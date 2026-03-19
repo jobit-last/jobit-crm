@@ -3,7 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Application, ApplicationStatusHistory } from "@/types/application";
 import { APPLICATION_STATUS_LABELS, APPLICATION_STATUS_COLORS } from "@/types/application";
+import type { Interview } from "@/types/interview";
 import ApplicationStatusManager from "./_components/StatusManager";
+import InterviewSection from "./_components/InterviewSection";
 
 export default async function ApplicationDetailPage({
   params,
@@ -13,7 +15,7 @@ export default async function ApplicationDetailPage({
   const { id } = await params;
   const supabase = await createClient();
 
-  const [{ data, error }, { data: histories }] = await Promise.all([
+  const [{ data, error }, { data: histories }, { data: interviews }] = await Promise.all([
     supabase
       .from("applications")
       .select(
@@ -28,6 +30,11 @@ export default async function ApplicationDetailPage({
       .select("*, changer:profiles!changed_by(full_name)")
       .eq("application_id", id)
       .order("changed_at", { ascending: false }),
+    supabase
+      .from("interviews")
+      .select("*")
+      .eq("application_id", id)
+      .order("scheduled_at", { ascending: true }),
   ]);
 
   if (error || !data) notFound();
@@ -98,6 +105,12 @@ export default async function ApplicationDetailPage({
           applicationId={id}
           currentStatus={app.status}
           histories={(histories as ApplicationStatusHistory[]) ?? []}
+        />
+
+        {/* 面接日程管理 */}
+        <InterviewSection
+          applicationId={id}
+          initialInterviews={(interviews as Interview[]) ?? []}
         />
       </div>
     </div>
