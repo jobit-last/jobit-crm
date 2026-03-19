@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { recordLog } from "@/lib/activity-log";
 
 const ALLOWED_SORT_COLUMNS = ["name", "industry", "company_size", "temperature", "created_at"];
 
@@ -92,6 +93,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    await recordLog("create", `企業作成: ${name.trim()}`);
     return NextResponse.json(
       { success: true, data, message: "企業を登録しました", meta: {} },
       { status: 201 }

@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { recordLog } from "@/lib/activity-log";
 import type { UserInsert } from "@/types/user";
 
 export async function GET() {
@@ -41,5 +42,6 @@ export async function POST(request: Request) {
     return Response.json({ error: error.message }, { status: 500 });
   }
 
+  await recordLog("create", `ユーザー作成: ${body.name} (${body.email})`);
   return Response.json(data, { status: 201 });
 }

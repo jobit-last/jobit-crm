@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { recordLog } from "@/lib/activity-log";
 import type { UserUpdate } from "@/types/user";
 
 export async function PUT(
@@ -26,6 +27,7 @@ export async function PUT(
     return Response.json({ error: error.message }, { status: 500 });
   }
 
+  await recordLog("update", `ユーザー更新: ${data.name ?? id}`);
   return Response.json(data);
 }
 
@@ -51,5 +53,6 @@ export async function DELETE(
     return Response.json({ error: error.message }, { status: 500 });
   }
 
+  await recordLog("delete", `ユーザー削除: ${id}`);
   return Response.json({ success: true });
 }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { recordLog } from "@/lib/activity-log";
 
 export async function GET(
   _request: NextRequest,
@@ -81,6 +82,7 @@ export async function PUT(
       );
     }
 
+    await recordLog("update", `求人更新: ${data.title ?? id}`);
     return NextResponse.json({ success: true, data, message: "更新しました", meta: {} });
   } catch {
     return NextResponse.json(
@@ -107,6 +109,7 @@ export async function DELETE(
       );
     }
 
+    await recordLog("delete", `求人削除: ${id}`);
     return NextResponse.json({ success: true, data: null, message: "削除しました", meta: {} });
   } catch {
     return NextResponse.json(

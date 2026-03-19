@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { recordLog } from "@/lib/activity-log";
 
 export type ApiResponse<T = null> = {
   success: boolean;
@@ -27,6 +28,8 @@ export async function signIn(
     };
   }
 
+  await recordLog("login", `ユーザーログイン: ${email}`);
+
   return {
     success: true,
     data: { userId: data.user.id },
@@ -36,6 +39,8 @@ export async function signIn(
 
 export async function signOut(): Promise<ApiResponse> {
   const supabase = await createClient();
+
+  await recordLog("logout", "ユーザーログアウト");
 
   const { error } = await supabase.auth.signOut();
 
