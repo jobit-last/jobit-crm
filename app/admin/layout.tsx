@@ -5,6 +5,10 @@ const navItems = [
   { label: "求職者管理", href: "/admin/candidates" },
   { label: "企業管理", href: "/admin/companies" },
   { label: "求人管理", href: "/admin/jobs" },
+  { label: "選考管理", href: "/admin/applications" },
+  { label: "スケジュール管理", href: "/admin/schedule" },
+  { label: "通知管理", href: "/admin/notifications" },
+  { label: "請求書管理", href: "/admin/invoices" },
   { label: "歩留まり分析", href: "/admin/analytics" },
 ];
 
