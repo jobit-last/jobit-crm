@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import type { DiagnosisHearing } from "@/types/diagnosis";
 import type { DiagnosisResult } from "@/app/api/diagnosis/analyze/route";
+import PdfPanel from "./PdfPanel";
 
 // ── Score Gauge (SVG arc) ────────────────────────────────────────────────────
 function ScoreGauge({ score }: { score: number }) {
@@ -142,10 +143,22 @@ export default function ResultClient({ hearing }: Props) {
   const [result, setResult] = useState<DiagnosisResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [resultSaved, setResultSaved] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
+        // If analysis_result is already stored in the hearing, use it
+        const stored = (hearing as DiagnosisHearing & { analysis_result?: DiagnosisResult })
+          .analysis_result;
+        if (stored) {
+          setResult(stored);
+          setResultSaved(true);
+          setLoading(false);
+          return;
+        }
+
+        // Otherwise call Claude API
         const res = await fetch("/api/diagnosis/analyze", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -153,7 +166,15 @@ export default function ResultClient({ hearing }: Props) {
         });
         const json = await res.json();
         if (!res.ok) throw new Error(json.error ?? "エラーが発生しました");
+
         setResult(json.result);
+
+        // Save result to Supabase for future use (PDF generation etc.)
+        await fetch(`/api/diagnosis/${hearing.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ result: json.result }),
+        }).then(() => setResultSaved(true));
       } catch (e) {
         setError(e instanceof Error ? e.message : "不明なエラー");
       } finally {
@@ -186,6 +207,9 @@ export default function ResultClient({ hearing }: Props) {
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
+      {/* ── PDF Panel ── */}
+      {resultSaved && <PdfPanel hearingId={hearing.id} candidateName={hearing.name} />}
+
       {/* ── Top row: Score + Salary ── */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         {/* Score */}
