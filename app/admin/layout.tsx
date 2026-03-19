@@ -4,6 +4,7 @@ const navItems = [
   { label: "求職者管理", href: "/admin/candidates" },
   { label: "選考管理", href: "/admin/applications" },
   { label: "スケジュール管理", href: "/admin/schedule" },
+  { label: "通知管理", href: "/admin/notifications" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
