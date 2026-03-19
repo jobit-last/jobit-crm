@@ -1,10 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import type { Candidate, StatusHistory } from "@/types/candidate";
+import type { Candidate, StatusHistory, CandidateMemo } from "@/types/candidate";
 import { STATUS_LABELS, STATUS_COLORS, GENDER_LABELS } from "@/types/candidate";
 import DeleteButton from "./_components/DeleteButton";
 import StatusManager from "./_components/StatusManager";
+import MemoSection from "./_components/MemoSection";
 
 export default async function CandidateDetailPage({
   params,
@@ -14,7 +15,7 @@ export default async function CandidateDetailPage({
   const { id } = await params;
   const supabase = await createClient();
 
-  const [{ data, error }, { data: histories }] = await Promise.all([
+  const [{ data, error }, { data: histories }, { data: memos }] = await Promise.all([
     supabase
       .from("candidates")
       .select("*, ca:profiles!candidates_ca_id_fkey(id, full_name)")
@@ -26,6 +27,11 @@ export default async function CandidateDetailPage({
       .select("*, changer:profiles!changed_by(full_name)")
       .eq("candidate_id", id)
       .order("changed_at", { ascending: false }),
+    supabase
+      .from("candidate_memos")
+      .select("*, author:profiles!user_id(full_name)")
+      .eq("candidate_id", id)
+      .order("created_at", { ascending: false }),
   ]);
 
   if (error || !data) notFound();
@@ -142,6 +148,12 @@ export default async function CandidateDetailPage({
           candidateId={id}
           currentStatus={candidate.status}
           histories={(histories as StatusHistory[]) ?? []}
+        />
+
+        {/* メモ・連絡履歴 */}
+        <MemoSection
+          candidateId={id}
+          initialMemos={(memos as CandidateMemo[]) ?? []}
         />
       </div>
     </div>

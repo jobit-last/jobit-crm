@@ -85,3 +85,32 @@ export const GENDER_LABELS: Record<Gender, string> = {
   female: "女性",
   other: "その他",
 };
+
+// =============================================================
+// メモ・連絡履歴
+// =============================================================
+
+export type MemoType = "interview" | "contact" | "other";
+
+export interface CandidateMemo {
+  id: string;
+  candidate_id: string;
+  user_id: string | null;
+  content: string;
+  memo_type: MemoType;
+  created_at: string;
+  // JOIN
+  author?: { full_name: string } | null;
+}
+
+export const MEMO_TYPE_LABELS: Record<MemoType, string> = {
+  interview: "面談メモ",
+  contact: "連絡履歴",
+  other: "その他",
+};
+
+export const MEMO_TYPE_COLORS: Record<MemoType, string> = {
+  interview: "bg-purple-100 text-purple-700",
+  contact: "bg-sky-100 text-sky-700",
+  other: "bg-gray-100 text-gray-600",
+};
