@@ -48,8 +48,8 @@ export default function FunnelChart({ data }: Props) {
           tick={{ fontSize: 13 }}
           width={44}
         />
-        <Tooltip
-          formatter={(value: number, _name: string, props) => {
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        <Tooltip formatter={(value: any, _name: any, props: any) => {
             const rate = props.payload?.rate;
             return [`${value}名 (${rate}%)`, "人数"];
           }}
@@ -61,7 +61,7 @@ export default function FunnelChart({ data }: Props) {
           <LabelList
             dataKey="count"
             position="right"
-            formatter={(v: number) => `${v}名`}
+            formatter={(v: unknown) => `${v}名`}
             style={{ fontSize: 12, fill: "#374151" }}
           />
         </Bar>

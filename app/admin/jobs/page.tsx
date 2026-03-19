@@ -49,7 +49,7 @@ export default async function JobsPage({
   if (error) console.error("Supabase error:", error.message);
 
   const jobs: Job[] = (data || []).map((row: Record<string, unknown>) => ({
-    ...(row as Job),
+    ...(row as unknown as Job),
     company_name: (row.companies as { name: string } | null)?.name ?? null,
     companies: undefined,
   }));
