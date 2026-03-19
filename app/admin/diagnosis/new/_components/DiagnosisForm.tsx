@@ -14,6 +14,7 @@ export default function DiagnosisForm() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [savedId, setSavedId] = useState<string | null>(null);
 
   const TOTAL_STEPS = 4;
 
@@ -94,6 +95,7 @@ export default function DiagnosisForm() {
       return;
     }
 
+    setSavedId(json.data?.id ?? null);
     setSubmitted(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -126,25 +128,36 @@ export default function DiagnosisForm() {
         <p className="text-sm mb-8" style={{ color: "#6B7280" }}>
           {form.name} さんのヒアリング情報を保存しました。
         </p>
-        <div className="flex gap-3">
-          <a
-            href="/admin/diagnosis/new"
-            onClick={() => {
-              setForm(INITIAL_FORM);
-              setStep(1);
-              setSubmitted(false);
-            }}
-            className="px-5 py-2 rounded-md text-sm font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
-          >
-            続けて入力
-          </a>
-          <a
-            href="/admin/candidates"
-            className="px-5 py-2 rounded-md text-sm font-medium text-white transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#002D37" }}
-          >
-            求職者一覧へ
-          </a>
+        <div className="flex flex-col items-center gap-3">
+          {savedId && (
+            <a
+              href={`/admin/diagnosis/${savedId}/result`}
+              className="px-6 py-2.5 rounded-md text-sm font-semibold transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "#00E05D", color: "#1A1A2E" }}
+            >
+              AI診断結果を見る →
+            </a>
+          )}
+          <div className="flex gap-3">
+            <a
+              href="/admin/diagnosis/new"
+              onClick={() => {
+                setForm(INITIAL_FORM);
+                setStep(1);
+                setSubmitted(false);
+              }}
+              className="px-5 py-2 rounded-md text-sm font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
+            >
+              続けて入力
+            </a>
+            <a
+              href="/admin/candidates"
+              className="px-5 py-2 rounded-md text-sm font-medium text-white transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "#002D37" }}
+            >
+              求職者一覧へ
+            </a>
+          </div>
         </div>
       </div>
     );
