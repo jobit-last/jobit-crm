@@ -5,6 +5,7 @@ const navItems = [
   { label: "求職者管理", href: "/admin/candidates" },
   { label: "企業管理", href: "/admin/companies" },
   { label: "求人管理", href: "/admin/jobs" },
+  { label: "歩留まり分析", href: "/admin/analytics" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
