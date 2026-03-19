@@ -10,6 +10,7 @@ const navItems = [
   { label: "通知管理", href: "/admin/notifications" },
   { label: "請求書管理", href: "/admin/invoices" },
   { label: "歩留まり分析", href: "/admin/analytics" },
+  { label: "ナレッジ管理", href: "/admin/knowledge" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
