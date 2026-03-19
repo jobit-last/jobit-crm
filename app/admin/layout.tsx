@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 const navItems = [
+  { label: "ダッシュボード", href: "/admin/dashboard" },
   { label: "求職者管理", href: "/admin/candidates" },
   { label: "企業管理", href: "/admin/companies" },
   { label: "求人管理", href: "/admin/jobs" },
