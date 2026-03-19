@@ -3,13 +3,16 @@
 // =============================================================
 
 export type CandidateStatus =
-  | "new"           // 新規登録
-  | "interviewed"   // 面談済み
-  | "proposed"      // 案件紹介中
-  | "in_selection"  // 選考中
-  | "offered"       // 内定
-  | "placed"        // 入社
-  | "declined";     // 辞退
+  | "new"                   // 新規登録
+  | "interview_scheduling"  // 面談調整中
+  | "interviewed"           // 面談済み
+  | "job_proposed"          // 求人提案中
+  | "applying"              // 応募中
+  | "in_selection"          // 選考中
+  | "offered"               // 内定
+  | "placed"                // 入社
+  | "failed"                // 不合格
+  | "closed";               // 対応終了
 
 export type Gender = "male" | "female" | "other";
 
@@ -40,24 +43,41 @@ export interface Advisor {
   full_name: string;
 }
 
+export interface StatusHistory {
+  id: string;
+  candidate_id: string;
+  from_status: CandidateStatus | null;
+  to_status: CandidateStatus;
+  changed_by: string | null;
+  changed_at: string;
+  // JOIN
+  changer?: { full_name: string } | null;
+}
+
 export const STATUS_LABELS: Record<CandidateStatus, string> = {
   new: "新規登録",
+  interview_scheduling: "面談調整中",
   interviewed: "面談済み",
-  proposed: "案件紹介中",
+  job_proposed: "求人提案中",
+  applying: "応募中",
   in_selection: "選考中",
   offered: "内定",
   placed: "入社",
-  declined: "辞退",
+  failed: "不合格",
+  closed: "対応終了",
 };
 
 export const STATUS_COLORS: Record<CandidateStatus, string> = {
   new: "bg-blue-100 text-blue-700",
+  interview_scheduling: "bg-sky-100 text-sky-700",
   interviewed: "bg-purple-100 text-purple-700",
-  proposed: "bg-yellow-100 text-yellow-800",
-  in_selection: "bg-orange-100 text-orange-700",
+  job_proposed: "bg-yellow-100 text-yellow-800",
+  applying: "bg-orange-100 text-orange-700",
+  in_selection: "bg-amber-100 text-amber-700",
   offered: "bg-green-100 text-green-700",
   placed: "bg-emerald-100 text-emerald-700",
-  declined: "bg-red-100 text-red-600",
+  failed: "bg-red-100 text-red-600",
+  closed: "bg-gray-100 text-gray-600",
 };
 
 export const GENDER_LABELS: Record<Gender, string> = {

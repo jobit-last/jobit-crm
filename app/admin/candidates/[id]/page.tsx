@@ -1,9 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import type { Candidate } from "@/types/candidate";
+import type { Candidate, StatusHistory } from "@/types/candidate";
 import { STATUS_LABELS, STATUS_COLORS, GENDER_LABELS } from "@/types/candidate";
 import DeleteButton from "./_components/DeleteButton";
+import StatusManager from "./_components/StatusManager";
 
 export default async function CandidateDetailPage({
   params,
@@ -13,12 +14,19 @@ export default async function CandidateDetailPage({
   const { id } = await params;
   const supabase = await createClient();
 
-  const { data, error } = await supabase
-    .from("candidates")
-    .select("*, ca:profiles!candidates_ca_id_fkey(id, full_name)")
-    .eq("id", id)
-    .eq("is_deleted", false)
-    .single();
+  const [{ data, error }, { data: histories }] = await Promise.all([
+    supabase
+      .from("candidates")
+      .select("*, ca:profiles!candidates_ca_id_fkey(id, full_name)")
+      .eq("id", id)
+      .eq("is_deleted", false)
+      .single(),
+    supabase
+      .from("candidate_status_histories")
+      .select("*, changer:profiles!changed_by(full_name)")
+      .eq("candidate_id", id)
+      .order("changed_at", { ascending: false }),
+  ]);
 
   if (error || !data) notFound();
 
@@ -128,6 +136,13 @@ export default async function CandidateDetailPage({
             />
           </dl>
         </section>
+
+        {/* ステータス管理 */}
+        <StatusManager
+          candidateId={id}
+          currentStatus={candidate.status}
+          histories={(histories as StatusHistory[]) ?? []}
+        />
       </div>
     </div>
   );
