@@ -152,7 +152,7 @@ export default function InterviewSection({ applicationId, initialInterviews }: P
         {!showAddForm && (
           <button
             onClick={openAddForm}
-            className="px-3 py-1.5 rounded-md text-sm font-medium text-[#002D37] transition-colors hover:bg-[#00c752]"
+            className="px-3 py-1.5 rounded-md text-sm font-medium text-[#002D37] transition-colors hover:bg-[#00A645]"
             style={{ backgroundColor: "#00E05D" }}
           >
             + 面接を追加
@@ -272,7 +272,7 @@ export default function InterviewSection({ applicationId, initialInterviews }: P
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-4 py-2 rounded-md text-sm font-medium text-[#002D37] transition-colors hover:bg-[#00c752] disabled:opacity-60"
+                className="px-4 py-2 rounded-md text-sm font-medium text-[#002D37] transition-colors hover:bg-[#00A645] disabled:opacity-60"
                 style={{ backgroundColor: "#00E05D" }}
               >
                 {submitting ? "保存中..." : editingId ? "更新する" : "登録する"}

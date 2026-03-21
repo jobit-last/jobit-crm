@@ -141,7 +141,7 @@ export default function ScheduleClient({
         </h1>
         <button
           onClick={() => openAdd()}
-          className="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00c752]"
+          className="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00A645]"
           style={{ backgroundColor: "#00E05D", color: "#002D37" }}
         >
           + スケジュール追加

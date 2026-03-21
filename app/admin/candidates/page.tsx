@@ -52,7 +52,7 @@ export default async function CandidatesPage({
         </h1>
         <Link
           href="/admin/candidates/new"
-          className="px-4 py-2 rounded-md text-sm font-medium text-[#002D37] transition-colors hover:bg-[#00c752]"
+          className="px-4 py-2 rounded-md text-sm font-medium text-[#002D37] transition-colors hover:bg-[#00A645]"
           style={{ backgroundColor: "#00E05D" }}
         >
           + 新規登録

@@ -85,7 +85,7 @@ export default function ApplicationStatusManager({
           <button
             type="submit"
             disabled={!hasChanged || loading}
-            className="px-4 py-2 rounded-md text-sm font-medium text-[#002D37] transition-colors hover:bg-[#00c752] disabled:opacity-40 disabled:cursor-not-allowed"
+            className="px-4 py-2 rounded-md text-sm font-medium text-[#002D37] transition-colors hover:bg-[#00A645] disabled:opacity-40 disabled:cursor-not-allowed"
             style={{ backgroundColor: "#00E05D" }}
           >
             {loading ? "保存中..." : "変更する"}

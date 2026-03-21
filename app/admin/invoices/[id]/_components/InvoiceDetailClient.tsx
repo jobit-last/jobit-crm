@@ -318,7 +318,7 @@ export default function InvoiceDetailClient({ invoice: initial }: Props) {
           <button
             onClick={handleStatusSave}
             disabled={!hasChanged || saving}
-            className="w-full py-2 rounded-md text-sm font-medium text-[#002D37] bg-[#00E05D] transition-colors hover:bg-[#00c752] disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full py-2 rounded-md text-sm font-medium text-[#002D37] bg-[#00E05D] transition-colors hover:bg-[#00A645] disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {saving ? "保存中..." : "変更する"}
           </button>

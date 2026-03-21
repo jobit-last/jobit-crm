@@ -29,7 +29,7 @@ const C = {
   gray: "#6B7280",
   lightGray: "#F3F4F6",
   white: "#FFFFFF",
-  border: "#E5E7EB",
+  border: "#BFCED1",
 };
 
 // ── Styles ───────────────────────────────────────────────────────────────────

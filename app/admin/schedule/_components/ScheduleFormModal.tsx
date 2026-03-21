@@ -262,7 +262,7 @@ export default function ScheduleFormModal({
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00c752] disabled:opacity-60"
+                className="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00A645] disabled:opacity-60"
                 style={{ backgroundColor: "#00E05D", color: "#002D37" }}
               >
                 {submitting ? "保存中..." : schedule ? "更新する" : "登録する"}

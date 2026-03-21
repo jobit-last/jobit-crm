@@ -150,7 +150,7 @@ export default function UsersPage() {
           <h2 className="text-2xl font-bold text-[#002D37]">ユーザー管理</h2>
           <button
             onClick={openCreate}
-            className="px-4 py-2 bg-[#00E05D] text-[#002D37] font-semibold rounded-lg hover:bg-[#00c752] transition cursor-pointer"
+            className="px-4 py-2 bg-[#00E05D] text-[#002D37] font-semibold rounded-lg hover:bg-[#00A645] transition cursor-pointer"
           >
             + 新規登録
           </button>
@@ -305,7 +305,7 @@ export default function UsersPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 px-4 py-2.5 bg-[#00E05D] text-[#002D37] font-semibold rounded-lg hover:bg-[#00c752] disabled:opacity-50 transition cursor-pointer"
+                  className="flex-1 px-4 py-2.5 bg-[#00E05D] text-[#002D37] font-semibold rounded-lg hover:bg-[#00A645] disabled:opacity-50 transition cursor-pointer"
                 >
                   {submitting ? "保存中..." : "保存"}
                 </button>

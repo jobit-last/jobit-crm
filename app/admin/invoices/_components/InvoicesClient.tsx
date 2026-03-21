@@ -49,7 +49,7 @@ export default function InvoicesClient({ initialInvoices }: Props) {
         </h1>
         <Link
           href="/admin/invoices/new"
-          className="px-4 py-2 rounded-md text-sm font-medium text-[#002D37] bg-[#00E05D] transition-colors hover:bg-[#00c752]"
+          className="px-4 py-2 rounded-md text-sm font-medium text-[#002D37] bg-[#00E05D] transition-colors hover:bg-[#00A645]"
         >
           + 請求書作成
         </Link>

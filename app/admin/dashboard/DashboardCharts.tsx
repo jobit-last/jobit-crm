@@ -34,7 +34,7 @@ export default function DashboardCharts({
         </h2>
         <ResponsiveContainer width="100%" height={260}>
           <LineChart data={monthlyRegistrations} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#BFCED1" />
             <XAxis
               dataKey="month"
               tick={{ fontSize: 12, fill: "#6B7280" }}
@@ -47,7 +47,7 @@ export default function DashboardCharts({
               allowDecimals={false}
             />
             <Tooltip
-              contentStyle={{ borderRadius: 8, border: "1px solid #E5E7EB", fontSize: 13 }}
+              contentStyle={{ borderRadius: 8, border: "1px solid #BFCED1", fontSize: 13 }}
               formatter={(value: unknown) => [`${value}人`, "登録数"]}
             />
             <Line
@@ -74,7 +74,7 @@ export default function DashboardCharts({
               layout="vertical"
               margin={{ top: 0, right: 20, left: 70, bottom: 0 }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" horizontal={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#BFCED1" horizontal={false} />
               <XAxis
                 type="number"
                 tick={{ fontSize: 12, fill: "#6B7280" }}
@@ -91,7 +91,7 @@ export default function DashboardCharts({
                 width={68}
               />
               <Tooltip
-                contentStyle={{ borderRadius: 8, border: "1px solid #E5E7EB", fontSize: 13 }}
+                contentStyle={{ borderRadius: 8, border: "1px solid #BFCED1", fontSize: 13 }}
                 formatter={(value: unknown) => [`${value}人`, "件数"]}
               />
               <Bar dataKey="count" fill={PRIMARY} radius={[0, 4, 4, 0]} barSize={18} />
@@ -115,7 +115,7 @@ export default function DashboardCharts({
                 layout="vertical"
                 margin={{ top: 0, right: 20, left: 70, bottom: 0 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" horizontal={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#BFCED1" horizontal={false} />
                 <XAxis
                   type="number"
                   tick={{ fontSize: 12, fill: "#6B7280" }}
@@ -132,7 +132,7 @@ export default function DashboardCharts({
                   width={68}
                 />
                 <Tooltip
-                  contentStyle={{ borderRadius: 8, border: "1px solid #E5E7EB", fontSize: 13 }}
+                  contentStyle={{ borderRadius: 8, border: "1px solid #BFCED1", fontSize: 13 }}
                   formatter={(value: unknown) => [`${value}人`, "担当数"]}
                 />
                 <Bar dataKey="count" fill={SECONDARY} radius={[0, 4, 4, 0]} barSize={18} />
