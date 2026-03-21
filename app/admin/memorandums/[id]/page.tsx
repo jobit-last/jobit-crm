@@ -63,7 +63,7 @@ export default function MemorandumDetailPage() {
             <dt className="font-medium text-[#6B7280]">紐づき契約書</dt>
             <dd className="mt-1 text-[#002D37]">
               {memo.contract_id ? (
-                <Link href={`/admin/contracts/${memo.contract_id}`} className="text-blue-600 hover:underline">
+                <Link href={`/admin/contracts/${memo.contract_id}`} className="text-[#002D37] underline">
                   {memo.contract_title ?? memo.contract_id}
                 </Link>
               ) : "-"}
@@ -82,7 +82,7 @@ export default function MemorandumDetailPage() {
               <dt className="font-medium text-[#6B7280]">ファイル</dt>
               <dd className="mt-1">
                 <a href={memo.file_url} target="_blank" rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline break-all">{memo.file_url}</a>
+                  className="text-[#002D37] underline break-all">{memo.file_url}</a>
               </dd>
             </div>
           )}

@@ -27,7 +27,7 @@ export default function HistoryList({ notifications }: Props) {
   return (
     <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-base font-semibold" style={{ color: "#1A1A2E" }}>
+        <h2 className="text-base font-semibold" style={{ color: "#002D37" }}>
           送信履歴
         </h2>
         <span className="text-xs" style={{ color: "#9CA3AF" }}>
@@ -81,7 +81,7 @@ export default function HistoryList({ notifications }: Props) {
                     {n.candidate?.name && (
                       <span
                         className="text-xs font-medium"
-                        style={{ color: "#1A1A2E" }}
+                        style={{ color: "#002D37" }}
                       >
                         {n.candidate.name}
                       </span>
@@ -103,7 +103,7 @@ export default function HistoryList({ notifications }: Props) {
                         setExpanded(expanded === n.id ? null : n.id)
                       }
                       className="mt-1 text-xs"
-                      style={{ color: "#00A0B0" }}
+                      style={{ color: "#00E05D" }}
                     >
                       {expanded === n.id ? "閉じる" : "すべて表示"}
                     </button>

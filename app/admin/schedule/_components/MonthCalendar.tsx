@@ -91,7 +91,7 @@ export default function MonthCalendar({
                     ? "text-red-400"
                     : "text-gray-700"
                 }`}
-                style={isToday ? { backgroundColor: "#00A0B0" } : {}}
+                style={isToday ? { backgroundColor: "#00E05D" } : {}}
               >
                 {day.getDate()}
               </div>
@@ -110,7 +110,7 @@ export default function MonthCalendar({
                     <span
                       className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${SCHEDULE_TYPE_BAR_COLORS[s.type]}`}
                     />
-                    <span className="truncate" style={{ color: "#1A1A2E" }}>
+                    <span className="truncate" style={{ color: "#002D37" }}>
                       {new Date(s.scheduled_at).toLocaleTimeString("ja-JP", {
                         hour: "2-digit",
                         minute: "2-digit",

@@ -104,7 +104,7 @@ export default function ScheduleFormModal({
       <div className="relative bg-white rounded-xl shadow-2xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
         {/* Modal header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-          <h2 className="text-base font-semibold" style={{ color: "#1A1A2E" }}>
+          <h2 className="text-base font-semibold" style={{ color: "#002D37" }}>
             {schedule ? "スケジュール編集" : "スケジュール追加"}
           </h2>
           <button
@@ -116,7 +116,7 @@ export default function ScheduleFormModal({
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* 種別 */}
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">
@@ -127,7 +127,7 @@ export default function ScheduleFormModal({
                 value={form.type}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
               >
                 {SCHEDULE_TYPES.map((t) => (
                   <option key={t} value={t}>
@@ -150,7 +150,7 @@ export default function ScheduleFormModal({
                 min={1}
                 max={480}
                 placeholder="60"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
               />
             </div>
           </div>
@@ -167,7 +167,7 @@ export default function ScheduleFormModal({
               onChange={handleChange}
               required
               placeholder="例: 山田太郎さん 初回面談"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             />
           </div>
 
@@ -182,7 +182,7 @@ export default function ScheduleFormModal({
               value={form.scheduled_at}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             />
           </div>
 
@@ -195,7 +195,7 @@ export default function ScheduleFormModal({
               name="candidate_id"
               value={form.candidate_id}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             >
               <option value="">選択なし</option>
               {candidates.map((c) => (
@@ -217,7 +217,7 @@ export default function ScheduleFormModal({
               value={form.location}
               onChange={handleChange}
               placeholder="例: 東京オフィス 3F / Zoom"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             />
           </div>
 
@@ -232,7 +232,7 @@ export default function ScheduleFormModal({
               onChange={handleChange}
               rows={3}
               placeholder="メモを入力..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             />
           </div>
 
@@ -262,8 +262,8 @@ export default function ScheduleFormModal({
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-4 py-2 rounded-md text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
-                style={{ backgroundColor: "#002D37" }}
+                className="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00c752] disabled:opacity-60"
+                style={{ backgroundColor: "#00E05D", color: "#002D37" }}
               >
                 {submitting ? "保存中..." : schedule ? "更新する" : "登録する"}
               </button>

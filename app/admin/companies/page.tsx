@@ -60,7 +60,7 @@ export default async function CompaniesPage({
           </div>
           <Link
             href="/admin/companies/new"
-            className="bg-cta hover:bg-cta-hover text-white px-5 py-2 rounded text-sm font-medium transition-colors"
+            className="bg-cta hover:bg-cta-hover text-primary font-semibold px-5 py-2 rounded text-sm transition-colors"
           >
             + 新規登録
           </Link>

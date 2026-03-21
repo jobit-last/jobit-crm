@@ -30,17 +30,17 @@ export default async function InvoiceDetailPage({
         <Link
           href="/admin/invoices"
           className="hover:underline"
-          style={{ color: "#00A0B0" }}
+          style={{ color: "#002D37" }}
         >
           請求書管理
         </Link>
         <span>/</span>
-        <span style={{ color: "#1A1A2E" }}>{invoiceNumber(invoice)}</span>
+        <span style={{ color: "#002D37" }}>{invoiceNumber(invoice)}</span>
       </div>
 
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold" style={{ color: "#1A1A2E" }}>
+        <h1 className="text-2xl font-semibold" style={{ color: "#002D37" }}>
           {invoiceNumber(invoice)}
         </h1>
       </div>

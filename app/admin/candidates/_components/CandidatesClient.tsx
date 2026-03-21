@@ -72,7 +72,7 @@ export default function CandidatesClient({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="氏名で検索"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             />
           </div>
           <div className="w-44">
@@ -80,7 +80,7 @@ export default function CandidatesClient({
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             >
               <option value="">すべて</option>
               {(Object.entries(STATUS_LABELS) as [CandidateStatus, string][]).map(([key, label]) => (
@@ -93,7 +93,7 @@ export default function CandidatesClient({
             <select
               value={caId}
               onChange={(e) => setCaId(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             >
               <option value="">すべて</option>
               {advisors.map((a) => (
@@ -104,8 +104,8 @@ export default function CandidatesClient({
           <div className="flex gap-2">
             <button
               type="submit"
-              className="px-4 py-2 rounded-md text-sm font-medium text-white transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#00A0B0" }}
+              className="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00c752]"
+              style={{ backgroundColor: "#00E05D", color: "#002D37" }}
             >
               検索
             </button>
@@ -152,7 +152,7 @@ export default function CandidatesClient({
                     className="hover:bg-gray-50 cursor-pointer transition-colors"
                     onClick={() => router.push(`/admin/candidates/${c.id}`)}
                   >
-                    <td className="px-4 py-3 font-medium" style={{ color: "#1A1A2E" }}>
+                    <td className="px-4 py-3 font-medium" style={{ color: "#002D37" }}>
                       {c.name}
                     </td>
                     <td className="px-4 py-3 text-gray-600">{c.email ?? "—"}</td>

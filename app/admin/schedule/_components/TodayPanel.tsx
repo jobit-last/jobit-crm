@@ -20,7 +20,7 @@ export default function TodayPanel({ schedules, onEdit }: Props) {
   return (
     <div className="mb-4 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
       <div className="flex items-center gap-3 mb-3">
-        <h2 className="text-sm font-semibold" style={{ color: "#1A1A2E" }}>
+        <h2 className="text-sm font-semibold" style={{ color: "#002D37" }}>
           今日の予定
         </h2>
         <span className="text-xs" style={{ color: "#6B7280" }}>
@@ -29,7 +29,7 @@ export default function TodayPanel({ schedules, onEdit }: Props) {
         {schedules.length > 0 && (
           <span
             className="text-xs px-2 py-0.5 rounded-full text-white"
-            style={{ backgroundColor: "#00A0B0" }}
+            style={{ backgroundColor: "#00E05D" }}
           >
             {schedules.length}件
           </span>
@@ -52,7 +52,7 @@ export default function TodayPanel({ schedules, onEdit }: Props) {
                 {SCHEDULE_TYPE_LABELS[s.type]}
               </span>
               <div>
-                <p className="text-xs font-medium" style={{ color: "#1A1A2E" }}>
+                <p className="text-xs font-medium" style={{ color: "#002D37" }}>
                   {new Date(s.scheduled_at).toLocaleTimeString("ja-JP", {
                     hour: "2-digit",
                     minute: "2-digit",

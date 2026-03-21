@@ -40,7 +40,7 @@ export default async function ApplicationsPage({
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold" style={{ color: "#1A1A2E" }}>
+        <h1 className="text-2xl font-semibold" style={{ color: "#002D37" }}>
           選考管理
         </h1>
       </div>

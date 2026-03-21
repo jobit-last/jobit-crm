@@ -76,7 +76,7 @@ export default function ContractDetailPage() {
               <dt className="font-medium text-[#6B7280]">ファイル</dt>
               <dd className="mt-1">
                 <a href={contract.file_url} target="_blank" rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline break-all">{contract.file_url}</a>
+                  className="text-[#002D37] underline break-all">{contract.file_url}</a>
               </dd>
             </div>
           )}

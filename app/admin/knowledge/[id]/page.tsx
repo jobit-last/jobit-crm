@@ -225,7 +225,7 @@ export default function KnowledgeDetailPage() {
           <div className="flex shrink-0 gap-2">
             <button
               onClick={() => setEditing(true)}
-              className="bg-primary hover:bg-primary-dark text-white px-5 py-2 rounded text-sm font-medium transition-colors"
+              className="bg-cta hover:bg-cta-hover text-primary font-semibold px-5 py-2 rounded text-sm transition-colors"
             >
               編集
             </button>
@@ -381,7 +381,7 @@ export default function KnowledgeDetailPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="bg-cta hover:bg-cta-hover text-white px-8 py-2 rounded text-sm font-medium transition-colors disabled:opacity-50"
+              className="bg-cta hover:bg-cta-hover text-primary font-semibold px-8 py-2 rounded text-sm transition-colors disabled:opacity-50"
             >
               {submitting ? "保存中..." : "保存する"}
             </button>

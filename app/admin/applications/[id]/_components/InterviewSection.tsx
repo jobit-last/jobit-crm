@@ -146,14 +146,14 @@ export default function InterviewSection({ applicationId, initialInterviews }: P
   return (
     <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 lg:col-span-2">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-base font-semibold" style={{ color: "#1A1A2E" }}>
+        <h2 className="text-base font-semibold" style={{ color: "#002D37" }}>
           面接日程管理
         </h2>
         {!showAddForm && (
           <button
             onClick={openAddForm}
-            className="px-3 py-1.5 rounded-md text-sm font-medium text-white transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#002D37" }}
+            className="px-3 py-1.5 rounded-md text-sm font-medium text-[#002D37] transition-colors hover:bg-[#00c752]"
+            style={{ backgroundColor: "#00E05D" }}
           >
             + 面接を追加
           </button>
@@ -163,7 +163,7 @@ export default function InterviewSection({ applicationId, initialInterviews }: P
       {/* 登録・編集フォーム */}
       {showAddForm && (
         <div className="mb-6 rounded-lg border border-gray-200 bg-gray-50 p-4">
-          <h3 className="text-sm font-semibold mb-4" style={{ color: "#1A1A2E" }}>
+          <h3 className="text-sm font-semibold mb-4" style={{ color: "#002D37" }}>
             {editingId ? "面接を編集" : "面接を追加"}
           </h3>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -178,7 +178,7 @@ export default function InterviewSection({ applicationId, initialInterviews }: P
                   value={form.interview_type}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
                 >
                   {INTERVIEW_TYPES.map((t) => (
                     <option key={t} value={t}>{INTERVIEW_TYPE_LABELS[t]}</option>
@@ -197,7 +197,7 @@ export default function InterviewSection({ applicationId, initialInterviews }: P
                   value={form.scheduled_at}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
                 />
               </div>
 
@@ -210,7 +210,7 @@ export default function InterviewSection({ applicationId, initialInterviews }: P
                   value={form.location}
                   onChange={handleChange}
                   placeholder="例: 東京オフィス 3F会議室 / Zoom"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
                 />
               </div>
 
@@ -223,7 +223,7 @@ export default function InterviewSection({ applicationId, initialInterviews }: P
                   value={form.interviewer}
                   onChange={handleChange}
                   placeholder="例: 田中部長"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
                 />
               </div>
 
@@ -234,7 +234,7 @@ export default function InterviewSection({ applicationId, initialInterviews }: P
                   name="result"
                   value={form.result}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
                 >
                   <option value="">未入力</option>
                   {INTERVIEW_RESULTS.map((r) => (
@@ -255,7 +255,7 @@ export default function InterviewSection({ applicationId, initialInterviews }: P
                 onChange={handleChange}
                 rows={3}
                 placeholder="面接のフィードバックを入力..."
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
               />
             </div>
 
@@ -272,8 +272,8 @@ export default function InterviewSection({ applicationId, initialInterviews }: P
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-4 py-2 rounded-md text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
-                style={{ backgroundColor: "#002D37" }}
+                className="px-4 py-2 rounded-md text-sm font-medium text-[#002D37] transition-colors hover:bg-[#00c752] disabled:opacity-60"
+                style={{ backgroundColor: "#00E05D" }}
               >
                 {submitting ? "保存中..." : editingId ? "更新する" : "登録する"}
               </button>
@@ -313,7 +313,7 @@ export default function InterviewSection({ applicationId, initialInterviews }: P
                   </div>
 
                   {/* 日時 */}
-                  <p className="text-sm font-medium" style={{ color: "#1A1A2E" }}>
+                  <p className="text-sm font-medium" style={{ color: "#002D37" }}>
                     {new Date(interview.scheduled_at).toLocaleString("ja-JP", {
                       year: "numeric",
                       month: "2-digit",
@@ -337,7 +337,7 @@ export default function InterviewSection({ applicationId, initialInterviews }: P
                   {interview.feedback && (
                     <p
                       className="mt-2 text-sm whitespace-pre-wrap break-words p-2 rounded bg-gray-50"
-                      style={{ color: "#1A1A2E" }}
+                      style={{ color: "#002D37" }}
                     >
                       {interview.feedback}
                     </p>

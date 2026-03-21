@@ -47,13 +47,13 @@ export default async function CandidatesPage({
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold" style={{ color: "#1A1A2E" }}>
+        <h1 className="text-2xl font-semibold" style={{ color: "#002D37" }}>
           求職者管理
         </h1>
         <Link
           href="/admin/candidates/new"
-          className="px-4 py-2 rounded-md text-sm font-medium text-white transition-opacity hover:opacity-90"
-          style={{ backgroundColor: "#002D37" }}
+          className="px-4 py-2 rounded-md text-sm font-medium text-[#002D37] transition-colors hover:bg-[#00c752]"
+          style={{ backgroundColor: "#00E05D" }}
         >
           + 新規登録
         </Link>

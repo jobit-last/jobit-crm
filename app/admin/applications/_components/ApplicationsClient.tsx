@@ -61,7 +61,7 @@ export default function ApplicationsClient({
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             >
               <option value="">すべて</option>
               {(Object.entries(APPLICATION_STATUS_LABELS) as [ApplicationStatus, string][]).map(
@@ -74,8 +74,8 @@ export default function ApplicationsClient({
           <div className="flex gap-2">
             <button
               type="submit"
-              className="px-4 py-2 rounded-md text-sm font-medium text-white transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#00A0B0" }}
+              className="px-4 py-2 rounded-md text-sm font-medium text-[#002D37] transition-colors hover:bg-[#00c752]"
+              style={{ backgroundColor: "#00E05D" }}
             >
               検索
             </button>
@@ -121,7 +121,7 @@ export default function ApplicationsClient({
                     className="hover:bg-gray-50 cursor-pointer transition-colors"
                     onClick={() => router.push(`/admin/applications/${app.id}`)}
                   >
-                    <td className="px-4 py-3 font-medium" style={{ color: "#1A1A2E" }}>
+                    <td className="px-4 py-3 font-medium" style={{ color: "#002D37" }}>
                       {app.candidate?.name ?? "—"}
                     </td>
                     <td className="px-4 py-3 text-gray-600">

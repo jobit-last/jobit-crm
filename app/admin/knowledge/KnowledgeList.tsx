@@ -75,7 +75,7 @@ export default function KnowledgeList() {
         </div>
         <Link
           href="/admin/knowledge/new"
-          className="bg-cta hover:bg-cta-hover text-white px-5 py-2 rounded text-sm font-medium transition-colors"
+          className="bg-cta hover:bg-cta-hover text-primary font-semibold px-5 py-2 rounded text-sm transition-colors"
         >
           + 新規登録
         </Link>
@@ -110,7 +110,7 @@ export default function KnowledgeList() {
           />
           <button
             type="submit"
-            className="bg-primary hover:bg-primary-dark text-white px-5 py-2 rounded text-sm font-medium transition-colors"
+            className="bg-cta hover:bg-cta-hover text-primary font-semibold px-5 py-2 rounded text-sm transition-colors"
           >
             検索
           </button>

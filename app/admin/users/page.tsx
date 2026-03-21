@@ -164,7 +164,7 @@ export default function UsersPage() {
         )}
 
         {/* Table */}
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden overflow-x-auto">
           {loading ? (
             <div className="px-6 py-12 text-center text-[#6B7280]">読み込み中...</div>
           ) : users.length === 0 ? (
@@ -172,7 +172,7 @@ export default function UsersPage() {
               ユーザーが登録されていません
             </div>
           ) : (
-            <table className="w-full">
+            <table className="w-full min-w-[640px]">
               <thead>
                 <tr className="border-b border-gray-200 bg-gray-50">
                   <th className="text-left px-6 py-3 text-xs font-semibold text-[#6B7280] uppercase tracking-wider">
