@@ -16,13 +16,10 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             <span className="text-sm text-gray-400 hidden sm:block">求人ポータル</span>
           </Link>
           <nav className="flex items-center gap-4 text-sm">
-            <Link
-              href="/portal/jobs"
-              className="font-medium transition-colors hover:opacity-70"
-              style={{ color: "#2394FF" }}
-            >
-              求人一覧
-            </Link>
+            <Link href="/portal/jobs"          className="font-medium transition-opacity hover:opacity-60" style={{ color: "#2394FF" }}>求人一覧</Link>
+            <Link href="/portal/jobs/search"   className="font-medium transition-opacity hover:opacity-60" style={{ color: "#2394FF" }}>検索</Link>
+            <Link href="/portal/jobs/compare"  className="font-medium transition-opacity hover:opacity-60" style={{ color: "#2394FF" }}>比較</Link>
+            <Link href="/portal/jobs/favorites" className="font-medium transition-opacity hover:opacity-60" style={{ color: "#2394FF" }}>♥ お気に入り</Link>
           </nav>
         </div>
       </header>
