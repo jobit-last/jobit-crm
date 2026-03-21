@@ -104,7 +104,7 @@ export default function CandidatesClient({
           <div className="flex gap-2">
             <button
               type="submit"
-              className="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00c752]"
+              className="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00A645]"
               style={{ backgroundColor: "#00E05D", color: "#002D37" }}
             >
               検索

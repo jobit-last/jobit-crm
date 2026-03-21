@@ -281,7 +281,7 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
         <button
           type="submit"
           disabled={loading}
-          className="px-5 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00c752] disabled:opacity-60"
+          className="px-5 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00A645] disabled:opacity-60"
           style={{ backgroundColor: "#00E05D", color: "#002D37" }}
         >
           {loading ? "保存中..." : mode === "create" ? "登録する" : "更新する"}

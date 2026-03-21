@@ -232,7 +232,7 @@ export default function InvoiceForm({ companies, candidates }: Props) {
         <button
           type="submit"
           disabled={submitting}
-          className="px-6 py-2 rounded-md text-sm font-medium text-[#002D37] bg-[#00E05D] transition-colors hover:bg-[#00c752] disabled:opacity-60"
+          className="px-6 py-2 rounded-md text-sm font-medium text-[#002D37] bg-[#00E05D] transition-colors hover:bg-[#00A645] disabled:opacity-60"
         >
           {submitting ? "作成中..." : "請求書を作成"}
         </button>

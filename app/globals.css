@@ -15,13 +15,13 @@
   --color-primary: #002D37;
   --color-primary-dark: #001E25;
   --color-cta: #00E05D;
-  --color-cta-hover: #00c752;
+  --color-cta-hover: #00A645;
   --color-accent: #002D37;
-  --color-secondary: #E5E7EB;
+  --color-secondary: #BFCED1;
   --color-text-primary: #002D37;
   --color-text-secondary: #6B7280;
   --color-card: #FFFFFF;
-  --color-border: #E5E7EB;
+  --color-border: #BFCED1;
 }
 
 body {

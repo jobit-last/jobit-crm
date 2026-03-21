@@ -125,7 +125,7 @@ export default function MemorandumsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-[#002D37]">覚書管理</h1>
-        <button onClick={openCreate} className="px-4 py-2 bg-[#00E05D] text-[#002D37] font-semibold rounded-lg hover:bg-[#00c752] transition cursor-pointer">
+        <button onClick={openCreate} className="px-4 py-2 bg-[#00E05D] text-[#002D37] font-semibold rounded-lg hover:bg-[#00A645] transition cursor-pointer">
           + 新規登録
         </button>
       </div>
@@ -251,7 +251,7 @@ export default function MemorandumsPage() {
                 <button type="button" onClick={() => setModalOpen(false)}
                   className="flex-1 px-4 py-2.5 border border-gray-300 text-[#002D37] rounded-lg hover:bg-gray-50 transition cursor-pointer">キャンセル</button>
                 <button type="submit" disabled={submitting}
-                  className="flex-1 px-4 py-2.5 bg-[#00E05D] text-[#002D37] font-semibold rounded-lg hover:bg-[#00c752] disabled:opacity-50 transition cursor-pointer">
+                  className="flex-1 px-4 py-2.5 bg-[#00E05D] text-[#002D37] font-semibold rounded-lg hover:bg-[#00A645] disabled:opacity-50 transition cursor-pointer">
                   {submitting ? "保存中..." : "保存"}
                 </button>
               </div>
