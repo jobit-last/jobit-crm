@@ -1,8 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { renderToBuffer } = require("@react-pdf/renderer") as {
-  renderToBuffer: (element: unknown) => Promise<Buffer>;
-};
+import { renderToBuffer } from "@react-pdf/renderer";
 import { ResumePdfDocument } from "@/lib/pdf/ResumePdfDocument";
 import { NextRequest } from "next/server";
 import type { Resume } from "@/types/resume";
@@ -44,7 +41,7 @@ export async function GET(
       candidate,
       content: typedResume.content,
       version: typedResume.version,
-    })
+    }) as any
   );
 
   const safeName = candidate.name.replace(/[^\w\u3040-\u9FFF]/g, "_");

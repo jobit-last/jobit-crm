@@ -1,8 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { renderToBuffer } = require("@react-pdf/renderer") as {
-  renderToBuffer: (element: unknown) => Promise<Buffer>;
-};
+import { renderToBuffer } from "@react-pdf/renderer";
 import { DiagnosisPdfDocument } from "@/lib/pdf/DiagnosisPdfDocument";
 import { NextRequest } from "next/server";
 import type { DiagnosisHearing } from "@/types/diagnosis";
@@ -40,7 +37,7 @@ export async function GET(_req: NextRequest, { params }: Params) {
     React.createElement(DiagnosisPdfDocument, {
       hearing,
       result: hearing.analysis_result,
-    })
+    }) as any
   );
 
   const safeName = hearing.name.replace(/[^\w\u3040-\u9FFF]/g, "_");
