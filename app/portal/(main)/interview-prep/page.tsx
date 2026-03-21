@@ -55,7 +55,7 @@ export default async function InterviewPrepPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold mb-6" style={{ color: "#1E293B" }}>
+      <h1 className="text-2xl font-semibold mb-6" style={{ color: "#21242B" }}>
         面接対策
       </h1>
 
@@ -79,7 +79,7 @@ export default async function InterviewPrepPage() {
                       {INTERVIEW_TYPE_LABELS[iv.interview_type]}
                     </span>
                   </div>
-                  <p className="text-sm font-medium truncate" style={{ color: "#1E293B" }}>
+                  <p className="text-sm font-medium truncate" style={{ color: "#21242B" }}>
                     {iv.application?.job?.company?.name} / {iv.application?.job?.title}
                   </p>
                   {iv.location && (
@@ -109,7 +109,7 @@ export default async function InterviewPrepPage() {
 
       {/* 面接対策ナレッジ */}
       <section className="mb-8">
-        <h2 className="text-base font-semibold mb-4" style={{ color: "#1E293B" }}>
+        <h2 className="text-base font-semibold mb-4" style={{ color: "#21242B" }}>
           面接対策ノート
         </h2>
 
@@ -134,7 +134,7 @@ export default async function InterviewPrepPage() {
                     </span>
                   )}
                 </div>
-                <h3 className="text-sm font-semibold line-clamp-2" style={{ color: "#1E293B" }}>
+                <h3 className="text-sm font-semibold line-clamp-2" style={{ color: "#21242B" }}>
                   {article.title}
                 </h3>
                 {article.content && (
@@ -166,7 +166,7 @@ export default async function InterviewPrepPage() {
       {/* 企業・業界情報 */}
       {refArticles.length > 0 && (
         <section>
-          <h2 className="text-base font-semibold mb-4" style={{ color: "#1E293B" }}>
+          <h2 className="text-base font-semibold mb-4" style={{ color: "#21242B" }}>
             企業・業界情報
           </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -183,7 +183,7 @@ export default async function InterviewPrepPage() {
                     {article.category}
                   </span>
                 )}
-                <h3 className="text-sm font-semibold line-clamp-2" style={{ color: "#1E293B" }}>
+                <h3 className="text-sm font-semibold line-clamp-2" style={{ color: "#21242B" }}>
                   {article.title}
                 </h3>
                 {article.content && (

@@ -80,7 +80,7 @@ export default function PortalJobsPage() {
     <div className="max-w-5xl mx-auto px-4 py-10">
       {/* ヒーロー */}
       <div className="text-center mb-10">
-        <h1 className="text-3xl font-bold mb-2" style={{ color: "#1A1A2E" }}>
+        <h1 className="text-3xl font-bold mb-2" style={{ color: "#21242B" }}>
           あなたにぴったりの求人
         </h1>
         <p className="text-gray-500 text-sm">担当CAが厳選した求人をご紹介します</p>
@@ -99,7 +99,7 @@ export default function PortalJobsPage() {
           <button
             type="submit"
             className="px-6 py-2 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-80"
-            style={{ backgroundColor: ACCENT }}
+            style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
           >
             検索
           </button>
@@ -109,7 +109,7 @@ export default function PortalJobsPage() {
       {/* 件数 */}
       <p className="text-sm text-gray-500 mb-4">
         {keyword ? `「${keyword}」の検索結果: ` : ""}
-        <span className="font-semibold" style={{ color: "#1A1A2E" }}>{total}</span> 件
+        <span className="font-semibold" style={{ color: "#21242B" }}>{total}</span> 件
       </p>
 
       {/* カード一覧 */}
@@ -207,7 +207,7 @@ function JobCard({
       {/* 職種タイトル */}
       <h2
         className="text-base font-bold leading-snug mb-3 group-hover:opacity-80 transition-opacity"
-        style={{ color: "#1A1A2E" }}
+        style={{ color: "#21242B" }}
       >
         {job.title}
       </h2>
@@ -241,7 +241,7 @@ function JobCard({
       <Link
         href={`/portal/jobs/${job.id}`}
         className="block text-center py-2.5 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-80"
-        style={{ backgroundColor: ACCENT }}
+        style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
       >
         詳細を見る
       </Link>

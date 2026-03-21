@@ -65,7 +65,7 @@ export default async function PortalDashboardPage() {
     <div>
       {/* 挨拶 */}
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold" style={{ color: "#1E293B" }}>
+        <h1 className="text-2xl font-semibold" style={{ color: "#21242B" }}>
           こんにちは、{candidate.name}さん
         </h1>
         <div className="mt-2 flex flex-wrap items-center gap-3">
@@ -93,7 +93,7 @@ export default async function PortalDashboardPage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
           <p className="text-xs font-medium text-gray-400 mb-1">次の面接</p>
           {nextInterview?.scheduled_at ? (
-            <p className="text-lg font-bold" style={{ color: "#1E293B" }}>
+            <p className="text-lg font-bold" style={{ color: "#21242B" }}>
               {new Date(nextInterview.scheduled_at).toLocaleDateString("ja-JP", {
                 month: "long",
                 day: "numeric",
@@ -111,7 +111,7 @@ export default async function PortalDashboardPage() {
         </div>
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
           <p className="text-xs font-medium text-gray-400 mb-1">ステータス</p>
-          <p className="text-lg font-bold" style={{ color: "#1E293B" }}>
+          <p className="text-lg font-bold" style={{ color: "#21242B" }}>
             {STATUS_LABELS[candidate.status]}
           </p>
         </div>
@@ -120,7 +120,7 @@ export default async function PortalDashboardPage() {
       {/* 進行中の選考 */}
       <section className="mb-8">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-base font-semibold" style={{ color: "#1E293B" }}>
+          <h2 className="text-base font-semibold" style={{ color: "#21242B" }}>
             進行中の選考
           </h2>
           <Link
@@ -144,7 +144,7 @@ export default async function PortalDashboardPage() {
                 className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 flex items-center justify-between gap-4"
               >
                 <div className="min-w-0">
-                  <p className="text-sm font-medium truncate" style={{ color: "#1E293B" }}>
+                  <p className="text-sm font-medium truncate" style={{ color: "#21242B" }}>
                     {app.job?.title ?? "—"}
                   </p>
                   <p className="text-xs text-gray-500 truncate">
@@ -164,7 +164,7 @@ export default async function PortalDashboardPage() {
 
       {/* 次の面接日程 */}
       <section>
-        <h2 className="text-base font-semibold mb-4" style={{ color: "#1E293B" }}>
+        <h2 className="text-base font-semibold mb-4" style={{ color: "#21242B" }}>
           次の面接日程
         </h2>
 
@@ -176,7 +176,7 @@ export default async function PortalDashboardPage() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm font-medium" style={{ color: "#1E293B" }}>
+                <p className="text-sm font-medium" style={{ color: "#21242B" }}>
                   {new Date(nextInterview.scheduled_at).toLocaleString("ja-JP", {
                     year: "numeric",
                     month: "long",

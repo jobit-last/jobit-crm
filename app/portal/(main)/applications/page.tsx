@@ -56,7 +56,7 @@ export default async function PortalApplicationsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold mb-6" style={{ color: "#1E293B" }}>
+      <h1 className="text-2xl font-semibold mb-6" style={{ color: "#21242B" }}>
         選考状況
       </h1>
 
@@ -82,7 +82,7 @@ export default async function PortalApplicationsPage() {
                 >
                   <div className="flex items-start justify-between gap-4 mb-4">
                     <div className="min-w-0">
-                      <p className="text-sm font-semibold truncate" style={{ color: "#1E293B" }}>
+                      <p className="text-sm font-semibold truncate" style={{ color: "#21242B" }}>
                         {app.job?.title ?? "—"}
                       </p>
                       <p className="text-xs text-gray-500 mt-0.5">
@@ -150,7 +150,7 @@ export default async function PortalApplicationsPage() {
               >
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0">
-                    <p className="text-sm font-medium truncate" style={{ color: "#1E293B" }}>
+                    <p className="text-sm font-medium truncate" style={{ color: "#21242B" }}>
                       {app.job?.title ?? "—"}
                     </p>
                     <p className="text-xs text-gray-500">

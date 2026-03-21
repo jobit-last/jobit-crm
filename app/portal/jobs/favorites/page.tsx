@@ -47,7 +47,7 @@ export default function FavoritesPage() {
       {/* ヘッダー */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold mb-1" style={{ color: "#1A1A2E" }}>
+          <h1 className="text-2xl font-bold mb-1" style={{ color: "#21242B" }}>
             お気に入り求人
           </h1>
           <p className="text-sm text-gray-400">
@@ -82,7 +82,7 @@ export default function FavoritesPage() {
           <Link
             href="/portal/jobs"
             className="inline-block px-6 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-80"
-            style={{ backgroundColor: ACCENT }}
+            style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
           >
             求人一覧を見る
           </Link>

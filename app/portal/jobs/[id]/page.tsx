@@ -120,7 +120,7 @@ export default function PortalJobDetailPage() {
         <div className="flex items-start justify-between gap-4 mb-4">
           <div className="min-w-0">
             <p className="text-xs text-gray-400 mb-1">{job.company_name ?? "企業名未設定"}</p>
-            <h1 className="text-2xl font-bold leading-snug" style={{ color: "#1A1A2E" }}>
+            <h1 className="text-2xl font-bold leading-snug" style={{ color: "#21242B" }}>
               {job.title}
             </h1>
           </div>
@@ -166,7 +166,7 @@ export default function PortalJobDetailPage() {
         {/* 仕事内容 */}
         {job.description && (
           <section className="mb-6">
-            <h2 className="text-sm font-bold mb-2" style={{ color: "#1A1A2E" }}>仕事内容</h2>
+            <h2 className="text-sm font-bold mb-2" style={{ color: "#21242B" }}>仕事内容</h2>
             <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">
               {job.description}
             </p>
@@ -176,7 +176,7 @@ export default function PortalJobDetailPage() {
         {/* 求めるスキル */}
         {job.required_skills && (
           <section className="mb-6">
-            <h2 className="text-sm font-bold mb-2" style={{ color: "#1A1A2E" }}>求めるスキル・経験</h2>
+            <h2 className="text-sm font-bold mb-2" style={{ color: "#21242B" }}>求めるスキル・経験</h2>
             <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">
               {job.required_skills}
             </p>
@@ -185,7 +185,7 @@ export default function PortalJobDetailPage() {
 
         {/* 詳細情報テーブル */}
         <section>
-          <h2 className="text-sm font-bold mb-3" style={{ color: "#1A1A2E" }}>募集要項</h2>
+          <h2 className="text-sm font-bold mb-3" style={{ color: "#21242B" }}>募集要項</h2>
           <dl className="divide-y divide-gray-50">
             {[
               { label: "職種",   value: job.job_type },
@@ -206,7 +206,7 @@ export default function PortalJobDetailPage() {
       {/* 企業情報カード */}
       {company && (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="text-sm font-bold mb-4" style={{ color: "#1A1A2E" }}>企業情報</h2>
+          <h2 className="text-sm font-bold mb-4" style={{ color: "#21242B" }}>企業情報</h2>
           <dl className="divide-y divide-gray-50">
             {[
               { label: "企業名",   value: company.name },
@@ -241,7 +241,7 @@ export default function PortalJobDetailPage() {
         {interested ? (
           <div>
             <p className="text-2xl mb-2">🎉</p>
-            <p className="text-sm font-semibold mb-1" style={{ color: "#1A1A2E" }}>
+            <p className="text-sm font-semibold mb-1" style={{ color: "#21242B" }}>
               ありがとうございます！
             </p>
             <p className="text-sm text-gray-500">{sentMsg}</p>
@@ -262,7 +262,7 @@ export default function PortalJobDetailPage() {
               onClick={handleInterest}
               disabled={sending}
               className="w-full sm:w-auto px-10 py-3 rounded-xl text-white font-semibold text-sm transition-opacity hover:opacity-80 disabled:opacity-50"
-              style={{ backgroundColor: ACCENT }}
+              style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
             >
               {sending ? "送信中..." : "この求人に興味あり"}
             </button>

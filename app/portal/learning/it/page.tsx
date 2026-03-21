@@ -110,7 +110,7 @@ export default function ITLearningPage() {
         >
           学習コンテンツ
         </span>
-        <h1 className="text-3xl font-bold mb-3" style={{ color: "#1A1A2E" }}>
+        <h1 className="text-3xl font-bold mb-3" style={{ color: "#21242B" }}>
           IT業界の基礎知識
         </h1>
         <p className="text-gray-500 text-sm max-w-lg mx-auto">
@@ -127,7 +127,7 @@ export default function ITLearningPage() {
           <Link
             href="/portal/jobs/search"
             className="text-sm font-medium px-5 py-2 rounded-xl text-white transition-opacity hover:opacity-80"
-            style={{ backgroundColor: ACCENT }}
+            style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
           >
             求人を探す
           </Link>
@@ -141,7 +141,7 @@ export default function ITLearningPage() {
           {OVERVIEW_CARDS.map((c) => (
             <div key={c.title} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
               <div className="text-2xl mb-2">{c.icon}</div>
-              <h3 className="text-sm font-bold mb-2" style={{ color: "#1A1A2E" }}>{c.title}</h3>
+              <h3 className="text-sm font-bold mb-2" style={{ color: "#21242B" }}>{c.title}</h3>
               <p className="text-xs text-gray-500 leading-relaxed">{c.body}</p>
             </div>
           ))}
@@ -191,7 +191,7 @@ export default function ITLearningPage() {
             >
               <dt
                 className="text-xs font-bold shrink-0 w-52"
-                style={{ color: "#1A1A2E" }}
+                style={{ color: "#21242B" }}
               >
                 {kw.word}
               </dt>
@@ -232,7 +232,7 @@ function SectionTitle({ children, color }: { children: React.ReactNode; color: s
   return (
     <div className="flex items-center gap-3 mb-5">
       <div className="w-1 h-6 rounded-full" style={{ backgroundColor: color }} />
-      <h2 className="text-lg font-bold" style={{ color: "#1A1A2E" }}>{children}</h2>
+      <h2 className="text-lg font-bold" style={{ color: "#21242B" }}>{children}</h2>
     </div>
   );
 }

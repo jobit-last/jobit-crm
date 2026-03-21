@@ -76,7 +76,7 @@ export default function SearchPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-1" style={{ color: "#1A1A2E" }}>求人検索</h1>
+        <h1 className="text-2xl font-bold mb-1" style={{ color: "#21242B" }}>求人検索</h1>
         <p className="text-sm text-gray-400">条件を絞って理想の求人を見つけましょう</p>
       </div>
 
@@ -145,7 +145,7 @@ export default function SearchPage() {
           <button
             type="submit"
             className="px-8 py-2.5 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-80"
-            style={{ backgroundColor: ACCENT }}
+            style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
           >
             検索する
           </button>
@@ -179,7 +179,7 @@ export default function SearchPage() {
       {/* 結果 */}
       {searched && (
         <p className="text-sm text-gray-500 mb-4">
-          <span className="font-semibold" style={{ color: "#1A1A2E" }}>{total}</span> 件見つかりました
+          <span className="font-semibold" style={{ color: "#21242B" }}>{total}</span> 件見つかりました
         </p>
       )}
 

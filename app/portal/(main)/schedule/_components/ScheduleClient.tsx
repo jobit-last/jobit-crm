@@ -108,7 +108,7 @@ export default function ScheduleClient({ schedules, interviews }: Props) {
           >
             ←
           </button>
-          <h2 className="text-base font-semibold" style={{ color: "#1E293B" }}>
+          <h2 className="text-base font-semibold" style={{ color: "#21242B" }}>
             {year}年{month + 1}月
           </h2>
           <button
@@ -177,7 +177,7 @@ export default function ScheduleClient({ schedules, interviews }: Props) {
 
       {/* 今後の予定リスト */}
       <section>
-        <h2 className="text-base font-semibold mb-4" style={{ color: "#1E293B" }}>
+        <h2 className="text-base font-semibold mb-4" style={{ color: "#21242B" }}>
           今後の予定（{upcoming.length}件）
         </h2>
 
@@ -208,7 +208,7 @@ export default function ScheduleClient({ schedules, interviews }: Props) {
                         </span>
                       )}
                     </div>
-                    <p className="text-sm font-medium truncate" style={{ color: "#1E293B" }}>
+                    <p className="text-sm font-medium truncate" style={{ color: "#21242B" }}>
                       {ev.title}
                     </p>
                     {ev.location && (

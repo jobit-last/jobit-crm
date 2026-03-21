@@ -153,7 +153,7 @@ export default function JobsLearningPage() {
         >
           学習コンテンツ
         </span>
-        <h1 className="text-3xl font-bold mb-3" style={{ color: "#1A1A2E" }}>
+        <h1 className="text-3xl font-bold mb-3" style={{ color: "#21242B" }}>
           IT職種ガイド
         </h1>
         <p className="text-gray-500 text-sm max-w-lg mx-auto">
@@ -170,7 +170,7 @@ export default function JobsLearningPage() {
           <Link
             href="/portal/jobs/search"
             className="text-sm font-medium px-5 py-2 rounded-xl text-white transition-opacity hover:opacity-80"
-            style={{ backgroundColor: ACCENT }}
+            style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
           >
             求人を探す
           </Link>
@@ -221,7 +221,7 @@ export default function JobsLearningPage() {
               <div className="flex items-center gap-4 flex-wrap">
                 <span className="text-3xl">{role.icon}</span>
                 <div className="flex-1 min-w-0">
-                  <h2 className="text-xl font-bold" style={{ color: "#1A1A2E" }}>
+                  <h2 className="text-xl font-bold" style={{ color: "#21242B" }}>
                     {role.title}
                   </h2>
                   <p className="text-sm mt-0.5" style={{ color: role.color }}>
@@ -231,7 +231,7 @@ export default function JobsLearningPage() {
                 <div className="flex gap-3 shrink-0 text-xs">
                   <div className="text-center">
                     <p className="text-gray-400 mb-0.5">想定年収</p>
-                    <p className="font-bold" style={{ color: "#1A1A2E" }}>{role.salary}</p>
+                    <p className="font-bold" style={{ color: "#21242B" }}>{role.salary}</p>
                   </div>
                   <div className="text-center">
                     <p className="text-gray-400 mb-0.5">需要</p>

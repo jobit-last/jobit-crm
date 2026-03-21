@@ -68,7 +68,7 @@ export default function ProfileClient({ candidate }: Props) {
 
       {/* 基本情報（読み取り専用） */}
       <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h2 className="text-base font-semibold mb-4" style={{ color: "#1E293B" }}>
+        <h2 className="text-base font-semibold mb-4" style={{ color: "#21242B" }}>
           基本情報
         </h2>
         <dl className="space-y-3">
@@ -109,7 +109,7 @@ export default function ProfileClient({ candidate }: Props) {
       {/* 編集可能な情報 */}
       <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-base font-semibold" style={{ color: "#1E293B" }}>
+          <h2 className="text-base font-semibold" style={{ color: "#21242B" }}>
             連絡先・希望条件
           </h2>
           {!editing && (
@@ -158,7 +158,7 @@ export default function ProfileClient({ candidate }: Props) {
                 onClick={handleSave}
                 disabled={saving}
                 className="px-5 py-2 rounded-lg text-sm font-medium text-white transition-colors disabled:opacity-60"
-                style={{ backgroundColor: "#2394FF" }}
+                style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
               >
                 {saving ? "保存中..." : "保存する"}
               </button>
@@ -187,7 +187,7 @@ export default function ProfileClient({ candidate }: Props) {
 
       {/* 登録情報 */}
       <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h2 className="text-base font-semibold mb-4" style={{ color: "#1E293B" }}>
+        <h2 className="text-base font-semibold mb-4" style={{ color: "#21242B" }}>
           登録情報
         </h2>
         <dl className="space-y-3">
@@ -219,7 +219,7 @@ function InfoRow({
       <dt className="w-32 flex-shrink-0 text-sm font-medium text-gray-400">
         {label}
       </dt>
-      <dd className="text-sm" style={{ color: value || children ? "#1E293B" : "#9CA3AF" }}>
+      <dd className="text-sm" style={{ color: value || children ? "#21242B" : "#9CA3AF" }}>
         {children ?? value ?? "—"}
       </dd>
     </div>

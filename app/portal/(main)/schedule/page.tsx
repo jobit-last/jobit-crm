@@ -44,7 +44,7 @@ export default async function PortalSchedulePage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold mb-6" style={{ color: "#1E293B" }}>
+      <h1 className="text-2xl font-semibold mb-6" style={{ color: "#21242B" }}>
         スケジュール
       </h1>
 

@@ -48,7 +48,7 @@ export default function ComparePage() {
       {/* ヘッダー */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold mb-1" style={{ color: "#1A1A2E" }}>求人比較</h1>
+          <h1 className="text-2xl font-bold mb-1" style={{ color: "#21242B" }}>求人比較</h1>
           <p className="text-sm text-gray-400">最大3件の求人を横並びで比較できます</p>
         </div>
         {compareIds.length > 0 && (
@@ -70,7 +70,7 @@ export default function ComparePage() {
           <Link
             href="/portal/jobs/search"
             className="inline-block px-6 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-80"
-            style={{ backgroundColor: ACCENT }}
+            style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
           >
             求人を探す
           </Link>
@@ -109,13 +109,13 @@ export default function ComparePage() {
                 </button>
 
                 <p className="text-xs text-gray-400 mb-1 pr-14 truncate">{job.company_name ?? "—"}</p>
-                <h2 className="text-sm font-bold leading-snug mb-3 pr-12" style={{ color: "#1A1A2E" }}>
+                <h2 className="text-sm font-bold leading-snug mb-3 pr-12" style={{ color: "#21242B" }}>
                   {job.title}
                 </h2>
                 <Link
                   href={`/portal/jobs/${job.id}`}
                   className="block text-center py-2 rounded-xl text-xs font-semibold text-white hover:opacity-80 transition-opacity"
-                  style={{ backgroundColor: ACCENT }}
+                  style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
                 >
                   詳細を見る
                 </Link>

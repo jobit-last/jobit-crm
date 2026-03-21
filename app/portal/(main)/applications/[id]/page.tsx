@@ -83,12 +83,12 @@ export default async function PortalApplicationDetailPage({
           選考状況
         </Link>
         <span>/</span>
-        <span style={{ color: "#1E293B" }}>{app.job?.title}</span>
+        <span style={{ color: "#21242B" }}>{app.job?.title}</span>
       </div>
 
       {/* ヘッダー */}
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold" style={{ color: "#1E293B" }}>
+        <h1 className="text-2xl font-semibold" style={{ color: "#21242B" }}>
           {app.job?.title ?? "—"}
         </h1>
         <p className="text-sm text-gray-500 mt-1">{app.job?.company?.name ?? "—"}</p>
@@ -147,7 +147,7 @@ export default async function PortalApplicationDetailPage({
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* 基本情報 */}
         <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold mb-4" style={{ color: "#1E293B" }}>
+          <h2 className="text-sm font-semibold mb-4" style={{ color: "#21242B" }}>
             選考情報
           </h2>
           <dl className="space-y-3">
@@ -166,7 +166,7 @@ export default async function PortalApplicationDetailPage({
 
         {/* 面接日程 */}
         <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold mb-4" style={{ color: "#1E293B" }}>
+          <h2 className="text-sm font-semibold mb-4" style={{ color: "#21242B" }}>
             面接日程
           </h2>
           {!interviews || interviews.length === 0 ? (
@@ -189,7 +189,7 @@ export default async function PortalApplicationDetailPage({
                       </span>
                     )}
                   </div>
-                  <p className="text-sm font-medium" style={{ color: "#1E293B" }}>
+                  <p className="text-sm font-medium" style={{ color: "#21242B" }}>
                     {new Date(iv.scheduled_at).toLocaleString("ja-JP", {
                       month: "long",
                       day: "numeric",
@@ -209,7 +209,7 @@ export default async function PortalApplicationDetailPage({
 
         {/* 選考履歴 */}
         <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 lg:col-span-2">
-          <h2 className="text-sm font-semibold mb-4" style={{ color: "#1E293B" }}>
+          <h2 className="text-sm font-semibold mb-4" style={{ color: "#21242B" }}>
             選考履歴
           </h2>
           {!histories || histories.length === 0 ? (
@@ -262,7 +262,7 @@ function Row({ label, value }: { label: string; value: string | null | undefined
   return (
     <div className="flex gap-4">
       <dt className="w-24 flex-shrink-0 text-sm text-gray-400">{label}</dt>
-      <dd className="text-sm" style={{ color: value ? "#1E293B" : "#9CA3AF" }}>
+      <dd className="text-sm" style={{ color: value ? "#21242B" : "#9CA3AF" }}>
         {value ?? "—"}
       </dd>
     </div>

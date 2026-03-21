@@ -36,7 +36,7 @@ export default async function InterviewPrepArticlePage({
           面接対策
         </Link>
         <span>/</span>
-        <span className="truncate" style={{ color: "#1E293B" }}>{article.title}</span>
+        <span className="truncate" style={{ color: "#21242B" }}>{article.title}</span>
       </div>
 
       <article className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8">
@@ -60,7 +60,7 @@ export default async function InterviewPrepArticlePage({
         </div>
 
         {/* タイトル */}
-        <h1 className="text-xl font-bold mb-4" style={{ color: "#1E293B" }}>
+        <h1 className="text-xl font-bold mb-4" style={{ color: "#21242B" }}>
           {article.title}
         </h1>
 
@@ -70,7 +70,7 @@ export default async function InterviewPrepArticlePage({
 
         {/* 本文 */}
         {article.content ? (
-          <div className="prose prose-sm max-w-none prose-headings:text-[#1E293B] prose-a:text-[#2394FF]">
+          <div className="prose prose-sm max-w-none prose-headings:text-[#21242B] prose-a:text-[#2394FF]">
             <ReactMarkdown>{article.content}</ReactMarkdown>
           </div>
         ) : (

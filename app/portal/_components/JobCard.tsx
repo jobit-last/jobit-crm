@@ -52,7 +52,7 @@ export default function JobCard({
       {/* タイトル */}
       <h2
         className="text-base font-bold leading-snug mb-3 group-hover:opacity-80 transition-opacity"
-        style={{ color: "#1A1A2E" }}
+        style={{ color: "#21242B" }}
       >
         {job.title}
       </h2>
@@ -86,7 +86,7 @@ export default function JobCard({
         <Link
           href={`/portal/jobs/${job.id}`}
           className="block text-center py-2 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-80"
-          style={{ backgroundColor: ACCENT }}
+          style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
         >
           詳細を見る
         </Link>

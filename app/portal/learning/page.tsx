@@ -13,7 +13,7 @@ export default function LearningTopPage() {
         >
           学習コンテンツ
         </span>
-        <h1 className="text-3xl font-bold mb-3" style={{ color: "#1A1A2E" }}>
+        <h1 className="text-3xl font-bold mb-3" style={{ color: "#21242B" }}>
           転職準備を始めよう
         </h1>
         <p className="text-sm text-gray-500 max-w-md mx-auto">
@@ -27,7 +27,7 @@ export default function LearningTopPage() {
           className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 group hover:shadow-md transition-shadow"
         >
           <div className="text-4xl mb-4">💻</div>
-          <h2 className="text-xl font-bold mb-2 group-hover:opacity-80 transition-opacity" style={{ color: "#1A1A2E" }}>
+          <h2 className="text-xl font-bold mb-2 group-hover:opacity-80 transition-opacity" style={{ color: "#21242B" }}>
             IT業界の基礎知識
           </h2>
           <p className="text-sm text-gray-500 mb-4">
@@ -41,7 +41,7 @@ export default function LearningTopPage() {
           className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 group hover:shadow-md transition-shadow"
         >
           <div className="text-4xl mb-4">👨‍💻</div>
-          <h2 className="text-xl font-bold mb-2 group-hover:opacity-80 transition-opacity" style={{ color: "#1A1A2E" }}>
+          <h2 className="text-xl font-bold mb-2 group-hover:opacity-80 transition-opacity" style={{ color: "#21242B" }}>
             IT職種ガイド
           </h2>
           <p className="text-sm text-gray-500 mb-4">
