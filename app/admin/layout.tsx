@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 const navItems = [
   { label: "ダッシュボード", href: "/admin/dashboard" },
@@ -44,7 +45,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           background: "linear-gradient(to bottom, #002D37 0%, #050258 25%, #1B36AE 50%, #0048D9 75%, #002D37 100%)",
         }}
       >
-        <div className="h-16 flex items-center px-6 border-b border-white/10">
+        <div className="h-16 flex items-center gap-3 px-6 border-b border-white/10">
+          <Image
+            src="/jobit-mascot.png"
+            alt="Jobit マスコット"
+            width={40}
+            height={40}
+            className="rounded-full"
+          />
           <span className="text-white font-bold text-lg tracking-wide">
             Jobit CRM
           </span>
