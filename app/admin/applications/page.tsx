@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import Link from "next/link";
 import type { Application } from "@/types/application";
 import ApplicationsClient from "./_components/ApplicationsClient";
 
@@ -43,6 +44,13 @@ export default async function ApplicationsPage({
         <h1 className="text-2xl font-semibold" style={{ color: "#002D37" }}>
           選考管理
         </h1>
+        <Link
+          href="/admin/applications/new"
+          className="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00c752]"
+          style={{ backgroundColor: "#00E05D", color: "#002D37" }}
+        >
+          新規登録
+        </Link>
       </div>
 
       <ApplicationsClient
