@@ -6,9 +6,9 @@ import { createClient } from "@/lib/supabase/client";
 
 const navItems = [
   { label: "マイページ", href: "/portal/dashboard" },
-  { label: "提案求人", href: "/portal/jobs" },
   { label: "選考状況", href: "/portal/applications" },
   { label: "スケジュール", href: "/portal/schedule" },
+  { label: "面接対策", href: "/portal/interview-prep" },
   { label: "プロフィール", href: "/portal/profile" },
 ];
 
