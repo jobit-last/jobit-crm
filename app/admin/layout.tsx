@@ -11,6 +11,7 @@ const navItems = [
   { label: "企業管理", href: "/admin/companies" },
   { label: "求人管理", href: "/admin/jobs" },
   { label: "選考管理", href: "/admin/applications" },
+  { label: "面接登録", href: "/admin/interviews/new" },
   { label: "スケジュール管理", href: "/admin/schedule" },
   { label: "通知管理", href: "/admin/notifications" },
   { label: "契約書管理", href: "/admin/contracts" },
