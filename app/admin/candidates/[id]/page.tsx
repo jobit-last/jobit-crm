@@ -65,6 +65,13 @@ export default async function CandidateDetailPage({
         </div>
         <div className="flex items-center gap-2">
           <Link
+            href={`/admin/candidates/${id}/resumes`}
+            className="px-4 py-2 rounded-md text-sm font-medium text-[#002D37] transition-colors hover:bg-[#00c752]"
+            style={{ backgroundColor: "#00E05D" }}
+          >
+            履歴書管理
+          </Link>
+          <Link
             href={`/admin/candidates/${id}/edit`}
             className="px-4 py-2 rounded-md text-sm font-medium text-white transition-opacity hover:opacity-90"
             style={{ backgroundColor: "#002D37" }}

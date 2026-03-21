@@ -47,5 +47,16 @@ export async function POST(request: NextRequest) {
     .single();
 
   if (error) return Response.json({ error: error.message }, { status: 500 });
+
+  // 初期ステータス履歴を自動記録
+  const { data: { user } } = await supabase.auth.getUser();
+  await supabase.from("application_status_histories").insert({
+    application_id: data.id,
+    from_status: null,
+    to_status: data.status,
+    changed_by: user?.id ?? null,
+    changed_at: new Date().toISOString(),
+  });
+
   return Response.json({ data }, { status: 201 });
 }

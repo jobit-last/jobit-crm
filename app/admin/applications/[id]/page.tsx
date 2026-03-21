@@ -108,10 +108,21 @@ export default async function ApplicationDetailPage({
         />
 
         {/* 面接日程管理 */}
-        <InterviewSection
-          applicationId={id}
-          initialInterviews={(interviews as Interview[]) ?? []}
-        />
+        <div className="lg:col-span-2 space-y-3">
+          <div className="flex justify-end">
+            <Link
+              href={`/admin/applications/${id}/interviews`}
+              className="px-3 py-1.5 rounded-md text-sm font-medium text-[#002D37] transition-colors hover:bg-[#00c752]"
+              style={{ backgroundColor: "#00E05D" }}
+            >
+              面接管理画面を開く
+            </Link>
+          </div>
+          <InterviewSection
+            applicationId={id}
+            initialInterviews={(interviews as Interview[]) ?? []}
+          />
+        </div>
       </div>
     </div>
   );
