@@ -40,7 +40,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         className={`fixed inset-y-0 left-0 z-40 w-60 flex-shrink-0 flex flex-col transform transition-transform duration-200 ease-in-out md:relative md:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
-        style={{ backgroundColor: "#002D37" }}
+        style={{
+          background: "linear-gradient(to bottom, #002D37 0%, #050258 25%, #1B36AE 50%, #0048D9 75%, #002D37 100%)",
+        }}
       >
         <div className="h-16 flex items-center px-6 border-b border-white/10">
           <span className="text-white font-bold text-lg tracking-wide">
@@ -55,11 +57,26 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 key={item.href}
                 href={item.href}
                 onClick={() => setSidebarOpen(false)}
-                className={`block px-3 py-2 rounded-md text-sm transition-colors ${
+                className={`block px-3 py-2 rounded-md text-sm transition-all duration-150 ${
                   isActive
-                    ? "text-white bg-white/15 font-medium"
-                    : "text-white/80 hover:text-white hover:bg-white/10"
+                    ? "font-semibold"
+                    : "text-white/80 hover:text-white"
                 }`}
+                style={
+                  isActive
+                    ? { color: "#FFF32D", backgroundColor: "rgba(255, 243, 45, 0.12)" }
+                    : undefined
+                }
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.backgroundColor = "rgba(75, 135, 255, 0.25)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.backgroundColor = "transparent";
+                  }
+                }}
               >
                 {item.label}
               </Link>
