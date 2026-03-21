@@ -1,14 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const protectedPaths = [
-  "/admin",
-];
-
-function isProtectedPath(pathname: string): boolean {
-  return protectedPaths.some((path) => pathname.startsWith(path));
-}
-
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
@@ -40,16 +32,26 @@ export async function updateSession(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
-  // 未ログインユーザーが保護されたページにアクセスした場合、ログインへリダイレクト
-  if (!user && isProtectedPath(pathname)) {
+  // ----- /admin 保護 -----
+  if (!user && pathname.startsWith("/admin")) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  // ログイン済みユーザーが /login にアクセスした場合、ダッシュボードへリダイレクト
+  // ----- /portal 保護（/portal/login は除外） -----
+  if (!user && pathname.startsWith("/portal") && pathname !== "/portal/login") {
+    return NextResponse.redirect(new URL("/portal/login", request.url));
+  }
+
+  // ログイン済みユーザーが管理者ログインにアクセスした場合
   if (user && (pathname === "/login" || pathname === "/")) {
     return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+  }
+
+  // ログイン済みユーザーがポータルログインにアクセスした場合
+  if (user && pathname === "/portal/login") {
+    return NextResponse.redirect(new URL("/portal/dashboard", request.url));
   }
 
   return supabaseResponse;
