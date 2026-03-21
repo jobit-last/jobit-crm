@@ -29,7 +29,7 @@ export default async function InterviewPrepArticlePage({
   const article = data as Knowledge;
 
   return (
-    <div>
+    <div style={{ backgroundColor: "#F2F6FF", minHeight: "100%" }} className="pb-8">
       {/* パンくず */}
       <div className="flex items-center gap-2 mb-6 text-sm text-gray-500">
         <Link href="/portal/interview-prep" className="hover:underline" style={{ color: "#2394FF" }}>
@@ -39,12 +39,15 @@ export default async function InterviewPrepArticlePage({
         <span className="truncate" style={{ color: "#21242B" }}>{article.title}</span>
       </div>
 
-      <article className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8">
-        {/* バッジ */}
-        <div className="flex flex-wrap items-center gap-2 mb-4">
+      {/* Gradient B ヘッダーバナー */}
+      <div
+        className="rounded-2xl px-8 py-8 mb-8 shadow-lg"
+        style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
+      >
+        <div className="flex flex-wrap items-center gap-2 mb-3">
           {article.category && (
             <span
-              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${CATEGORY_COLORS[article.category]}`}
+              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-white/20 text-white backdrop-blur-sm"
             >
               {article.category}
             </span>
@@ -52,22 +55,22 @@ export default async function InterviewPrepArticlePage({
           {article.tags.map((tag) => (
             <span
               key={tag}
-              className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-500"
+              className="text-xs px-2 py-0.5 rounded-full bg-white/10 text-white/80"
             >
               {tag}
             </span>
           ))}
         </div>
-
-        {/* タイトル */}
-        <h1 className="text-xl font-bold mb-4" style={{ color: "#21242B" }}>
+        <h1 className="text-xl font-bold text-white">
           {article.title}
         </h1>
-
-        <p className="text-xs text-gray-400 mb-6">
+        <p className="text-xs text-white/60 mt-2">
           更新日: {new Date(article.updated_at).toLocaleDateString("ja-JP")}
         </p>
+      </div>
 
+      {/* 本文カード */}
+      <article className="bg-white rounded-2xl shadow-sm p-6 sm:p-8">
         {/* 本文 */}
         {article.content ? (
           <div className="prose prose-sm max-w-none prose-headings:text-[#21242B] prose-a:text-[#2394FF]">
@@ -78,11 +81,24 @@ export default async function InterviewPrepArticlePage({
         )}
       </article>
 
+      {/* Tips セクション */}
+      <div
+        className="rounded-2xl p-5 mt-6 border-l-4"
+        style={{ backgroundColor: "#E8F0F6", borderLeftColor: "#00B59A" }}
+      >
+        <p className="text-sm font-semibold mb-1" style={{ color: "#00B59A" }}>
+          面接のポイント
+        </p>
+        <p className="text-xs text-gray-600">
+          記事の内容を参考に、自分なりの回答を準備しておきましょう。具体的なエピソードを交えて話すと効果的です。
+        </p>
+      </div>
+
       <div className="mt-6">
         <Link
           href="/portal/interview-prep"
-          className="text-sm font-medium hover:underline"
-          style={{ color: "#2394FF" }}
+          className="inline-flex items-center text-sm font-medium text-white px-5 py-2 rounded-xl shadow-md transition-all hover:shadow-lg"
+          style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
         >
           ← 面接対策一覧に戻る
         </Link>

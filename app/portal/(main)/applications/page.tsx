@@ -20,6 +20,14 @@ function getProgressIndex(status: ApplicationStatus): number {
   return 0;
 }
 
+// ステータスに応じた左ボーダー色
+function getStatusBorderColor(status: ApplicationStatus): string {
+  if (["offered", "placed"].includes(status)) return "#00B59A";
+  if (["first_interview", "second_interview", "final_interview"].includes(status)) return "#2394FF";
+  if (["failed", "declined"].includes(status)) return "#9CA3AF";
+  return "#F67A34";
+}
+
 export default async function PortalApplicationsPage() {
   const supabase = await createClient();
   const {
@@ -55,30 +63,37 @@ export default async function PortalApplicationsPage() {
   const closed = apps.filter((a) => ["placed", "failed", "declined"].includes(a.status));
 
   return (
-    <div>
-      <h1 className="text-2xl font-semibold mb-6" style={{ color: "#21242B" }}>
-        選考状況
-      </h1>
+    <div style={{ backgroundColor: "#F2F6FF", minHeight: "100%" }} className="pb-8">
+      {/* Hero Header */}
+      <div
+        className="rounded-2xl px-8 py-8 mb-8 shadow-lg"
+        style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
+      >
+        <h1 className="text-2xl font-bold text-white">選考状況</h1>
+        <p className="text-white/70 text-sm mt-1">応募の進捗をまとめて確認できます</p>
+      </div>
 
       {/* 進行中 */}
       <section className="mb-8">
-        <h2 className="text-sm font-medium text-gray-500 mb-3">
+        <h2 className="text-sm font-semibold mb-3" style={{ color: "#16B1F3" }}>
           進行中（{active.length}件）
         </h2>
 
         {active.length === 0 ? (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+          <div className="bg-white rounded-2xl shadow-sm p-8 text-center">
             <p className="text-sm text-gray-400">進行中の選考はありません</p>
           </div>
         ) : (
           <div className="space-y-4">
             {active.map((app) => {
               const progressIdx = getProgressIndex(app.status);
+              const borderColor = getStatusBorderColor(app.status);
               return (
                 <Link
                   key={app.id}
                   href={`/portal/applications/${app.id}`}
-                  className="block bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:border-[#2394FF]/40 transition-colors"
+                  className="block bg-white rounded-2xl shadow-sm p-5 hover:shadow-md transition-all border-l-4"
+                  style={{ borderLeftColor: borderColor }}
                 >
                   <div className="flex items-start justify-between gap-4 mb-4">
                     <div className="min-w-0">
@@ -104,15 +119,17 @@ export default async function PortalApplicationsPage() {
                       return (
                         <div key={step.label} className="flex-1">
                           <div
-                            className="h-1.5 rounded-full transition-colors"
+                            className="h-2 rounded-full transition-colors"
                             style={{
-                              backgroundColor: isComplete ? "#2394FF" : "#E5E7EB",
+                              background: isComplete
+                                ? "linear-gradient(135deg, #16B1F3, #0649C4)"
+                                : "#E5E7EB",
                             }}
                           />
                           <p
                             className="text-[10px] mt-1 text-center"
                             style={{
-                              color: isCurrent ? "#2394FF" : "#9CA3AF",
+                              color: isCurrent ? "#16B1F3" : "#9CA3AF",
                               fontWeight: isCurrent ? 600 : 400,
                             }}
                           >
@@ -124,7 +141,7 @@ export default async function PortalApplicationsPage() {
                   </div>
 
                   {app.applied_at && (
-                    <p className="text-[11px] text-gray-400 mt-3">
+                    <p className="text-[11px] mt-3" style={{ color: "#2394FF" }}>
                       応募日: {new Date(app.applied_at).toLocaleDateString("ja-JP")}
                     </p>
                   )}
@@ -138,7 +155,7 @@ export default async function PortalApplicationsPage() {
       {/* 終了した選考 */}
       {closed.length > 0 && (
         <section>
-          <h2 className="text-sm font-medium text-gray-500 mb-3">
+          <h2 className="text-sm font-semibold mb-3" style={{ color: "#16B1F3" }}>
             終了（{closed.length}件）
           </h2>
           <div className="space-y-3">
@@ -146,7 +163,8 @@ export default async function PortalApplicationsPage() {
               <Link
                 key={app.id}
                 href={`/portal/applications/${app.id}`}
-                className="block bg-white rounded-xl shadow-sm border border-gray-200 p-4 opacity-70 hover:opacity-100 transition-opacity"
+                className="block bg-white rounded-2xl shadow-sm p-4 opacity-70 hover:opacity-100 transition-all border-l-4"
+                style={{ borderLeftColor: getStatusBorderColor(app.status) }}
               >
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0">

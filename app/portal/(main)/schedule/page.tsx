@@ -43,10 +43,15 @@ export default async function PortalSchedulePage() {
     .order("scheduled_at", { ascending: true });
 
   return (
-    <div>
-      <h1 className="text-2xl font-semibold mb-6" style={{ color: "#21242B" }}>
-        スケジュール
-      </h1>
+    <div style={{ backgroundColor: "#F2F6FF", minHeight: "100%" }} className="pb-8">
+      {/* Hero Header */}
+      <div
+        className="rounded-2xl px-8 py-8 mb-8 shadow-lg"
+        style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
+      >
+        <h1 className="text-2xl font-bold text-white">スケジュール</h1>
+        <p className="text-white/70 text-sm mt-1">面接・面談の予定を管理</p>
+      </div>
 
       <ScheduleClient
         schedules={(schedules as Schedule[]) ?? []}

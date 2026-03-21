@@ -63,34 +63,61 @@ export default async function PortalDashboardPage() {
 
   return (
     <div>
-      {/* 挨拶 */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold" style={{ color: "#21242B" }}>
-          こんにちは、{candidate.name}さん
-        </h1>
-        <div className="mt-2 flex flex-wrap items-center gap-3">
-          <span
-            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[candidate.status]}`}
-          >
-            {STATUS_LABELS[candidate.status]}
-          </span>
-          {candidate.ca && (
-            <span className="text-sm text-gray-500">
-              担当CA: <span className="font-medium text-gray-700">{candidate.ca.full_name}</span>
+      {/* Hero section with gradient */}
+      <div
+        className="rounded-2xl p-6 mb-8 relative overflow-hidden"
+        style={{
+          background: "linear-gradient(135deg, #16B1F3, #0649C4)",
+          boxShadow: "0 4px 20px rgba(6, 73, 196, 0.25)",
+        }}
+      >
+        {/* Subtle decorative circles */}
+        <div
+          className="absolute -top-10 -right-10 w-40 h-40 rounded-full"
+          style={{ background: "rgba(255,255,255,0.08)" }}
+        />
+        <div
+          className="absolute -bottom-6 -left-6 w-24 h-24 rounded-full"
+          style={{ background: "rgba(255,255,255,0.06)" }}
+        />
+
+        <div className="relative z-10">
+          <h1 className="text-2xl font-bold text-white">
+            こんにちは、{candidate.name}さん
+          </h1>
+          <p className="text-sm mt-1" style={{ color: "rgba(255,255,255,0.8)" }}>
+            今日も素敵なキャリアを見つけましょう
+          </p>
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            <span
+              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[candidate.status]}`}
+            >
+              {STATUS_LABELS[candidate.status]}
             </span>
-          )}
+            {candidate.ca && (
+              <span className="text-sm" style={{ color: "rgba(255,255,255,0.85)" }}>
+                担当CA: <span className="font-medium text-white">{candidate.ca.full_name}</span>
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
       {/* サマリーカード */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-8">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+        <div
+          className="bg-white rounded-xl shadow-sm p-5 border-l-4"
+          style={{ borderLeftColor: "#2394FF" }}
+        >
           <p className="text-xs font-medium text-gray-400 mb-1">進行中の選考</p>
           <p className="text-3xl font-bold" style={{ color: "#2394FF" }}>
             {(applications as Application[] | null)?.length ?? 0}
           </p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+        <div
+          className="bg-white rounded-xl shadow-sm p-5 border-l-4"
+          style={{ borderLeftColor: "#00B59A" }}
+        >
           <p className="text-xs font-medium text-gray-400 mb-1">次の面接</p>
           {nextInterview?.scheduled_at ? (
             <p className="text-lg font-bold" style={{ color: "#21242B" }}>
@@ -109,7 +136,10 @@ export default async function PortalDashboardPage() {
             <p className="text-lg font-bold text-gray-300">予定なし</p>
           )}
         </div>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+        <div
+          className="bg-white rounded-xl shadow-sm p-5 border-l-4"
+          style={{ borderLeftColor: "#F67A34" }}
+        >
           <p className="text-xs font-medium text-gray-400 mb-1">ステータス</p>
           <p className="text-lg font-bold" style={{ color: "#21242B" }}>
             {STATUS_LABELS[candidate.status]}
@@ -117,10 +147,54 @@ export default async function PortalDashboardPage() {
         </div>
       </div>
 
+      {/* Quick Actions */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+        <Link
+          href="/portal/applications"
+          className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-white text-sm font-medium transition-all hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+          style={{
+            background: "linear-gradient(135deg, #16B1F3, #0649C4)",
+            boxShadow: "0 2px 10px rgba(6, 73, 196, 0.2)",
+          }}
+        >
+          選考一覧
+        </Link>
+        <Link
+          href="/portal/schedule"
+          className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-white text-sm font-medium transition-all hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+          style={{
+            background: "linear-gradient(135deg, #16B1F3, #0649C4)",
+            boxShadow: "0 2px 10px rgba(6, 73, 196, 0.2)",
+          }}
+        >
+          スケジュール
+        </Link>
+        <Link
+          href="/portal/interview-prep"
+          className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-white text-sm font-medium transition-all hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+          style={{
+            background: "linear-gradient(135deg, #16B1F3, #0649C4)",
+            boxShadow: "0 2px 10px rgba(6, 73, 196, 0.2)",
+          }}
+        >
+          面接対策
+        </Link>
+        <Link
+          href="/portal/profile"
+          className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-white text-sm font-medium transition-all hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+          style={{
+            background: "linear-gradient(135deg, #16B1F3, #0649C4)",
+            boxShadow: "0 2px 10px rgba(6, 73, 196, 0.2)",
+          }}
+        >
+          プロフィール
+        </Link>
+      </div>
+
       {/* 進行中の選考 */}
       <section className="mb-8">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-base font-semibold" style={{ color: "#21242B" }}>
+          <h2 className="text-base font-semibold" style={{ color: "#16B1F3" }}>
             進行中の選考
           </h2>
           <Link
@@ -141,7 +215,8 @@ export default async function PortalDashboardPage() {
             {(applications as Application[]).map((app) => (
               <div
                 key={app.id}
-                className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 flex items-center justify-between gap-4"
+                className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex items-center justify-between gap-4 transition-all hover:shadow-md"
+                style={{ borderLeft: "3px solid #2394FF" }}
               >
                 <div className="min-w-0">
                   <p className="text-sm font-medium truncate" style={{ color: "#21242B" }}>
@@ -164,7 +239,7 @@ export default async function PortalDashboardPage() {
 
       {/* 次の面接日程 */}
       <section>
-        <h2 className="text-base font-semibold mb-4" style={{ color: "#21242B" }}>
+        <h2 className="text-base font-semibold mb-4" style={{ color: "#16B1F3" }}>
           次の面接日程
         </h2>
 
@@ -173,7 +248,10 @@ export default async function PortalDashboardPage() {
             <p className="text-sm text-gray-400">予定されている面接はありません</p>
           </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+          <div
+            className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 transition-all hover:shadow-md"
+            style={{ borderLeft: "3px solid #00B59A" }}
+          >
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-sm font-medium" style={{ color: "#21242B" }}>

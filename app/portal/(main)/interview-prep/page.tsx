@@ -6,6 +6,12 @@ import { CATEGORY_COLORS } from "@/types/knowledge";
 import type { Interview } from "@/types/interview";
 import { INTERVIEW_TYPE_LABELS, INTERVIEW_TYPE_COLORS } from "@/types/interview";
 
+// カードの左ボーダー色をインデックスに応じて回す
+const CARD_ACCENT_COLORS = ["#2394FF", "#00B59A", "#F67A34", "#0649C4", "#EE542F", "#16B1F3"];
+function getCardAccent(index: number): string {
+  return CARD_ACCENT_COLORS[index % CARD_ACCENT_COLORS.length];
+}
+
 export default async function InterviewPrepPage() {
   const supabase = await createClient();
   const {
@@ -54,22 +60,28 @@ export default async function InterviewPrepPage() {
   const refArticles = (otherArticles as Knowledge[]) ?? [];
 
   return (
-    <div>
-      <h1 className="text-2xl font-semibold mb-6" style={{ color: "#21242B" }}>
-        面接対策
-      </h1>
+    <div style={{ backgroundColor: "#F2F6FF", minHeight: "100%" }} className="pb-8">
+      {/* Hero Header */}
+      <div
+        className="rounded-2xl px-8 py-8 mb-8 shadow-lg"
+        style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
+      >
+        <h1 className="text-2xl font-bold text-white">面接対策</h1>
+        <p className="text-white/70 text-sm mt-1">面接に向けた準備と対策ナレッジ</p>
+      </div>
 
       {/* 今後の面接 */}
       {upcomingInterviews.length > 0 && (
         <section className="mb-8">
-          <h2 className="text-sm font-medium text-gray-500 mb-3">
+          <h2 className="text-sm font-semibold mb-3" style={{ color: "#16B1F3" }}>
             今後の面接予定
           </h2>
           <div className="space-y-3">
             {upcomingInterviews.map((iv) => (
               <div
                 key={iv.id}
-                className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 flex items-center justify-between gap-4"
+                className="bg-white rounded-2xl shadow-sm p-4 flex items-center justify-between gap-4 border-l-4"
+                style={{ borderLeftColor: "#EE542F" }}
               >
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 mb-1">
@@ -77,6 +89,12 @@ export default async function InterviewPrepPage() {
                       className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium ${INTERVIEW_TYPE_COLORS[iv.interview_type]}`}
                     >
                       {INTERVIEW_TYPE_LABELS[iv.interview_type]}
+                    </span>
+                    <span
+                      className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold text-white"
+                      style={{ background: "linear-gradient(135deg, #EE542F, #F67A34, #FFA639)" }}
+                    >
+                      予定あり
                     </span>
                   </div>
                   <p className="text-sm font-medium truncate" style={{ color: "#21242B" }}>
@@ -87,14 +105,14 @@ export default async function InterviewPrepPage() {
                   )}
                 </div>
                 <div className="flex-shrink-0 text-right">
-                  <p className="text-sm font-medium" style={{ color: "#2394FF" }}>
+                  <p className="text-sm font-semibold" style={{ color: "#2394FF" }}>
                     {new Date(iv.scheduled_at).toLocaleDateString("ja-JP", {
                       month: "short",
                       day: "numeric",
                       weekday: "short",
                     })}
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs" style={{ color: "#2394FF" }}>
                     {new Date(iv.scheduled_at).toLocaleTimeString("ja-JP", {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -109,21 +127,22 @@ export default async function InterviewPrepPage() {
 
       {/* 面接対策ナレッジ */}
       <section className="mb-8">
-        <h2 className="text-base font-semibold mb-4" style={{ color: "#21242B" }}>
+        <h2 className="text-base font-semibold mb-4" style={{ color: "#16B1F3" }}>
           面接対策ノート
         </h2>
 
         {prepArticles.length === 0 ? (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+          <div className="bg-white rounded-2xl shadow-sm p-8 text-center">
             <p className="text-sm text-gray-400">面接対策の記事はまだありません</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {prepArticles.map((article) => (
+            {prepArticles.map((article, idx) => (
               <Link
                 key={article.id}
                 href={`/portal/interview-prep/${article.id}`}
-                className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:border-[#2394FF]/40 transition-colors block"
+                className="bg-white rounded-2xl shadow-sm p-5 hover:shadow-md transition-all block border-l-4"
+                style={{ borderLeftColor: getCardAccent(idx) }}
               >
                 <div className="flex items-center gap-2 mb-2">
                   {article.category && (
@@ -147,14 +166,15 @@ export default async function InterviewPrepPage() {
                     {article.tags.slice(0, 3).map((tag) => (
                       <span
                         key={tag}
-                        className="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-500"
+                        className="text-[10px] px-1.5 py-0.5 rounded-full font-medium"
+                        style={{ backgroundColor: "#E8F0F6", color: "#2394FF" }}
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
                 )}
-                <p className="text-[10px] text-gray-400 mt-2">
+                <p className="text-[10px] mt-2" style={{ color: "#2394FF" }}>
                   {new Date(article.updated_at).toLocaleDateString("ja-JP")}
                 </p>
               </Link>
@@ -166,15 +186,16 @@ export default async function InterviewPrepPage() {
       {/* 企業・業界情報 */}
       {refArticles.length > 0 && (
         <section>
-          <h2 className="text-base font-semibold mb-4" style={{ color: "#21242B" }}>
+          <h2 className="text-base font-semibold mb-4" style={{ color: "#16B1F3" }}>
             企業・業界情報
           </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {refArticles.map((article) => (
+            {refArticles.map((article, idx) => (
               <Link
                 key={article.id}
                 href={`/portal/interview-prep/${article.id}`}
-                className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:border-[#00B59A]/40 transition-colors block"
+                className="bg-white rounded-2xl shadow-sm p-5 hover:shadow-md transition-all block border-l-4"
+                style={{ borderLeftColor: "#00B59A" }}
               >
                 {article.category && (
                   <span
@@ -191,7 +212,7 @@ export default async function InterviewPrepPage() {
                     {article.content.slice(0, 100)}
                   </p>
                 )}
-                <p className="text-[10px] text-gray-400 mt-2">
+                <p className="text-[10px] mt-2" style={{ color: "#2394FF" }}>
                   {new Date(article.updated_at).toLocaleDateString("ja-JP")}
                 </p>
               </Link>

@@ -4,6 +4,9 @@ import Link from "next/link";
 import type { Job } from "@/types/job";
 
 const ACCENT = "#2394FF";
+const MINT = "#00B59A";
+const GRADIENT_B = "linear-gradient(135deg, #16B1F3, #0649C4)";
+const GRADIENT_O = "linear-gradient(135deg, #EE542F, #F67A34, #FFA639)";
 
 export function formatSalary(min: number | null, max: number | null): string {
   if (!min && !max) return "応相談";
@@ -32,10 +35,13 @@ export default function JobCard({
   const inCompare = compareIds.includes(job.id);
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex flex-col hover:shadow-md transition-shadow group">
+    <div
+      className="bg-white rounded-2xl shadow-sm p-5 flex flex-col hover:shadow-lg transition-shadow group"
+      style={{ borderLeft: `4px solid ${ACCENT}` }}
+    >
       {/* 企業名 + お気に入り */}
       <div className="flex items-start justify-between gap-2 mb-1">
-        <span className="text-xs text-gray-400 font-medium truncate">
+        <span className="text-xs font-medium truncate" style={{ color: "#16B1F3" }}>
           {job.company_name ?? "企業名未設定"}
         </span>
         <button
@@ -61,22 +67,33 @@ export default function JobCard({
       <div className="flex flex-wrap gap-2 mb-3">
         {job.job_type && (
           <span
-            className="text-xs px-2.5 py-1 rounded-full font-medium"
-            style={{ backgroundColor: "#EBF4FF", color: ACCENT }}
+            className="text-xs px-2.5 py-1 rounded-full font-medium text-white"
+            style={{ backgroundColor: MINT }}
           >
             {job.job_type}
           </span>
         )}
         {job.location && (
-          <span className="text-xs px-2.5 py-1 rounded-full bg-gray-100 text-gray-500">
+          <span
+            className="text-xs px-2.5 py-1 rounded-full font-medium"
+            style={{ backgroundColor: "#E6F7F4", color: MINT }}
+          >
             📍 {job.location}
           </span>
         )}
       </div>
 
       {/* 年収 */}
-      <p className="text-sm font-semibold mb-4" style={{ color: ACCENT }}>
-        💰 {formatSalary(job.salary_min, job.salary_max)}
+      <p className="text-sm font-bold mb-4">
+        <span
+          style={{
+            background: GRADIENT_O,
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
+        >
+          💰 {formatSalary(job.salary_min, job.salary_max)}
+        </span>
       </p>
 
       <div className="flex-1" />
@@ -85,8 +102,8 @@ export default function JobCard({
       <div className="flex flex-col gap-2">
         <Link
           href={`/portal/jobs/${job.id}`}
-          className="block text-center py-2 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-80"
-          style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
+          className="block text-center py-2 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-80 shadow-md"
+          style={{ background: GRADIENT_B }}
         >
           詳細を見る
         </Link>

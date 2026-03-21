@@ -5,6 +5,9 @@ import Link from "next/link";
 import type { Job } from "@/types/job";
 
 const ACCENT = "#2394FF";
+const MINT = "#00B59A";
+const GRADIENT_B = "linear-gradient(135deg, #16B1F3, #0649C4)";
+const GRADIENT_O = "linear-gradient(135deg, #EE542F, #F67A34, #FFA639)";
 
 function formatSalary(min: number | null, max: number | null): string {
   if (!min && !max) return "応相談";
@@ -77,100 +80,111 @@ export default function PortalJobsPage() {
   const totalPages = Math.ceil(total / perPage);
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10">
+    <div style={{ backgroundColor: "#F2F6FF", minHeight: "100vh" }}>
       {/* ヒーロー */}
-      <div className="text-center mb-10">
-        <h1 className="text-3xl font-bold mb-2" style={{ color: "#21242B" }}>
+      <div
+        className="py-14 px-4 text-center mb-10"
+        style={{ background: GRADIENT_B }}
+      >
+        <h1 className="text-3xl font-bold mb-2 text-white">
           あなたにぴったりの求人
         </h1>
-        <p className="text-gray-500 text-sm">担当CAが厳選した求人をご紹介します</p>
+        <p className="text-blue-100 text-sm">担当CAが厳選した求人をご紹介します</p>
       </div>
 
-      {/* 検索バー */}
-      <form onSubmit={handleSearch} className="mb-8">
-        <div className="flex gap-2 bg-white rounded-xl shadow-sm border border-gray-200 p-2">
-          <input
-            type="text"
-            value={inputKw}
-            onChange={(e) => setInputKw(e.target.value)}
-            placeholder="職種・キーワードで検索..."
-            className="flex-1 px-3 py-2 text-sm focus:outline-none bg-transparent"
-          />
-          <button
-            type="submit"
-            className="px-6 py-2 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-80"
-            style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
-          >
-            検索
-          </button>
-        </div>
-      </form>
-
-      {/* 件数 */}
-      <p className="text-sm text-gray-500 mb-4">
-        {keyword ? `「${keyword}」の検索結果: ` : ""}
-        <span className="font-semibold" style={{ color: "#21242B" }}>{total}</span> 件
-      </p>
-
-      {/* カード一覧 */}
-      {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 animate-pulse">
-              <div className="h-4 bg-gray-100 rounded mb-3 w-1/3" />
-              <div className="h-5 bg-gray-100 rounded mb-4 w-3/4" />
-              <div className="h-3 bg-gray-100 rounded mb-2 w-1/2" />
-              <div className="h-3 bg-gray-100 rounded w-2/3" />
-            </div>
-          ))}
-        </div>
-      ) : jobs.length === 0 ? (
-        <div className="text-center py-20 text-gray-400">
-          <p className="text-4xl mb-3">🔍</p>
-          <p className="text-sm">求人が見つかりませんでした</p>
-          {keyword && (
-            <button
-              onClick={() => { setInputKw(""); setKeyword(""); setPage(1); }}
-              className="mt-4 text-sm underline"
-              style={{ color: ACCENT }}
-            >
-              検索をリセット
-            </button>
-          )}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {jobs.map((job) => (
-            <JobCard
-              key={job.id}
-              job={job}
-              isFavorite={favorites.has(job.id)}
-              onToggleFavorite={() => toggle(job.id)}
+      <div className="max-w-5xl mx-auto px-4 pb-10">
+        {/* 検索バー */}
+        <form onSubmit={handleSearch} className="mb-8 -mt-8">
+          <div className="flex gap-2 bg-white rounded-xl shadow-lg border border-gray-100 p-2">
+            <input
+              type="text"
+              value={inputKw}
+              onChange={(e) => setInputKw(e.target.value)}
+              placeholder="職種・キーワードで検索..."
+              className="flex-1 px-3 py-2 text-sm focus:outline-none bg-transparent"
+              style={{ "--tw-ring-color": ACCENT } as React.CSSProperties}
             />
-          ))}
-        </div>
-      )}
+            <button
+              type="submit"
+              className="px-6 py-2 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-80 shadow-md"
+              style={{ background: GRADIENT_B }}
+            >
+              検索
+            </button>
+          </div>
+        </form>
 
-      {/* ページネーション */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 mt-10">
-          <button
-            onClick={() => setPage((p) => Math.max(p - 1, 1))}
-            disabled={page === 1}
-            className="px-4 py-2 rounded-lg text-sm border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-          >
-            ← 前へ
-          </button>
-          <span className="text-sm text-gray-500 px-2">{page} / {totalPages}</span>
-          <button
-            onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
-            disabled={page === totalPages}
-            className="px-4 py-2 rounded-lg text-sm border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-          >
-            次へ →
-          </button>
-        </div>
-      )}
+        {/* 件数 */}
+        <p className="text-sm text-gray-500 mb-4">
+          {keyword ? `「${keyword}」の検索結果: ` : ""}
+          <span className="font-semibold" style={{ color: "#21242B" }}>{total}</span> 件
+        </p>
+
+        {/* カード一覧 */}
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 animate-pulse">
+                <div className="h-4 bg-gray-100 rounded mb-3 w-1/3" />
+                <div className="h-5 bg-gray-100 rounded mb-4 w-3/4" />
+                <div className="h-3 bg-gray-100 rounded mb-2 w-1/2" />
+                <div className="h-3 bg-gray-100 rounded w-2/3" />
+              </div>
+            ))}
+          </div>
+        ) : jobs.length === 0 ? (
+          <div className="text-center py-20">
+            <div
+              className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center"
+              style={{ background: GRADIENT_B }}
+            >
+              <span className="text-3xl text-white">🔍</span>
+            </div>
+            <p className="text-sm text-gray-500">求人が見つかりませんでした</p>
+            {keyword && (
+              <button
+                onClick={() => { setInputKw(""); setKeyword(""); setPage(1); }}
+                className="mt-4 text-sm underline"
+                style={{ color: ACCENT }}
+              >
+                検索をリセット
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {jobs.map((job) => (
+              <JobCard
+                key={job.id}
+                job={job}
+                isFavorite={favorites.has(job.id)}
+                onToggleFavorite={() => toggle(job.id)}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* ページネーション */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 mt-10">
+            <button
+              onClick={() => setPage((p) => Math.max(p - 1, 1))}
+              disabled={page === 1}
+              className="px-4 py-2 rounded-lg text-sm border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              ← 前へ
+            </button>
+            <span className="text-sm text-gray-500 px-2">{page} / {totalPages}</span>
+            <button
+              onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+              disabled={page === totalPages}
+              className="px-4 py-2 rounded-lg text-sm border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              次へ →
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -185,10 +199,13 @@ function JobCard({
   onToggleFavorite: () => void;
 }) {
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex flex-col hover:shadow-md transition-shadow group">
+    <div
+      className="bg-white rounded-2xl shadow-sm p-5 flex flex-col hover:shadow-lg transition-shadow group"
+      style={{ borderLeft: `4px solid ${ACCENT}` }}
+    >
       {/* 企業名 + お気に入り */}
       <div className="flex items-start justify-between gap-2 mb-1">
-        <span className="text-xs text-gray-400 font-medium truncate">
+        <span className="text-xs font-medium truncate" style={{ color: "#16B1F3" }}>
           {job.company_name ?? "企業名未設定"}
         </span>
         <button
@@ -216,22 +233,33 @@ function JobCard({
       <div className="flex flex-wrap gap-2 mb-4">
         {job.job_type && (
           <span
-            className="text-xs px-2.5 py-1 rounded-full font-medium"
-            style={{ backgroundColor: "#EBF4FF", color: ACCENT }}
+            className="text-xs px-2.5 py-1 rounded-full font-medium text-white"
+            style={{ backgroundColor: MINT }}
           >
             {job.job_type}
           </span>
         )}
         {job.location && (
-          <span className="text-xs px-2.5 py-1 rounded-full bg-gray-100 text-gray-500">
+          <span
+            className="text-xs px-2.5 py-1 rounded-full font-medium"
+            style={{ backgroundColor: "#E6F7F4", color: MINT }}
+          >
             📍 {job.location}
           </span>
         )}
       </div>
 
       {/* 年収 */}
-      <p className="text-sm font-semibold mb-4" style={{ color: ACCENT }}>
-        💰 {formatSalary(job.salary_min, job.salary_max)}
+      <p className="text-sm font-bold mb-4">
+        <span
+          style={{
+            background: GRADIENT_O,
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
+        >
+          💰 {formatSalary(job.salary_min, job.salary_max)}
+        </span>
       </p>
 
       {/* スペーサー */}
@@ -240,8 +268,8 @@ function JobCard({
       {/* ボタン */}
       <Link
         href={`/portal/jobs/${job.id}`}
-        className="block text-center py-2.5 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-80"
-        style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
+        className="block text-center py-2.5 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-80 shadow-md"
+        style={{ background: GRADIENT_B }}
       >
         詳細を見る
       </Link>

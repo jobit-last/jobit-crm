@@ -26,18 +26,24 @@ export default function PortalMainLayout({ children }: { children: React.ReactNo
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#F2F6FF" }}>
       {/* ヘッダー */}
-      <header className="sticky top-0 z-30" style={{ backgroundColor: "#21242B", borderBottom: "1px solid #21242B" }}>
+      <header
+        className="sticky top-0 z-30"
+        style={{
+          background: "linear-gradient(135deg, #16B1F3, #0649C4)",
+          boxShadow: "0 4px 24px rgba(6, 73, 196, 0.35), 0 1px 4px rgba(22, 177, 243, 0.2)",
+        }}
+      >
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="h-14 flex items-center justify-between">
             <Link
               href="/portal/dashboard"
-              className="text-lg font-bold text-white"
+              className="text-lg font-bold text-white tracking-tight"
             >
               PITキャリア マイページ
             </Link>
             <button
               onClick={handleLogout}
-              className="text-sm transition-colors"
+              className="text-sm transition-colors cursor-pointer"
               style={{ color: "rgba(255,255,255,0.7)" }}
               onMouseOver={(e) => (e.currentTarget.style.color = "rgba(255,255,255,1)")}
               onMouseOut={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.7)")}
@@ -57,10 +63,14 @@ export default function PortalMainLayout({ children }: { children: React.ReactNo
                   href={item.href}
                   className={`whitespace-nowrap px-3 py-2.5 text-sm font-medium border-b-2 transition-colors ${
                     isActive
-                      ? "border-[#2394FF] text-[#2394FF]"
-                      : "border-transparent hover:border-gray-500"
+                      ? "border-white"
+                      : "border-transparent hover:border-white/40"
                   }`}
-                  style={isActive ? {} : { color: "rgba(255,255,255,0.7)" }}
+                  style={
+                    isActive
+                      ? { color: "#FFFFFF", borderBottomColor: "#FFFFFF" }
+                      : { color: "rgba(255,255,255,0.7)" }
+                  }
                 >
                   {item.label}
                 </Link>

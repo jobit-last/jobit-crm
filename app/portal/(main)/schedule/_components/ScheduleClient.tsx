@@ -28,6 +28,12 @@ interface Props {
 
 const DAY_NAMES = ["月", "火", "水", "木", "金", "土", "日"];
 
+// イベントタイプに応じた左ボーダー色
+function getEventBorderColor(ev: CalendarEvent): string {
+  if (ev.type === "interview") return "#2394FF";
+  return "#00B59A";
+}
+
 export default function ScheduleClient({ schedules, interviews }: Props) {
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
@@ -99,21 +105,23 @@ export default function ScheduleClient({ schedules, interviews }: Props) {
   return (
     <div className="space-y-6">
       {/* カレンダー */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+      <div className="bg-white rounded-2xl shadow-sm p-5">
         {/* ヘッダー */}
         <div className="flex items-center justify-between mb-4">
           <button
             onClick={prevMonth}
-            className="px-3 py-1 text-sm text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
+            className="px-3 py-1.5 text-sm font-medium rounded-xl transition-all hover:shadow-sm"
+            style={{ color: "#2394FF", border: "1px solid #2394FF" }}
           >
             ←
           </button>
-          <h2 className="text-base font-semibold" style={{ color: "#21242B" }}>
+          <h2 className="text-base font-bold" style={{ color: "#21242B" }}>
             {year}年{month + 1}月
           </h2>
           <button
             onClick={nextMonth}
-            className="px-3 py-1 text-sm text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
+            className="px-3 py-1.5 text-sm font-medium rounded-xl transition-all hover:shadow-sm"
+            style={{ color: "#2394FF", border: "1px solid #2394FF" }}
           >
             →
           </button>
@@ -122,7 +130,7 @@ export default function ScheduleClient({ schedules, interviews }: Props) {
         {/* 曜日ヘッダー */}
         <div className="grid grid-cols-7 mb-1">
           {DAY_NAMES.map((d) => (
-            <div key={d} className="text-center text-[11px] font-medium text-gray-400 py-1">
+            <div key={d} className="text-center text-[11px] font-semibold py-1" style={{ color: "#16B1F3" }}>
               {d}
             </div>
           ))}
@@ -137,16 +145,27 @@ export default function ScheduleClient({ schedules, interviews }: Props) {
             return (
               <div
                 key={i}
-                className={`h-20 border border-gray-50 p-1 ${isToday ? "bg-blue-50/50" : ""}`}
+                className={`h-20 border border-gray-50 p-1 rounded-lg ${isToday ? "ring-2 ring-[#2394FF] ring-inset" : ""}`}
+                style={{ backgroundColor: isToday ? "#EBF5FF" : undefined }}
               >
                 <p
                   className={`text-[11px] mb-0.5 ${
                     isToday
-                      ? "font-bold text-[#2394FF]"
+                      ? "font-bold"
                       : "text-gray-500"
                   }`}
+                  style={isToday ? { color: "#2394FF" } : undefined}
                 >
-                  {day}
+                  {isToday ? (
+                    <span
+                      className="inline-flex items-center justify-center w-5 h-5 rounded-full text-white text-[10px] font-bold"
+                      style={{ backgroundColor: "#2394FF" }}
+                    >
+                      {day}
+                    </span>
+                  ) : (
+                    day
+                  )}
                 </p>
                 {dayEvents.slice(0, 2).map((ev) => (
                   <div
@@ -177,12 +196,12 @@ export default function ScheduleClient({ schedules, interviews }: Props) {
 
       {/* 今後の予定リスト */}
       <section>
-        <h2 className="text-base font-semibold mb-4" style={{ color: "#21242B" }}>
+        <h2 className="text-base font-semibold mb-4" style={{ color: "#16B1F3" }}>
           今後の予定（{upcoming.length}件）
         </h2>
 
         {upcoming.length === 0 ? (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+          <div className="bg-white rounded-2xl shadow-sm p-8 text-center">
             <p className="text-sm text-gray-400">今後の予定はありません</p>
           </div>
         ) : (
@@ -190,7 +209,8 @@ export default function ScheduleClient({ schedules, interviews }: Props) {
             {upcoming.map((ev) => (
               <div
                 key={ev.id}
-                className="bg-white rounded-xl shadow-sm border border-gray-200 p-4"
+                className="bg-white rounded-2xl shadow-sm p-4 border-l-4 hover:shadow-md transition-all"
+                style={{ borderLeftColor: getEventBorderColor(ev) }}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
@@ -216,13 +236,13 @@ export default function ScheduleClient({ schedules, interviews }: Props) {
                     )}
                   </div>
                   <div className="flex-shrink-0 text-right">
-                    <p className="text-sm font-medium" style={{ color: "#2394FF" }}>
+                    <p className="text-sm font-semibold" style={{ color: "#2394FF" }}>
                       {new Date(ev.datetime).toLocaleDateString("ja-JP", {
                         month: "short",
                         day: "numeric",
                       })}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs" style={{ color: "#2394FF" }}>
                       {new Date(ev.datetime).toLocaleTimeString("ja-JP", {
                         hour: "2-digit",
                         minute: "2-digit",

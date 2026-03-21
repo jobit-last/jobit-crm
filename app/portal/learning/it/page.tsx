@@ -2,6 +2,7 @@ import Link from "next/link";
 
 const ACCENT = "#2394FF";
 const MINT   = "#00B59A";
+const GRAD_B = "linear-gradient(135deg, #16B1F3, #0649C4)";
 
 // ─────────────────────────────────────────────
 // データ定義
@@ -101,127 +102,139 @@ const KEYWORDS = [
 // ─────────────────────────────────────────────
 export default function ITLearningPage() {
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10">
-      {/* ヒーロー */}
-      <div className="text-center mb-12">
+    <div style={{ backgroundColor: "#F2F6FF" }} className="min-h-screen">
+      {/* ヒーロー — gradient B */}
+      <div
+        className="rounded-b-3xl px-4 pt-14 pb-16 text-center"
+        style={{ background: GRAD_B }}
+      >
         <span
           className="inline-block text-xs font-semibold px-4 py-1.5 rounded-full mb-4"
-          style={{ backgroundColor: "#E8F4FF", color: ACCENT }}
+          style={{ backgroundColor: "rgba(255,255,255,0.2)", color: "#fff" }}
         >
           学習コンテンツ
         </span>
-        <h1 className="text-3xl font-bold mb-3" style={{ color: "#21242B" }}>
+        <h1 className="text-3xl font-bold mb-3 text-white">
           IT業界の基礎知識
         </h1>
-        <p className="text-gray-500 text-sm max-w-lg mx-auto">
+        <p className="text-white/80 text-sm max-w-lg mx-auto">
           IT業界への転職を考えているあなたへ。業界の構造から主要技術まで、わかりやすく解説します。
         </p>
-        <div className="flex justify-center gap-4 mt-5">
+        <div className="flex justify-center gap-4 mt-6">
           <Link
             href="/portal/learning/jobs"
-            className="text-sm font-medium px-5 py-2 rounded-xl border-2 transition-colors hover:bg-blue-50"
-            style={{ borderColor: ACCENT, color: ACCENT }}
+            className="text-sm font-medium px-5 py-2.5 rounded-xl border-2 border-white/40 text-white transition-colors hover:bg-white/10"
           >
             職種説明を見る →
           </Link>
           <Link
             href="/portal/jobs/search"
-            className="text-sm font-medium px-5 py-2 rounded-xl text-white transition-opacity hover:opacity-80"
-            style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
+            className="text-sm font-medium px-5 py-2.5 rounded-xl bg-white shadow-md transition-opacity hover:opacity-90"
+            style={{ color: "#0649C4" }}
           >
             求人を探す
           </Link>
         </div>
       </div>
 
-      {/* 業界概要 */}
-      <section className="mb-14">
-        <SectionTitle color={ACCENT}>IT業界の全体像</SectionTitle>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {OVERVIEW_CARDS.map((c) => (
-            <div key={c.title} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-              <div className="text-2xl mb-2">{c.icon}</div>
-              <h3 className="text-sm font-bold mb-2" style={{ color: "#21242B" }}>{c.title}</h3>
-              <p className="text-xs text-gray-500 leading-relaxed">{c.body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 技術スタック */}
-      <section className="mb-14">
-        <SectionTitle color={MINT}>主要な技術スタック</SectionTitle>
-        <div className="space-y-6">
-          {TECH_STACKS.map((stack) => (
-            <div key={stack.category} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-              {/* カテゴリヘッダー */}
+      <div className="max-w-5xl mx-auto px-4 -mt-8">
+        {/* 業界概要 */}
+        <section className="mb-14">
+          <SectionTitle color="#16B1F3">IT業界の全体像</SectionTitle>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {OVERVIEW_CARDS.map((c) => (
               <div
-                className="flex items-center gap-3 px-6 py-4"
-                style={{ backgroundColor: stack.color + "14" }}
+                key={c.title}
+                className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow p-5"
+                style={{ borderLeft: `4px solid ${ACCENT}` }}
               >
-                <span className="text-xl">{stack.icon}</span>
-                <h3 className="text-base font-bold" style={{ color: stack.color }}>
-                  {stack.category}
-                </h3>
+                <div className="text-2xl mb-2">{c.icon}</div>
+                <h3 className="text-sm font-bold mb-2" style={{ color: "#21242B" }}>{c.title}</h3>
+                <p className="text-xs text-gray-500 leading-relaxed">{c.body}</p>
               </div>
-              {/* アイテム */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 divide-x-0 sm:divide-x divide-y divide-gray-50">
-                {stack.items.map((item) => (
-                  <div key={item.name} className="px-6 py-4 border-b border-gray-50 last:border-b-0 sm:last:border-b-0">
-                    <p className="text-sm font-semibold mb-1" style={{ color: stack.color }}>
-                      {item.name}
-                    </p>
-                    <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+            ))}
+          </div>
+        </section>
 
-      {/* IT用語集 */}
-      <section className="mb-14">
-        <SectionTitle color="#8B5CF6">よく聞くIT用語</SectionTitle>
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-          {KEYWORDS.map((kw, i) => (
-            <div
-              key={kw.word}
-              className={`flex gap-4 px-6 py-4 ${i % 2 === 0 ? "" : "bg-gray-50/50"}`}
+        {/* 技術スタック */}
+        <section className="mb-14 rounded-2xl p-6" style={{ backgroundColor: "#E8F0F6" }}>
+          <SectionTitle color="#16B1F3">主要な技術スタック</SectionTitle>
+          <div className="space-y-6">
+            {TECH_STACKS.map((stack) => (
+              <div key={stack.category} className="bg-white rounded-2xl shadow-sm overflow-hidden">
+                {/* カテゴリヘッダー — colored top accent bar */}
+                <div className="h-1" style={{ background: `linear-gradient(90deg, ${stack.color}, ${stack.color}88)` }} />
+                <div
+                  className="flex items-center gap-3 px-6 py-4"
+                  style={{ backgroundColor: stack.color + "0c" }}
+                >
+                  <span className="text-xl">{stack.icon}</span>
+                  <h3 className="text-base font-bold" style={{ color: stack.color }}>
+                    {stack.category}
+                  </h3>
+                </div>
+                {/* アイテム */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 divide-x-0 sm:divide-x divide-y divide-gray-50">
+                  {stack.items.map((item) => (
+                    <div key={item.name} className="px-6 py-4 border-b border-gray-50 last:border-b-0 sm:last:border-b-0">
+                      <p className="text-sm font-semibold mb-1" style={{ color: stack.color }}>
+                        {item.name}
+                      </p>
+                      <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* IT用語集 */}
+        <section className="mb-14">
+          <SectionTitle color="#16B1F3">よく聞くIT用語</SectionTitle>
+          <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+            {KEYWORDS.map((kw, i) => (
+              <div
+                key={kw.word}
+                className={`flex gap-4 px-6 py-4 ${i % 2 === 0 ? "" : ""}`}
+                style={{ backgroundColor: i % 2 === 1 ? "#E8F0F6" : undefined }}
+              >
+                <dt className="shrink-0 w-52">
+                  <span
+                    className="inline-block text-xs font-bold px-3 py-1 rounded-full"
+                    style={{ backgroundColor: `${MINT}18`, color: MINT }}
+                  >
+                    {kw.word}
+                  </span>
+                </dt>
+                <dd className="text-xs text-gray-500 leading-relaxed pt-0.5">{kw.desc}</dd>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* 次のステップ — gradient B */}
+        <div
+          className="rounded-2xl p-8 text-center text-white shadow-lg mb-8"
+          style={{ background: GRAD_B }}
+        >
+          <p className="text-lg font-bold mb-2">知識を身につけたら次のステップへ</p>
+          <p className="text-sm opacity-80 mb-6">担当CAがあなたに合った求人をご紹介します</p>
+          <div className="flex justify-center gap-3">
+            <Link
+              href="/portal/learning/jobs"
+              className="bg-white/20 hover:bg-white/30 px-6 py-2.5 rounded-xl text-sm font-semibold transition-colors border border-white/30"
             >
-              <dt
-                className="text-xs font-bold shrink-0 w-52"
-                style={{ color: "#21242B" }}
-              >
-                {kw.word}
-              </dt>
-              <dd className="text-xs text-gray-500 leading-relaxed">{kw.desc}</dd>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 次のステップ */}
-      <div
-        className="rounded-2xl p-8 text-center text-white"
-        style={{ background: `linear-gradient(135deg, ${ACCENT}, ${MINT})` }}
-      >
-        <p className="text-lg font-bold mb-2">知識を身につけたら次のステップへ</p>
-        <p className="text-sm opacity-80 mb-6">担当CAがあなたに合った求人をご紹介します</p>
-        <div className="flex justify-center gap-3">
-          <Link
-            href="/portal/learning/jobs"
-            className="bg-white/20 hover:bg-white/30 px-6 py-2.5 rounded-xl text-sm font-semibold transition-colors"
-          >
-            職種を知る
-          </Link>
-          <Link
-            href="/portal/jobs/search"
-            className="bg-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-opacity hover:opacity-80"
-            style={{ color: ACCENT }}
-          >
-            求人を探す
-          </Link>
+              職種を知る
+            </Link>
+            <Link
+              href="/portal/jobs/search"
+              className="bg-white px-6 py-2.5 rounded-xl text-sm font-semibold shadow-md transition-opacity hover:opacity-90"
+              style={{ color: "#0649C4" }}
+            >
+              求人を探す
+            </Link>
+          </div>
         </div>
       </div>
     </div>
@@ -230,9 +243,9 @@ export default function ITLearningPage() {
 
 function SectionTitle({ children, color }: { children: React.ReactNode; color: string }) {
   return (
-    <div className="flex items-center gap-3 mb-5">
-      <div className="w-1 h-6 rounded-full" style={{ backgroundColor: color }} />
-      <h2 className="text-lg font-bold" style={{ color: "#21242B" }}>{children}</h2>
+    <div className="flex items-center gap-3 mb-5 mt-8">
+      <div className="w-1.5 h-7 rounded-full" style={{ background: `linear-gradient(180deg, ${color}, ${color}66)` }} />
+      <h2 className="text-lg font-bold" style={{ color: "#16B1F3" }}>{children}</h2>
     </div>
   );
 }

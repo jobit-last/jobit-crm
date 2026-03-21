@@ -56,19 +56,25 @@ export default function ProfileClient({ candidate }: Props) {
   return (
     <div className="space-y-6">
       {error && (
-        <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-600">
+        <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-sm text-red-600">
           {error}
         </div>
       )}
       {saved && (
-        <div className="p-3 rounded-lg bg-green-50 border border-green-200 text-sm text-green-700">
+        <div
+          className="p-3 rounded-xl text-sm font-medium text-white"
+          style={{ background: "linear-gradient(135deg, #00B59A, #00D4B5)" }}
+        >
           プロフィールを更新しました
         </div>
       )}
 
       {/* 基本情報（読み取り専用） */}
-      <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h2 className="text-base font-semibold mb-4" style={{ color: "#21242B" }}>
+      <section
+        className="rounded-2xl shadow-sm p-6 border-l-4"
+        style={{ backgroundColor: "#E8F0F6", borderLeftColor: "#2394FF" }}
+      >
+        <h2 className="text-base font-semibold mb-4" style={{ color: "#16B1F3" }}>
           基本情報
         </h2>
         <dl className="space-y-3">
@@ -107,9 +113,12 @@ export default function ProfileClient({ candidate }: Props) {
       </section>
 
       {/* 編集可能な情報 */}
-      <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+      <section
+        className="rounded-2xl shadow-sm p-6 border-l-4"
+        style={{ backgroundColor: "#E8F0F6", borderLeftColor: "#00B59A" }}
+      >
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-base font-semibold" style={{ color: "#21242B" }}>
+          <h2 className="text-base font-semibold" style={{ color: "#16B1F3" }}>
             連絡先・希望条件
           </h2>
           {!editing && (
@@ -118,8 +127,8 @@ export default function ProfileClient({ candidate }: Props) {
                 setEditing(true);
                 setSaved(false);
               }}
-              className="text-sm font-medium px-4 py-1.5 rounded-lg transition-colors"
-              style={{ color: "#2394FF", backgroundColor: "#EBF5FF" }}
+              className="text-sm font-medium px-4 py-1.5 rounded-xl transition-colors border"
+              style={{ color: "#2394FF", borderColor: "#2394FF", backgroundColor: "white" }}
             >
               編集する
             </button>
@@ -137,7 +146,7 @@ export default function ProfileClient({ candidate }: Props) {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="090-0000-0000"
-                className="w-full max-w-sm px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#2394FF]/30 focus:border-[#2394FF] transition"
+                className="w-full max-w-sm px-3 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2394FF]/30 focus:border-[#2394FF] transition bg-white"
               />
             </div>
             <div>
@@ -150,21 +159,22 @@ export default function ProfileClient({ candidate }: Props) {
                 onChange={(e) => setDesiredSalary(e.target.value)}
                 placeholder="600"
                 min={0}
-                className="w-full max-w-sm px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#2394FF]/30 focus:border-[#2394FF] transition"
+                className="w-full max-w-sm px-3 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2394FF]/30 focus:border-[#2394FF] transition bg-white"
               />
             </div>
             <div className="flex items-center gap-3 pt-2">
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="px-5 py-2 rounded-lg text-sm font-medium text-white transition-colors disabled:opacity-60"
+                className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition-all shadow-md hover:shadow-lg disabled:opacity-60"
                 style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
               >
                 {saving ? "保存中..." : "保存する"}
               </button>
               <button
                 onClick={handleCancel}
-                className="px-5 py-2 rounded-lg text-sm font-medium text-gray-600 bg-white border border-gray-300 hover:bg-gray-50 transition-colors"
+                className="px-5 py-2 rounded-xl text-sm font-medium border transition-colors"
+                style={{ color: "#2394FF", borderColor: "#2394FF", backgroundColor: "white" }}
               >
                 キャンセル
               </button>
@@ -186,18 +196,23 @@ export default function ProfileClient({ candidate }: Props) {
       </section>
 
       {/* 登録情報 */}
-      <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h2 className="text-base font-semibold mb-4" style={{ color: "#21242B" }}>
+      <section
+        className="rounded-2xl shadow-sm p-6 border-l-4"
+        style={{ backgroundColor: "#E8F0F6", borderLeftColor: "#F67A34" }}
+      >
+        <h2 className="text-base font-semibold mb-4" style={{ color: "#16B1F3" }}>
           登録情報
         </h2>
         <dl className="space-y-3">
           <InfoRow
             label="登録日"
             value={new Date(candidate.created_at).toLocaleDateString("ja-JP")}
+            isDate
           />
           <InfoRow
             label="最終更新"
             value={new Date(candidate.updated_at).toLocaleDateString("ja-JP")}
+            isDate
           />
         </dl>
       </section>
@@ -209,17 +224,19 @@ function InfoRow({
   label,
   value,
   children,
+  isDate,
 }: {
   label: string;
   value?: string | null;
   children?: React.ReactNode;
+  isDate?: boolean;
 }) {
   return (
     <div className="flex gap-4 items-start">
-      <dt className="w-32 flex-shrink-0 text-sm font-medium text-gray-400">
+      <dt className="w-32 flex-shrink-0 text-sm font-medium text-gray-500">
         {label}
       </dt>
-      <dd className="text-sm" style={{ color: value || children ? "#21242B" : "#9CA3AF" }}>
+      <dd className="text-sm font-medium" style={{ color: value || children ? (isDate ? "#2394FF" : "#21242B") : "#9CA3AF" }}>
         {children ?? value ?? "—"}
       </dd>
     </div>

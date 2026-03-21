@@ -7,6 +7,8 @@ import { useFavorites, useCompare, COMPARE_MAX } from "@/app/portal/_lib/storage
 import type { Job } from "@/types/job";
 
 const ACCENT = "#2394FF";
+const MINT = "#00B59A";
+const GRADIENT_B = "linear-gradient(135deg, #16B1F3, #0649C4)";
 
 const SALARY_OPTIONS = [
   { label: "指定なし", value: "" },
@@ -74,169 +76,217 @@ export default function SearchPage() {
   const totalPages = Math.ceil(total / perPage);
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-1" style={{ color: "#21242B" }}>求人検索</h1>
-        <p className="text-sm text-gray-400">条件を絞って理想の求人を見つけましょう</p>
-      </div>
-
-      {/* 検索フォーム */}
-      <form
-        onSubmit={handleSearch}
-        className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8"
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-          {/* キーワード */}
-          <div className="sm:col-span-2">
-            <label className="block text-xs font-medium text-gray-500 mb-1">キーワード</label>
-            <input
-              type="text"
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-              placeholder="職種名・スキルなど自由に入力"
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:border-transparent"
-              style={{ "--tw-ring-color": ACCENT } as React.CSSProperties}
-            />
-          </div>
-
-          {/* 職種 */}
-          <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">職種</label>
-            <input
-              type="text"
-              value={jobType}
-              onChange={(e) => setJobType(e.target.value)}
-              placeholder="例: エンジニア、営業、デザイナー"
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:border-transparent"
-              style={{ "--tw-ring-color": ACCENT } as React.CSSProperties}
-            />
-          </div>
-
-          {/* 勤務地 */}
-          <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">勤務地</label>
-            <input
-              type="text"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              placeholder="例: 東京、大阪、リモート"
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:border-transparent"
-              style={{ "--tw-ring-color": ACCENT } as React.CSSProperties}
-            />
-          </div>
-
-          {/* 年収下限 */}
-          <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">年収（下限）</label>
-            <select
-              value={salaryMin}
-              onChange={(e) => setSalaryMin(e.target.value)}
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:border-transparent bg-white"
-              style={{ "--tw-ring-color": ACCENT } as React.CSSProperties}
-            >
-              {SALARY_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
-          </div>
+    <div style={{ backgroundColor: "#F2F6FF", minHeight: "100vh" }}>
+      <div className="max-w-5xl mx-auto px-4 py-10">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold mb-1" style={{ color: "#16B1F3" }}>求人検索</h1>
+          <p className="text-sm text-gray-400">条件を絞って理想の求人を見つけましょう</p>
         </div>
 
-        <div className="flex gap-3">
-          <button
-            type="submit"
-            className="px-8 py-2.5 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-80"
-            style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
-          >
-            検索する
-          </button>
-          <button
-            type="button"
-            onClick={handleReset}
-            className="px-6 py-2.5 rounded-xl text-sm font-medium text-gray-500 border border-gray-200 hover:bg-gray-50 transition-colors"
-          >
-            リセット
-          </button>
-        </div>
-      </form>
-
-      {/* 比較バナー */}
-      {compareIds.length > 0 && (
-        <div
-          className="flex items-center justify-between rounded-xl px-4 py-3 mb-6 text-white text-sm"
-          style={{ backgroundColor: ACCENT }}
+        {/* 検索フォーム */}
+        <form
+          onSubmit={handleSearch}
+          className="bg-white rounded-2xl shadow-sm p-6 mb-8"
+          style={{ borderLeft: `4px solid ${ACCENT}` }}
         >
-          <span>{compareIds.length}件を比較リストに追加中</span>
-          <Link
-            href="/portal/jobs/compare"
-            className="font-semibold bg-white rounded-lg px-4 py-1.5 hover:opacity-80 transition-opacity"
-            style={{ color: ACCENT }}
-          >
-            比較する →
-          </Link>
-        </div>
-      )}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            {/* キーワード */}
+            <div className="sm:col-span-2">
+              <label className="block text-xs font-medium text-gray-500 mb-1">キーワード</label>
+              <input
+                type="text"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                placeholder="職種名・スキルなど自由に入力"
+                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:border-transparent"
+                style={{ "--tw-ring-color": ACCENT } as React.CSSProperties}
+              />
+            </div>
 
-      {/* 結果 */}
-      {searched && (
-        <p className="text-sm text-gray-500 mb-4">
-          <span className="font-semibold" style={{ color: "#21242B" }}>{total}</span> 件見つかりました
-        </p>
-      )}
+            {/* 職種 */}
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">職種</label>
+              <input
+                type="text"
+                value={jobType}
+                onChange={(e) => setJobType(e.target.value)}
+                placeholder="例: エンジニア、営業、デザイナー"
+                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:border-transparent"
+                style={{ "--tw-ring-color": ACCENT } as React.CSSProperties}
+              />
+            </div>
 
-      {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5 animate-pulse h-52" />
-          ))}
-        </div>
-      ) : jobs.length === 0 && searched ? (
-        <div className="text-center py-20 text-gray-400">
-          <p className="text-4xl mb-3">🔍</p>
-          <p className="text-sm">条件に合う求人が見つかりませんでした</p>
-          <button
-            onClick={handleReset}
-            className="mt-4 text-sm underline"
-            style={{ color: ACCENT }}
-          >
-            条件をリセット
-          </button>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {jobs.map((job) => (
-            <JobCard
-              key={job.id}
-              job={job}
-              isFavorite={favorites.has(job.id)}
-              onToggleFavorite={() => toggleFav(job.id)}
-              compareIds={compareIds}
-              onToggleCompare={handleToggleCompare}
-              compareMax={compareMax && !compareIds.includes(job.id)}
-            />
-          ))}
-        </div>
-      )}
+            {/* 勤務地 */}
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">勤務地</label>
+              <input
+                type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="例: 東京、大阪、リモート"
+                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:border-transparent"
+                style={{ "--tw-ring-color": ACCENT } as React.CSSProperties}
+              />
+            </div>
 
-      {/* ページネーション */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 mt-10">
-          <button
-            onClick={() => { setPage((p) => p - 1); fetchJobs(page - 1); }}
-            disabled={page === 1}
-            className="px-4 py-2 rounded-lg text-sm border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+            {/* 年収下限 */}
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">年収（下限）</label>
+              <select
+                value={salaryMin}
+                onChange={(e) => setSalaryMin(e.target.value)}
+                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:border-transparent bg-white"
+                style={{ "--tw-ring-color": ACCENT } as React.CSSProperties}
+              >
+                {SALARY_OPTIONS.map((o) => (
+                  <option key={o.value} value={o.value}>{o.label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* フィルターチップス */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {keyword && (
+              <span
+                className="inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full text-white font-medium"
+                style={{ backgroundColor: MINT }}
+              >
+                {keyword}
+                <button onClick={() => setKeyword("")} className="ml-1 hover:opacity-70">×</button>
+              </span>
+            )}
+            {jobType && (
+              <span
+                className="inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full text-white font-medium"
+                style={{ backgroundColor: MINT }}
+              >
+                {jobType}
+                <button onClick={() => setJobType("")} className="ml-1 hover:opacity-70">×</button>
+              </span>
+            )}
+            {location && (
+              <span
+                className="inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full text-white font-medium"
+                style={{ backgroundColor: MINT }}
+              >
+                {location}
+                <button onClick={() => setLocation("")} className="ml-1 hover:opacity-70">×</button>
+              </span>
+            )}
+            {salaryMin && (
+              <span
+                className="inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full text-white font-medium"
+                style={{ backgroundColor: MINT }}
+              >
+                {SALARY_OPTIONS.find((o) => o.value === salaryMin)?.label}
+                <button onClick={() => setSalaryMin("")} className="ml-1 hover:opacity-70">×</button>
+              </span>
+            )}
+          </div>
+
+          <div className="flex gap-3">
+            <button
+              type="submit"
+              className="px-8 py-2.5 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-80 shadow-md"
+              style={{ background: GRADIENT_B }}
+            >
+              検索する
+            </button>
+            <button
+              type="button"
+              onClick={handleReset}
+              className="px-6 py-2.5 rounded-xl text-sm font-medium text-gray-500 border border-gray-200 hover:bg-gray-50 transition-colors"
+            >
+              リセット
+            </button>
+          </div>
+        </form>
+
+        {/* 比較バナー */}
+        {compareIds.length > 0 && (
+          <div
+            className="flex items-center justify-between rounded-xl px-4 py-3 mb-6 text-white text-sm shadow-md"
+            style={{ background: GRADIENT_B }}
           >
-            ← 前へ
-          </button>
-          <span className="text-sm text-gray-500 px-2">{page} / {totalPages}</span>
-          <button
-            onClick={() => { setPage((p) => p + 1); fetchJobs(page + 1); }}
-            disabled={page === totalPages}
-            className="px-4 py-2 rounded-lg text-sm border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            次へ →
-          </button>
-        </div>
-      )}
+            <span>{compareIds.length}件を比較リストに追加中</span>
+            <Link
+              href="/portal/jobs/compare"
+              className="font-semibold bg-white rounded-lg px-4 py-1.5 hover:opacity-80 transition-opacity"
+              style={{ color: ACCENT }}
+            >
+              比較する →
+            </Link>
+          </div>
+        )}
+
+        {/* 結果 */}
+        {searched && (
+          <p className="text-sm text-gray-500 mb-4">
+            <span className="font-semibold" style={{ color: "#21242B" }}>{total}</span> 件見つかりました
+          </p>
+        )}
+
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5 animate-pulse h-52" />
+            ))}
+          </div>
+        ) : jobs.length === 0 && searched ? (
+          <div className="text-center py-20">
+            <div
+              className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center"
+              style={{ background: GRADIENT_B }}
+            >
+              <span className="text-3xl text-white">🔍</span>
+            </div>
+            <p className="text-sm text-gray-500">条件に合う求人が見つかりませんでした</p>
+            <button
+              onClick={handleReset}
+              className="mt-4 text-sm underline"
+              style={{ color: ACCENT }}
+            >
+              条件をリセット
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {jobs.map((job) => (
+              <JobCard
+                key={job.id}
+                job={job}
+                isFavorite={favorites.has(job.id)}
+                onToggleFavorite={() => toggleFav(job.id)}
+                compareIds={compareIds}
+                onToggleCompare={handleToggleCompare}
+                compareMax={compareMax && !compareIds.includes(job.id)}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* ページネーション */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 mt-10">
+            <button
+              onClick={() => { setPage((p) => p - 1); fetchJobs(page - 1); }}
+              disabled={page === 1}
+              className="px-4 py-2 rounded-lg text-sm border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              ← 前へ
+            </button>
+            <span className="text-sm text-gray-500 px-2">{page} / {totalPages}</span>
+            <button
+              onClick={() => { setPage((p) => p + 1); fetchJobs(page + 1); }}
+              disabled={page === totalPages}
+              className="px-4 py-2 rounded-lg text-sm border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              次へ →
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
