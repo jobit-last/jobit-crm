@@ -12,6 +12,7 @@ const navItems = [
   { label: "覚書管理", href: "/admin/memorandums" },
   { label: "請求書管理", href: "/admin/invoices" },
   { label: "歩留まり分析", href: "/admin/analytics" },
+  { label: "市場価値診断", href: "/admin/diagnosis/new" },
   { label: "ナレッジ管理", href: "/admin/knowledge" },
   { label: "操作ログ", href: "/admin/logs" },
 ];
