@@ -48,7 +48,7 @@ export default function DashboardCharts({
             />
             <Tooltip
               contentStyle={{ borderRadius: 8, border: "1px solid #E5E7EB", fontSize: 13 }}
-              formatter={(value: number) => [`${value}人`, "登録数"]}
+              formatter={(value: unknown) => [`${value}人`, "登録数"]}
             />
             <Line
               type="monotone"
@@ -92,7 +92,7 @@ export default function DashboardCharts({
               />
               <Tooltip
                 contentStyle={{ borderRadius: 8, border: "1px solid #E5E7EB", fontSize: 13 }}
-                formatter={(value: number) => [`${value}人`, "件数"]}
+                formatter={(value: unknown) => [`${value}人`, "件数"]}
               />
               <Bar dataKey="count" fill={PRIMARY} radius={[0, 4, 4, 0]} barSize={18} />
             </BarChart>
@@ -133,7 +133,7 @@ export default function DashboardCharts({
                 />
                 <Tooltip
                   contentStyle={{ borderRadius: 8, border: "1px solid #E5E7EB", fontSize: 13 }}
-                  formatter={(value: number) => [`${value}人`, "担当数"]}
+                  formatter={(value: unknown) => [`${value}人`, "担当数"]}
                 />
                 <Bar dataKey="count" fill={SECONDARY} radius={[0, 4, 4, 0]} barSize={18} />
               </BarChart>

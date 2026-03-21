@@ -1,6 +1,14 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+const protectedPaths = [
+  "/admin",
+];
+
+function isProtectedPath(pathname: string): boolean {
+  return protectedPaths.some((path) => pathname.startsWith(path));
+}
+
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
@@ -13,7 +21,7 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
+          cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           );
           supabaseResponse = NextResponse.next({ request });
@@ -26,7 +34,23 @@ export async function updateSession(request: NextRequest) {
   );
 
   // セッションのリフレッシュ
-  await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { pathname } = request.nextUrl;
+
+  // 未ログインユーザーが保護されたページにアクセスした場合、ログインへリダイレクト
+  if (!user && isProtectedPath(pathname)) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("redirect", pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  // ログイン済みユーザーが /login にアクセスした場合、ダッシュボードへリダイレクト
+  if (user && (pathname === "/login" || pathname === "/")) {
+    return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+  }
 
   return supabaseResponse;
 }

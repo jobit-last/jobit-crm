@@ -11,25 +11,19 @@ export async function GET(
     const { id } = await params;
 
     const { data, error } = await supabase
-      .from("jobs")
-      .select("*, companies(name)")
+      .from("contracts")
+      .select("*")
       .eq("id", id)
       .single();
 
     if (error || !data) {
       return NextResponse.json(
-        { success: false, data: null, message: "求人が見つかりません", meta: {} },
+        { success: false, data: null, message: "契約書が見つかりません", meta: {} },
         { status: 404 }
       );
     }
 
-    const job = {
-      ...data,
-      company_name: (data.companies as { name: string } | null)?.name ?? null,
-      companies: undefined,
-    };
-
-    return NextResponse.json({ success: true, data: job, message: "", meta: {} });
+    return NextResponse.json({ success: true, data, message: "", meta: {} });
   } catch {
     return NextResponse.json(
       { success: false, data: null, message: "Internal server error", meta: {} },
@@ -47,29 +41,26 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
 
-    const { company_id, title, description, job_type, location,
-            salary_min, salary_max, required_skills, is_published } = body;
+    const { company_id, title, content, status, start_date, end_date, file_url } = body;
 
     if (title !== undefined && (typeof title !== "string" || title.trim() === "")) {
       return NextResponse.json(
-        { success: false, data: null, message: "求人タイトルは必須です", meta: {} },
+        { success: false, data: null, message: "タイトルは必須です", meta: {} },
         { status: 400 }
       );
     }
 
-    const updateData: Record<string, unknown> = {};
+    const updateData: Record<string, unknown> = { updated_at: new Date().toISOString() };
     if (company_id !== undefined) updateData.company_id = company_id || null;
     if (title !== undefined) updateData.title = title.trim();
-    if (description !== undefined) updateData.description = description || null;
-    if (job_type !== undefined) updateData.job_type = job_type || null;
-    if (location !== undefined) updateData.location = location || null;
-    if (salary_min !== undefined) updateData.salary_min = salary_min ? parseInt(salary_min) : null;
-    if (salary_max !== undefined) updateData.salary_max = salary_max ? parseInt(salary_max) : null;
-    if (required_skills !== undefined) updateData.required_skills = required_skills || null;
-    if (is_published !== undefined) updateData.is_published = is_published;
+    if (content !== undefined) updateData.content = content || null;
+    if (status !== undefined) updateData.status = status;
+    if (start_date !== undefined) updateData.start_date = start_date || null;
+    if (end_date !== undefined) updateData.end_date = end_date || null;
+    if (file_url !== undefined) updateData.file_url = file_url || null;
 
     const { data, error } = await supabase
-      .from("jobs")
+      .from("contracts")
       .update(updateData)
       .eq("id", id)
       .select()
@@ -82,7 +73,7 @@ export async function PUT(
       );
     }
 
-    await recordLog("update", `求人更新: ${data.title ?? id}`);
+    await recordLog("update", `契約書更新: ${data.title ?? id}`);
     return NextResponse.json({ success: true, data, message: "更新しました", meta: {} });
   } catch {
     return NextResponse.json(
@@ -100,7 +91,7 @@ export async function DELETE(
     const supabase = await createClient();
     const { id } = await params;
 
-    const { error } = await supabase.from("jobs").delete().eq("id", id);
+    const { error } = await supabase.from("contracts").delete().eq("id", id);
 
     if (error) {
       return NextResponse.json(
@@ -109,7 +100,7 @@ export async function DELETE(
       );
     }
 
-    await recordLog("delete", `求人削除: ${id}`);
+    await recordLog("delete", `契約書削除: ${id}`);
     return NextResponse.json({ success: true, data: null, message: "削除しました", meta: {} });
   } catch {
     return NextResponse.json(

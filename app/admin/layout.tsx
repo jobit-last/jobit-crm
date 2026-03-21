@@ -8,9 +8,13 @@ const navItems = [
   { label: "選考管理", href: "/admin/applications" },
   { label: "スケジュール管理", href: "/admin/schedule" },
   { label: "通知管理", href: "/admin/notifications" },
+  { label: "契約書管理", href: "/admin/contracts" },
+  { label: "覚書管理", href: "/admin/memorandums" },
   { label: "請求書管理", href: "/admin/invoices" },
   { label: "歩留まり分析", href: "/admin/analytics" },
   { label: "市場価値診断", href: "/admin/diagnosis/new" },
+  { label: "ナレッジ管理", href: "/admin/knowledge" },
+  { label: "操作ログ", href: "/admin/logs" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

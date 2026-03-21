@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { recordLog } from "@/lib/activity-log";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -41,5 +42,6 @@ export async function POST(request: NextRequest) {
     .single();
 
   if (error) return Response.json({ error: error.message }, { status: 500 });
+  await recordLog("create", `求職者作成: ${data.name ?? data.id}`);
   return Response.json({ data }, { status: 201 });
 }
