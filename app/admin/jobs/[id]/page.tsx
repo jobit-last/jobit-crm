@@ -209,7 +209,7 @@ export default function JobDetailPage() {
               </select>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className={labelClass}>職種</label>
                 <input type="text" name="job_type" value={form.job_type} onChange={handleChange} disabled={!editing}
@@ -222,7 +222,7 @@ export default function JobDetailPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className={labelClass}>年収下限（万円）</label>
                 <input type="number" name="salary_min" value={form.salary_min} onChange={handleChange}

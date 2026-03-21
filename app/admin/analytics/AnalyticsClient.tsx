@@ -98,7 +98,7 @@ export default function AnalyticsClient() {
       ) : (
         <>
           {/* サマリーカード */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
               <p className="text-sm text-gray-500">期間内登録数</p>
               <p className="text-3xl font-bold text-primary mt-1">{total}<span className="text-base font-normal text-gray-400 ml-1">名</span></p>

@@ -62,7 +62,7 @@ export default function WeekCalendar({
                     ? "text-red-400"
                     : "text-gray-700"
                 }`}
-                style={isToday ? { backgroundColor: "#00A0B0" } : {}}
+                style={isToday ? { backgroundColor: "#00E05D" } : {}}
               >
                 {d.getDate()}
               </div>
@@ -109,7 +109,7 @@ export default function WeekCalendar({
                     <span
                       className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${SCHEDULE_TYPE_BAR_COLORS[s.type]}`}
                     />
-                    <span className="text-xs font-medium" style={{ color: "#1A1A2E" }}>
+                    <span className="text-xs font-medium" style={{ color: "#002D37" }}>
                       {new Date(s.scheduled_at).toLocaleTimeString("ja-JP", {
                         hour: "2-digit",
                         minute: "2-digit",
@@ -118,7 +118,7 @@ export default function WeekCalendar({
                   </div>
                   <p
                     className="text-xs font-medium truncate"
-                    style={{ color: "#1A1A2E" }}
+                    style={{ color: "#002D37" }}
                   >
                     {s.title}
                   </p>

@@ -78,7 +78,7 @@ export default function InvoiceForm({ companies, candidates }: Props) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 className="text-sm font-semibold mb-4" style={{ color: "#1A1A2E" }}>
+        <h2 className="text-sm font-semibold mb-4" style={{ color: "#002D37" }}>
           基本情報
         </h2>
 
@@ -92,7 +92,7 @@ export default function InvoiceForm({ companies, candidates }: Props) {
               name="company_id"
               value={form.company_id}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             >
               <option value="">選択なし</option>
               {companies.map((c) => (
@@ -112,7 +112,7 @@ export default function InvoiceForm({ companies, candidates }: Props) {
               name="candidate_id"
               value={form.candidate_id}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             >
               <option value="">選択なし</option>
               {candidates.map((c) => (
@@ -140,11 +140,11 @@ export default function InvoiceForm({ companies, candidates }: Props) {
                 required
                 min={1}
                 placeholder="500000"
-                className="w-full pl-7 pr-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+                className="w-full pl-7 pr-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
               />
             </div>
             {form.amount && (
-              <p className="mt-1 text-xs" style={{ color: "#00A0B0" }}>
+              <p className="mt-1 text-xs" style={{ color: "#002D37" }}>
                 ¥{Number(form.amount).toLocaleString("ja-JP")}
               </p>
             )}
@@ -159,7 +159,7 @@ export default function InvoiceForm({ companies, candidates }: Props) {
               name="status"
               value={form.status}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             >
               {INVOICE_STATUS_LIST.map((s) => (
                 <option key={s} value={s}>
@@ -180,7 +180,7 @@ export default function InvoiceForm({ companies, candidates }: Props) {
               value={form.invoice_date}
               onChange={handleInvoiceDateChange}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             />
           </div>
 
@@ -195,7 +195,7 @@ export default function InvoiceForm({ companies, candidates }: Props) {
               value={form.due_date}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             />
           </div>
         </div>
@@ -203,7 +203,7 @@ export default function InvoiceForm({ companies, candidates }: Props) {
 
       {/* 備考 */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 className="text-sm font-semibold mb-4" style={{ color: "#1A1A2E" }}>
+        <h2 className="text-sm font-semibold mb-4" style={{ color: "#002D37" }}>
           備考
         </h2>
         <textarea
@@ -212,7 +212,7 @@ export default function InvoiceForm({ companies, candidates }: Props) {
           onChange={handleChange}
           rows={4}
           placeholder="備考・特記事項を入力..."
-          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
         />
       </div>
 
@@ -232,8 +232,7 @@ export default function InvoiceForm({ companies, candidates }: Props) {
         <button
           type="submit"
           disabled={submitting}
-          className="px-6 py-2 rounded-md text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
-          style={{ backgroundColor: "#002D37" }}
+          className="px-6 py-2 rounded-md text-sm font-medium text-[#002D37] bg-[#00E05D] transition-colors hover:bg-[#00A645] disabled:opacity-60"
         >
           {submitting ? "作成中..." : "請求書を作成"}
         </button>

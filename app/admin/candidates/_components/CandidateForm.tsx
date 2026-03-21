@@ -96,7 +96,7 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
 
       {/* 基本情報 */}
       <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 className="text-base font-semibold mb-4" style={{ color: "#1A1A2E" }}>
+        <h2 className="text-base font-semibold mb-4" style={{ color: "#002D37" }}>
           基本情報
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -110,7 +110,7 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
               value={form.name}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
               placeholder="山田 太郎"
             />
           </div>
@@ -124,7 +124,7 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
               name="email"
               value={form.email}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
               placeholder="example@email.com"
             />
           </div>
@@ -138,7 +138,7 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
               name="phone"
               value={form.phone}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
               placeholder="090-0000-0000"
             />
           </div>
@@ -152,7 +152,7 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
               name="birth_date"
               value={form.birth_date}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             />
           </div>
 
@@ -162,7 +162,7 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
               name="gender"
               value={form.gender}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             >
               <option value="">未選択</option>
               {GENDER_OPTIONS.map((g) => (
@@ -175,7 +175,7 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
 
       {/* 職歴・希望条件 */}
       <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 className="text-base font-semibold mb-4" style={{ color: "#1A1A2E" }}>
+        <h2 className="text-base font-semibold mb-4" style={{ color: "#002D37" }}>
           職歴・希望条件
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -188,7 +188,7 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
               name="current_company"
               value={form.current_company}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
               placeholder="株式会社〇〇"
             />
           </div>
@@ -203,7 +203,7 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
               value={form.current_salary}
               onChange={handleChange}
               min={0}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
               placeholder="500"
             />
           </div>
@@ -218,7 +218,7 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
               value={form.desired_salary}
               onChange={handleChange}
               min={0}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
               placeholder="600"
             />
           </div>
@@ -227,7 +227,7 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
 
       {/* 担当・ステータス */}
       <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 className="text-base font-semibold mb-4" style={{ color: "#1A1A2E" }}>
+        <h2 className="text-base font-semibold mb-4" style={{ color: "#002D37" }}>
           担当・ステータス
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -240,7 +240,7 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
               value={form.status}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             >
               {(Object.entries(STATUS_LABELS) as [CandidateStatus, string][]).map(
                 ([key, label]) => (
@@ -258,7 +258,7 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
               name="ca_id"
               value={form.ca_id}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             >
               <option value="">未割り当て</option>
               {advisors.map((a) => (
@@ -281,8 +281,8 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
         <button
           type="submit"
           disabled={loading}
-          className="px-5 py-2 rounded-md text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
-          style={{ backgroundColor: "#002D37" }}
+          className="px-5 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00A645] disabled:opacity-60"
+          style={{ backgroundColor: "#00E05D", color: "#002D37" }}
         >
           {loading ? "保存中..." : mode === "create" ? "登録する" : "更新する"}
         </button>

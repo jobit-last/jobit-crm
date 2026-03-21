@@ -39,7 +39,7 @@ function ScoreGauge({ score }: { score: number }) {
         <path
           d={arcPath(startAngle, startAngle + totalAngle)}
           fill="none"
-          stroke="#E5E7EB"
+          stroke="#BFCED1"
           strokeWidth={strokeWidth}
           strokeLinecap="round"
         />

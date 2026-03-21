@@ -190,7 +190,7 @@ export default function KnowledgeNewPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="bg-cta hover:bg-cta-hover text-white px-8 py-2 rounded text-sm font-medium transition-colors disabled:opacity-50"
+            className="bg-cta hover:bg-cta-hover text-primary font-semibold px-8 py-2 rounded text-sm transition-colors disabled:opacity-50"
           >
             {submitting ? "登録中..." : "登録する"}
           </button>

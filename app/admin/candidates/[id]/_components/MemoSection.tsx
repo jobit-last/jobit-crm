@@ -67,7 +67,7 @@ export default function MemoSection({ candidateId, initialMemos }: Props) {
 
   return (
     <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 lg:col-span-2">
-      <h2 className="text-base font-semibold mb-4" style={{ color: "#1A1A2E" }}>
+      <h2 className="text-base font-semibold mb-4" style={{ color: "#002D37" }}>
         メモ・連絡履歴
       </h2>
 
@@ -96,7 +96,7 @@ export default function MemoSection({ candidateId, initialMemos }: Props) {
           onChange={(e) => setContent(e.target.value)}
           rows={3}
           placeholder="メモを入力してください..."
-          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
         />
 
         {submitError && (
@@ -107,8 +107,8 @@ export default function MemoSection({ candidateId, initialMemos }: Props) {
           <button
             type="submit"
             disabled={submitting || !content.trim()}
-            className="px-4 py-2 rounded-md text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
-            style={{ backgroundColor: "#002D37" }}
+            className="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00A645] disabled:opacity-40 disabled:cursor-not-allowed"
+            style={{ backgroundColor: "#00E05D", color: "#002D37" }}
           >
             {submitting ? "保存中..." : "追加する"}
           </button>
@@ -154,7 +154,7 @@ export default function MemoSection({ candidateId, initialMemos }: Props) {
                   {/* 本文 */}
                   <p
                     className="text-sm whitespace-pre-wrap break-words"
-                    style={{ color: "#1A1A2E" }}
+                    style={{ color: "#002D37" }}
                   >
                     {memo.content}
                   </p>

@@ -44,13 +44,12 @@ export default function InvoicesClient({ initialInvoices }: Props) {
     <div>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold" style={{ color: "#1A1A2E" }}>
+        <h1 className="text-2xl font-semibold" style={{ color: "#002D37" }}>
           請求書管理
         </h1>
         <Link
           href="/admin/invoices/new"
-          className="px-4 py-2 rounded-md text-sm font-medium text-white transition-opacity hover:opacity-90"
-          style={{ backgroundColor: "#002D37" }}
+          className="px-4 py-2 rounded-md text-sm font-medium text-[#002D37] bg-[#00E05D] transition-colors hover:bg-[#00A645]"
         >
           + 請求書作成
         </Link>
@@ -151,18 +150,18 @@ export default function InvoicesClient({ initialInvoices }: Props) {
                       <td className="px-4 py-3">
                         <span
                           className="text-sm font-mono font-medium"
-                          style={{ color: "#00A0B0" }}
+                          style={{ color: "#002D37" }}
                         >
                           {invoiceNumber(inv)}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-sm" style={{ color: "#1A1A2E" }}>
+                      <td className="px-4 py-3 text-sm" style={{ color: "#002D37" }}>
                         {inv.company?.name ?? "—"}
                       </td>
-                      <td className="px-4 py-3 text-sm" style={{ color: "#1A1A2E" }}>
+                      <td className="px-4 py-3 text-sm" style={{ color: "#002D37" }}>
                         {inv.candidate?.name ?? "—"}
                       </td>
-                      <td className="px-4 py-3 text-sm font-medium" style={{ color: "#1A1A2E" }}>
+                      <td className="px-4 py-3 text-sm font-medium" style={{ color: "#002D37" }}>
                         {formatAmount(inv.amount)}
                       </td>
                       <td className="px-4 py-3 text-sm" style={{ color: "#6B7280" }}>
@@ -202,7 +201,7 @@ function SummaryCard({
   label,
   value,
   sub,
-  color = "#1A1A2E",
+  color = "#002D37",
 }: {
   label: string;
   value: string;

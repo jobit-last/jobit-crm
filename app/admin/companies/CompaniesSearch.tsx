@@ -83,7 +83,7 @@ export default function CompaniesSearch() {
       <div className="flex gap-3 mt-4">
         <button
           onClick={handleSearch}
-          className="bg-cta hover:bg-cta-hover text-white px-6 py-2 rounded text-sm font-medium transition-colors"
+          className="bg-cta hover:bg-cta-hover text-primary font-semibold px-6 py-2 rounded text-sm transition-colors"
         >
           検索
         </button>

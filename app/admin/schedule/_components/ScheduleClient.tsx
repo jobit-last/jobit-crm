@@ -136,13 +136,13 @@ export default function ScheduleClient({
     <div>
       {/* Page header */}
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-semibold" style={{ color: "#1A1A2E" }}>
+        <h1 className="text-2xl font-semibold" style={{ color: "#002D37" }}>
           スケジュール管理
         </h1>
         <button
           onClick={() => openAdd()}
-          className="px-4 py-2 rounded-md text-sm font-medium text-white transition-opacity hover:opacity-90"
-          style={{ backgroundColor: "#002D37" }}
+          className="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00A645]"
+          style={{ backgroundColor: "#00E05D", color: "#002D37" }}
         >
           + スケジュール追加
         </button>
@@ -164,7 +164,7 @@ export default function ScheduleClient({
             </button>
             <span
               className="text-base font-semibold min-w-[220px] text-center"
-              style={{ color: "#1A1A2E" }}
+              style={{ color: "#002D37" }}
             >
               {loading ? "読み込み中..." : periodLabel}
             </span>

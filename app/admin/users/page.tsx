@@ -150,7 +150,7 @@ export default function UsersPage() {
           <h2 className="text-2xl font-bold text-[#002D37]">ユーザー管理</h2>
           <button
             onClick={openCreate}
-            className="px-4 py-2 bg-[#00E05D] text-[#002D37] font-semibold rounded-lg hover:bg-[#00c752] transition cursor-pointer"
+            className="px-4 py-2 bg-[#00E05D] text-[#002D37] font-semibold rounded-lg hover:bg-[#00A645] transition cursor-pointer"
           >
             + 新規登録
           </button>
@@ -164,7 +164,7 @@ export default function UsersPage() {
         )}
 
         {/* Table */}
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden overflow-x-auto">
           {loading ? (
             <div className="px-6 py-12 text-center text-[#6B7280]">読み込み中...</div>
           ) : users.length === 0 ? (
@@ -172,7 +172,7 @@ export default function UsersPage() {
               ユーザーが登録されていません
             </div>
           ) : (
-            <table className="w-full">
+            <table className="w-full min-w-[640px]">
               <thead>
                 <tr className="border-b border-gray-200 bg-gray-50">
                   <th className="text-left px-6 py-3 text-xs font-semibold text-[#6B7280] uppercase tracking-wider">
@@ -305,7 +305,7 @@ export default function UsersPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 px-4 py-2.5 bg-[#00E05D] text-[#002D37] font-semibold rounded-lg hover:bg-[#00c752] disabled:opacity-50 transition cursor-pointer"
+                  className="flex-1 px-4 py-2.5 bg-[#00E05D] text-[#002D37] font-semibold rounded-lg hover:bg-[#00A645] disabled:opacity-50 transition cursor-pointer"
                 >
                   {submitting ? "保存中..." : "保存"}
                 </button>

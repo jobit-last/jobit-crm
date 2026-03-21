@@ -95,7 +95,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 px-4 bg-[#00E05D] text-[#002D37] font-semibold rounded-lg hover:bg-[#00c752] focus:outline-none focus:ring-2 focus:ring-[#00E05D] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition cursor-pointer"
+              className="w-full py-2.5 px-4 bg-[#00E05D] text-[#002D37] font-semibold rounded-lg hover:bg-[#00A645] focus:outline-none focus:ring-2 focus:ring-[#00E05D] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition cursor-pointer"
             >
               {loading ? "ログイン中..." : "ログイン"}
             </button>

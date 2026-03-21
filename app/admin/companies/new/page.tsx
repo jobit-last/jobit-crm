@@ -101,7 +101,7 @@ export default function CompanyNewPage() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className={labelClass}>業種</label>
                 <input
@@ -126,7 +126,7 @@ export default function CompanyNewPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className={labelClass}>所在地</label>
                 <input
@@ -184,7 +184,7 @@ export default function CompanyNewPage() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className={labelClass}>メールアドレス</label>
                 <input
@@ -230,7 +230,7 @@ export default function CompanyNewPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="bg-cta hover:bg-cta-hover text-white px-8 py-2 rounded text-sm font-medium transition-colors disabled:opacity-50"
+              className="bg-cta hover:bg-cta-hover text-primary font-semibold px-8 py-2 rounded text-sm transition-colors disabled:opacity-50"
             >
               {submitting ? "登録中..." : "登録する"}
             </button>

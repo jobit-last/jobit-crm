@@ -85,7 +85,7 @@ export default function SendForm({ candidates, onSent }: Props) {
 
   return (
     <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-      <h2 className="text-base font-semibold mb-5" style={{ color: "#1A1A2E" }}>
+      <h2 className="text-base font-semibold mb-5" style={{ color: "#002D37" }}>
         通知を送信
       </h2>
 
@@ -99,7 +99,7 @@ export default function SendForm({ candidates, onSent }: Props) {
             name="candidate_id"
             value={form.candidate_id}
             onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
           >
             <option value="">選択なし</option>
             {candidates.map((c) => (
@@ -143,7 +143,7 @@ export default function SendForm({ candidates, onSent }: Props) {
           <select
             value={selectedTemplate}
             onChange={handleTemplateChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
           >
             <option value="">テンプレートを選択...</option>
             {TEMPLATES.map((t) => (
@@ -166,7 +166,7 @@ export default function SendForm({ candidates, onSent }: Props) {
             required
             rows={7}
             placeholder="送信内容を入力、またはテンプレートを選択してください..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
           />
           <p className="mt-1 text-xs text-right" style={{ color: "#9CA3AF" }}>
             {form.content.length} 文字
@@ -187,8 +187,8 @@ export default function SendForm({ candidates, onSent }: Props) {
         <button
           type="submit"
           disabled={submitting || !form.content.trim()}
-          className="w-full py-2.5 rounded-md text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{ backgroundColor: "#002D37" }}
+          className="w-full py-2.5 rounded-md text-sm font-medium transition-colors hover:bg-[#00A645] disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{ backgroundColor: "#00E05D", color: "#002D37" }}
         >
           {submitting ? "送信中..." : "送信する"}
         </button>

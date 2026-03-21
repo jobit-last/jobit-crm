@@ -57,10 +57,10 @@ export default function InvoiceDetailClient({ invoice: initial }: Props) {
           {/* Invoice header */}
           <div className="flex items-start justify-between mb-8">
             <div>
-              <h2 className="text-2xl font-bold" style={{ color: "#1A1A2E" }}>
+              <h2 className="text-2xl font-bold" style={{ color: "#002D37" }}>
                 請求書
               </h2>
-              <p className="mt-1 font-mono text-sm" style={{ color: "#00A0B0" }}>
+              <p className="mt-1 font-mono text-sm" style={{ color: "#002D37" }}>
                 {invoiceNumber(invoice)}
               </p>
             </div>
@@ -72,7 +72,7 @@ export default function InvoiceDetailClient({ invoice: initial }: Props) {
           </div>
 
           {/* Company & Candidate */}
-          <div className="grid grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div>
               <p
                 className="text-xs font-medium uppercase tracking-wide mb-1"
@@ -80,7 +80,7 @@ export default function InvoiceDetailClient({ invoice: initial }: Props) {
               >
                 請求先
               </p>
-              <p className="text-base font-semibold" style={{ color: "#1A1A2E" }}>
+              <p className="text-base font-semibold" style={{ color: "#002D37" }}>
                 {invoice.company?.name ?? "—"}
               </p>
             </div>
@@ -91,14 +91,14 @@ export default function InvoiceDetailClient({ invoice: initial }: Props) {
               >
                 対象求職者
               </p>
-              <p className="text-base font-semibold" style={{ color: "#1A1A2E" }}>
+              <p className="text-base font-semibold" style={{ color: "#002D37" }}>
                 {invoice.candidate?.name ?? "—"}
               </p>
             </div>
           </div>
 
           {/* Dates */}
-          <div className="grid grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div>
               <p
                 className="text-xs font-medium uppercase tracking-wide mb-1"
@@ -106,7 +106,7 @@ export default function InvoiceDetailClient({ invoice: initial }: Props) {
               >
                 請求日
               </p>
-              <p className="text-sm" style={{ color: "#1A1A2E" }}>
+              <p className="text-sm" style={{ color: "#002D37" }}>
                 {new Date(invoice.invoice_date).toLocaleDateString("ja-JP", {
                   year: "numeric",
                   month: "long",
@@ -123,7 +123,7 @@ export default function InvoiceDetailClient({ invoice: initial }: Props) {
               </p>
               <p
                 className="text-sm font-medium"
-                style={{ color: isOverdue ? "#DC2626" : "#1A1A2E" }}
+                style={{ color: isOverdue ? "#DC2626" : "#002D37" }}
               >
                 {new Date(invoice.due_date).toLocaleDateString("ja-JP", {
                   year: "numeric",
@@ -162,14 +162,14 @@ export default function InvoiceDetailClient({ invoice: initial }: Props) {
                 <tr className="border-t border-gray-100">
                   <td
                     className="px-4 py-3 text-sm"
-                    style={{ color: "#1A1A2E" }}
+                    style={{ color: "#002D37" }}
                   >
                     人材紹介成功報酬
                     {invoice.candidate?.name && ` — ${invoice.candidate.name}`}
                   </td>
                   <td
                     className="px-4 py-3 text-sm text-right font-medium"
-                    style={{ color: "#1A1A2E" }}
+                    style={{ color: "#002D37" }}
                   >
                     {formatAmount(invoice.amount)}
                   </td>
@@ -182,13 +182,13 @@ export default function InvoiceDetailClient({ invoice: initial }: Props) {
                 >
                   <td
                     className="px-4 py-3 text-sm font-semibold"
-                    style={{ color: "#1A1A2E" }}
+                    style={{ color: "#002D37" }}
                   >
                     合計金額
                   </td>
                   <td
                     className="px-4 py-3 text-right text-lg font-bold"
-                    style={{ color: "#1A1A2E" }}
+                    style={{ color: "#002D37" }}
                   >
                     {formatAmount(invoice.amount)}
                   </td>
@@ -229,7 +229,7 @@ export default function InvoiceDetailClient({ invoice: initial }: Props) {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
           <h3
             className="text-sm font-semibold mb-3"
-            style={{ color: "#1A1A2E" }}
+            style={{ color: "#002D37" }}
           >
             操作
           </h3>
@@ -269,7 +269,7 @@ export default function InvoiceDetailClient({ invoice: initial }: Props) {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
           <h3
             className="text-sm font-semibold mb-3"
-            style={{ color: "#1A1A2E" }}
+            style={{ color: "#002D37" }}
           >
             ステータス管理
           </h3>
@@ -318,8 +318,7 @@ export default function InvoiceDetailClient({ invoice: initial }: Props) {
           <button
             onClick={handleStatusSave}
             disabled={!hasChanged || saving}
-            className="w-full py-2 rounded-md text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
-            style={{ backgroundColor: "#002D37" }}
+            className="w-full py-2 rounded-md text-sm font-medium text-[#002D37] bg-[#00E05D] transition-colors hover:bg-[#00A645] disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {saving ? "保存中..." : "変更する"}
           </button>
@@ -329,7 +328,7 @@ export default function InvoiceDetailClient({ invoice: initial }: Props) {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
           <h3
             className="text-sm font-semibold mb-3"
-            style={{ color: "#1A1A2E" }}
+            style={{ color: "#002D37" }}
           >
             請求情報
           </h3>
@@ -338,7 +337,7 @@ export default function InvoiceDetailClient({ invoice: initial }: Props) {
               <dt className="text-xs" style={{ color: "#6B7280" }}>
                 請求金額
               </dt>
-              <dd className="text-sm font-semibold" style={{ color: "#1A1A2E" }}>
+              <dd className="text-sm font-semibold" style={{ color: "#002D37" }}>
                 {formatAmount(invoice.amount)}
               </dd>
             </div>
@@ -346,7 +345,7 @@ export default function InvoiceDetailClient({ invoice: initial }: Props) {
               <dt className="text-xs" style={{ color: "#6B7280" }}>
                 請求日
               </dt>
-              <dd className="text-sm" style={{ color: "#1A1A2E" }}>
+              <dd className="text-sm" style={{ color: "#002D37" }}>
                 {new Date(invoice.invoice_date).toLocaleDateString("ja-JP")}
               </dd>
             </div>
@@ -356,7 +355,7 @@ export default function InvoiceDetailClient({ invoice: initial }: Props) {
               </dt>
               <dd
                 className="text-sm"
-                style={{ color: isOverdue ? "#DC2626" : "#1A1A2E" }}
+                style={{ color: isOverdue ? "#DC2626" : "#002D37" }}
               >
                 {new Date(invoice.due_date).toLocaleDateString("ja-JP")}
               </dd>

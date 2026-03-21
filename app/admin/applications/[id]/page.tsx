@@ -45,11 +45,11 @@ export default async function ApplicationDetailPage({
     <div>
       {/* パンくず */}
       <div className="flex items-center gap-2 mb-6 text-sm" style={{ color: "#6B7280" }}>
-        <Link href="/admin/applications" className="hover:underline" style={{ color: "#00A0B0" }}>
+        <Link href="/admin/applications" className="hover:underline" style={{ color: "#002D37" }}>
           選考管理
         </Link>
         <span>/</span>
-        <span style={{ color: "#1A1A2E" }}>
+        <span style={{ color: "#002D37" }}>
           {app.candidate?.name} — {app.job?.title}
         </span>
       </div>
@@ -57,7 +57,7 @@ export default async function ApplicationDetailPage({
       {/* ヘッダー */}
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-semibold" style={{ color: "#1A1A2E" }}>
+          <h1 className="text-2xl font-semibold" style={{ color: "#002D37" }}>
             {app.candidate?.name ?? "—"}
           </h1>
           <p className="mt-1 text-sm" style={{ color: "#6B7280" }}>
@@ -76,7 +76,7 @@ export default async function ApplicationDetailPage({
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* 選考基本情報 */}
         <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-base font-semibold mb-4" style={{ color: "#1A1A2E" }}>
+          <h2 className="text-base font-semibold mb-4" style={{ color: "#002D37" }}>
             選考情報
           </h2>
           <dl className="space-y-3">
@@ -123,7 +123,7 @@ function DetailRow({ label, value }: { label: string; value: string | null | und
       <dt className="w-28 flex-shrink-0 text-sm font-medium" style={{ color: "#6B7280" }}>
         {label}
       </dt>
-      <dd className="text-sm" style={{ color: value ? "#1A1A2E" : "#9CA3AF" }}>
+      <dd className="text-sm" style={{ color: value ? "#002D37" : "#9CA3AF" }}>
         {value ?? "—"}
       </dd>
     </div>

@@ -307,7 +307,7 @@ export default function DiagnosisForm() {
                     ? "#002D37"
                     : step > i + 1
                     ? "#00A0B0"
-                    : "#E5E7EB",
+                    : "#BFCED1",
               }}
             />
           ))}

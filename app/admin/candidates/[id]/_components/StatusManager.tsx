@@ -45,7 +45,7 @@ export default function StatusManager({ candidateId, currentStatus, histories }:
 
   return (
     <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-      <h2 className="text-base font-semibold mb-4" style={{ color: "#1A1A2E" }}>
+      <h2 className="text-base font-semibold mb-4" style={{ color: "#002D37" }}>
         ステータス管理
       </h2>
 
@@ -69,7 +69,7 @@ export default function StatusManager({ candidateId, currentStatus, histories }:
             <select
               value={selected}
               onChange={(e) => setSelected(e.target.value as CandidateStatus)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#00A0B0] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             >
               {(Object.entries(STATUS_LABELS) as [CandidateStatus, string][]).map(
                 ([key, label]) => (
@@ -83,8 +83,8 @@ export default function StatusManager({ candidateId, currentStatus, histories }:
           <button
             type="submit"
             disabled={!hasChanged || loading}
-            className="px-4 py-2 rounded-md text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
-            style={{ backgroundColor: "#002D37" }}
+            className="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00A645] disabled:opacity-40 disabled:cursor-not-allowed"
+            style={{ backgroundColor: "#00E05D", color: "#002D37" }}
           >
             {loading ? "保存中..." : "変更する"}
           </button>
@@ -110,7 +110,7 @@ export default function StatusManager({ candidateId, currentStatus, histories }:
                 {/* タイムラインドット */}
                 <span
                   className="absolute -left-[9px] flex h-4 w-4 items-center justify-center rounded-full ring-2 ring-white"
-                  style={{ backgroundColor: "#00A0B0" }}
+                  style={{ backgroundColor: "#002D37" }}
                 />
 
                 <div className="flex flex-wrap items-center gap-2">
