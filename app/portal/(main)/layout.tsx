@@ -34,7 +34,7 @@ export default function PortalMainLayout({ children }: { children: React.ReactNo
               className="text-lg font-bold"
               style={{ color: "#2394FF" }}
             >
-              Jobit マイページ
+              PITキャリア マイページ
             </Link>
             <button
               onClick={handleLogout}

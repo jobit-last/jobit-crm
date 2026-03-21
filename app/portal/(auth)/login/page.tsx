@@ -45,7 +45,7 @@ export default function PortalLoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold tracking-tight" style={{ color: "#0649C4" }}>
-            Jobit
+            PITキャリア
           </h1>
           <p className="mt-2 text-sm" style={{ color: "#6B7280" }}>
             求職者の方はこちら
@@ -121,7 +121,7 @@ export default function PortalLoginPage() {
         </div>
 
         <p className="mt-6 text-center text-xs" style={{ color: "#9CA3AF" }}>
-          &copy; 2026 Jobit. All rights reserved.
+          &copy; 2026 PITキャリア. All rights reserved.
         </p>
       </div>
     </div>
