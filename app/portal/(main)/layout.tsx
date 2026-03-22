@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
@@ -15,6 +16,26 @@ const navItems = [
 export default function PortalMainLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
+  const [candidateName, setCandidateName] = useState("");
+
+  useEffect(() => {
+    async function fetchCandidateName() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data } = await supabase
+        .from("candidates")
+        .select("last_name, first_name")
+        .eq("email", user.email)
+        .single();
+
+      if (data) {
+        setCandidateName(`${data.last_name} ${data.first_name}`);
+      }
+    }
+    fetchCandidateName();
+  }, []);
 
   async function handleLogout() {
     const supabase = createClient();
@@ -37,7 +58,7 @@ export default function PortalMainLayout({ children }: { children: React.ReactNo
               className="text-lg text-white"
               style={{ letterSpacing: "0.2em", fontWeight: 900 }}
             >
-              PITキャリア マイページ
+              {candidateName ? `${candidateName}様 マイページ` : "マイページ"}
             </Link>
             <button
               onClick={handleLogout}

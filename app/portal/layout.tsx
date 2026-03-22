@@ -20,25 +20,18 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
           </Link>
           <nav className="flex items-center gap-5 text-sm">
             <Link
+              href="/portal/dashboard"
+              className="font-medium relative py-1 transition-all hover:after:scale-x-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#2394FF] after:scale-x-0 after:origin-center after:transition-transform after:duration-200"
+              style={{ color: "#21242B" }}
+            >
+              マイページ
+            </Link>
+            <Link
               href="/portal/jobs"
               className="font-medium relative py-1 transition-all hover:after:scale-x-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#2394FF] after:scale-x-0 after:origin-center after:transition-transform after:duration-200"
               style={{ color: "#21242B" }}
             >
               求人一覧
-            </Link>
-            <Link
-              href="/portal/jobs/search"
-              className="font-medium relative py-1 transition-all hover:after:scale-x-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#2394FF] after:scale-x-0 after:origin-center after:transition-transform after:duration-200"
-              style={{ color: "#21242B" }}
-            >
-              検索
-            </Link>
-            <Link
-              href="/portal/jobs/compare"
-              className="font-medium relative py-1 transition-all hover:after:scale-x-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#2394FF] after:scale-x-0 after:origin-center after:transition-transform after:duration-200"
-              style={{ color: "#21242B" }}
-            >
-              比較
             </Link>
             <Link
               href="/portal/jobs/favorites"
