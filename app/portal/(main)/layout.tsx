@@ -25,32 +25,32 @@ export default function PortalMainLayout({ children }: { children: React.ReactNo
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#F2F6FF" }}>
-      {/* ヘッダー */}
+      {/* サブヘッダー（PITキャリア マイページ + ログアウト） */}
       <header
-        className="sticky top-0 z-30 bg-white"
-        style={{ borderBottom: "1px solid #C5CBD8" }}
+        className="sticky top-0 z-30"
+        style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
       >
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="h-14 flex items-center justify-between">
             <Link
               href="/portal/dashboard"
-              className="text-lg font-bold"
-              style={{ color: "#21242B", letterSpacing: "0.15em" }}
+              className="text-lg text-white"
+              style={{ letterSpacing: "0.2em", fontWeight: 900 }}
             >
               PITキャリア マイページ
             </Link>
             <button
               onClick={handleLogout}
               className="text-sm transition-colors cursor-pointer"
-              style={{ color: "#C5CBD8" }}
-              onMouseOver={(e) => (e.currentTarget.style.color = "#21242B")}
-              onMouseOut={(e) => (e.currentTarget.style.color = "#C5CBD8")}
+              style={{ color: "rgba(255,255,255,0.7)" }}
+              onMouseOver={(e) => (e.currentTarget.style.color = "#FFFFFF")}
+              onMouseOut={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.7)")}
             >
               ログアウト
             </button>
           </div>
 
-          {/* ナビゲーション */}
+          {/* タブナビゲーション */}
           <nav className="-mb-px flex gap-1 overflow-x-auto">
             {navItems.map((item) => {
               const isActive =
@@ -61,13 +61,13 @@ export default function PortalMainLayout({ children }: { children: React.ReactNo
                   href={item.href}
                   className={`whitespace-nowrap px-3 py-2.5 text-sm font-medium border-b-2 transition-colors ${
                     isActive
-                      ? ""
-                      : "border-transparent hover:border-[#2394FF]/40"
+                      ? "border-white text-white"
+                      : "border-transparent hover:border-white/40"
                   }`}
                   style={
                     isActive
-                      ? { color: "#2394FF", borderBottomColor: "#2394FF" }
-                      : { color: "#21242B" }
+                      ? { color: "#FFFFFF", borderBottomColor: "#FFFFFF" }
+                      : { color: "rgba(255,255,255,0.7)" }
                   }
                 >
                   {item.label}

@@ -15,7 +15,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
       >
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/portal/jobs" className="flex items-center gap-2">
-            <span className="font-bold text-xl" style={{ color: "#21242B", letterSpacing: "0.15em" }}>PITキャリア</span>
+            <span className="text-xl" style={{ color: "#21242B", letterSpacing: "0.2em", fontWeight: 900 }}>PITキャリア</span>
             <span className="text-sm hidden sm:block" style={{ color: "#C5CBD8" }}>ポータル</span>
           </Link>
           <nav className="flex items-center gap-5 text-sm">
