@@ -27,26 +27,24 @@ export default function PortalMainLayout({ children }: { children: React.ReactNo
     <div className="min-h-screen" style={{ backgroundColor: "#F2F6FF" }}>
       {/* ヘッダー */}
       <header
-        className="sticky top-0 z-30"
-        style={{
-          background: "linear-gradient(135deg, #16B1F3, #0649C4)",
-          boxShadow: "0 4px 24px rgba(6, 73, 196, 0.35), 0 1px 4px rgba(22, 177, 243, 0.2)",
-        }}
+        className="sticky top-0 z-30 bg-white"
+        style={{ borderBottom: "1px solid #C5CBD8" }}
       >
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="h-14 flex items-center justify-between">
             <Link
               href="/portal/dashboard"
-              className="text-lg font-bold text-white tracking-tight"
+              className="text-lg font-bold"
+              style={{ color: "#21242B", letterSpacing: "0.15em" }}
             >
               PITキャリア マイページ
             </Link>
             <button
               onClick={handleLogout}
               className="text-sm transition-colors cursor-pointer"
-              style={{ color: "rgba(255,255,255,0.7)" }}
-              onMouseOver={(e) => (e.currentTarget.style.color = "rgba(255,255,255,1)")}
-              onMouseOut={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.7)")}
+              style={{ color: "#C5CBD8" }}
+              onMouseOver={(e) => (e.currentTarget.style.color = "#21242B")}
+              onMouseOut={(e) => (e.currentTarget.style.color = "#C5CBD8")}
             >
               ログアウト
             </button>
@@ -63,13 +61,13 @@ export default function PortalMainLayout({ children }: { children: React.ReactNo
                   href={item.href}
                   className={`whitespace-nowrap px-3 py-2.5 text-sm font-medium border-b-2 transition-colors ${
                     isActive
-                      ? "border-white"
-                      : "border-transparent hover:border-white/40"
+                      ? ""
+                      : "border-transparent hover:border-[#2394FF]/40"
                   }`}
                   style={
                     isActive
-                      ? { color: "#FFFFFF", borderBottomColor: "#FFFFFF" }
-                      : { color: "rgba(255,255,255,0.7)" }
+                      ? { color: "#2394FF", borderBottomColor: "#2394FF" }
+                      : { color: "#21242B" }
                   }
                 >
                   {item.label}

@@ -10,45 +10,46 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     <div className="min-h-screen" style={{ backgroundColor: "#F2F6FF" }}>
       {/* ヘッダー */}
       <header
-        className="sticky top-0 z-10"
-        style={{
-          background: "linear-gradient(135deg, #16B1F3, #0649C4)",
-          boxShadow: "0 4px 24px rgba(6, 73, 196, 0.35), 0 1px 4px rgba(22, 177, 243, 0.2)",
-        }}
+        className="sticky top-0 z-10 bg-white"
+        style={{ borderBottom: "1px solid #C5CBD8" }}
       >
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/portal/jobs" className="flex items-center gap-2">
-            <span className="font-bold text-xl text-white tracking-tight">PITキャリア</span>
-            <span className="text-sm hidden sm:block" style={{ color: "rgba(255,255,255,0.8)" }}>ポータル</span>
+            <span className="font-bold text-xl" style={{ color: "#21242B", letterSpacing: "0.15em" }}>PITキャリア</span>
+            <span className="text-sm hidden sm:block" style={{ color: "#C5CBD8" }}>ポータル</span>
           </Link>
           <nav className="flex items-center gap-5 text-sm">
             <Link
               href="/portal/jobs"
-              className="font-medium text-white relative py-1 transition-all hover:after:scale-x-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-white after:scale-x-0 after:origin-center after:transition-transform after:duration-200"
+              className="font-medium relative py-1 transition-all hover:after:scale-x-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#2394FF] after:scale-x-0 after:origin-center after:transition-transform after:duration-200"
+              style={{ color: "#21242B" }}
             >
               求人一覧
             </Link>
             <Link
               href="/portal/jobs/search"
-              className="font-medium text-white relative py-1 transition-all hover:after:scale-x-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-white after:scale-x-0 after:origin-center after:transition-transform after:duration-200"
+              className="font-medium relative py-1 transition-all hover:after:scale-x-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#2394FF] after:scale-x-0 after:origin-center after:transition-transform after:duration-200"
+              style={{ color: "#21242B" }}
             >
               検索
             </Link>
             <Link
               href="/portal/jobs/compare"
-              className="font-medium text-white relative py-1 transition-all hover:after:scale-x-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-white after:scale-x-0 after:origin-center after:transition-transform after:duration-200"
+              className="font-medium relative py-1 transition-all hover:after:scale-x-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#2394FF] after:scale-x-0 after:origin-center after:transition-transform after:duration-200"
+              style={{ color: "#21242B" }}
             >
               比較
             </Link>
             <Link
               href="/portal/jobs/favorites"
-              className="font-medium text-white relative py-1 transition-all hover:after:scale-x-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-white after:scale-x-0 after:origin-center after:transition-transform after:duration-200"
+              className="font-medium relative py-1 transition-all hover:after:scale-x-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#2394FF] after:scale-x-0 after:origin-center after:transition-transform after:duration-200"
+              style={{ color: "#21242B" }}
             >
               ♥ お気に入り
             </Link>
             <Link
               href="/portal/learning"
-              className="font-medium relative py-1 transition-all hover:after:scale-x-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:scale-x-0 after:origin-center after:transition-transform after:duration-200"
+              className="font-medium relative py-1 transition-all hover:after:scale-x-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#00B59A] after:scale-x-0 after:origin-center after:transition-transform after:duration-200"
               style={{ color: "#00B59A" }}
             >
               📚 学習
