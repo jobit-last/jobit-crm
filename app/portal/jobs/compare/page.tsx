@@ -93,10 +93,7 @@ export default function ComparePage() {
         ) : (
           <div className="space-y-6">
             {/* ジョブカード（ヘッダー） */}
-            <div
-              className="grid gap-4"
-              style={{ gridTemplateColumns: `repeat(${validJobs.length}, 1fr)` }}
-            >
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {validJobs.map((job, idx) => (
                 <div
                   key={job.id}
@@ -138,8 +135,8 @@ export default function ComparePage() {
             </div>
 
             {/* 比較テーブル */}
-            <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-              <table className="w-full">
+            <div className="bg-white rounded-2xl shadow-sm overflow-x-auto">
+              <table className="w-full min-w-[500px]">
                 <tbody className="divide-y divide-gray-50">
                   {rows.map(({ label, key, format, highlight }) => (
                     <tr key={key} className="hover:bg-gray-50 transition-colors">

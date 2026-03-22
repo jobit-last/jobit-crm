@@ -102,8 +102,8 @@ export default function JobCard({
       <div className="flex flex-col gap-2">
         <Link
           href={`/portal/jobs/${job.id}`}
-          className="block text-center py-2 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-80 shadow-md"
-          style={{ background: GRADIENT_B }}
+          className="block text-center py-2.5 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-80 shadow-md"
+          style={{ background: GRADIENT_B, minHeight: "44px", lineHeight: "24px" }}
         >
           詳細を見る
         </Link>

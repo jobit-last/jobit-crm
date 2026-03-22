@@ -55,8 +55,8 @@ export default function PortalMainLayout({ children }: { children: React.ReactNo
           <div className="h-14 flex items-center justify-between">
             <Link
               href="/portal/dashboard"
-              className="text-lg text-white"
-              style={{ letterSpacing: "0.2em", fontWeight: 900 }}
+              className="text-sm sm:text-lg text-white truncate"
+              style={{ letterSpacing: "0.15em", fontWeight: 900 }}
             >
               {candidateName ? `${candidateName}様 マイページ` : "マイページ"}
             </Link>
@@ -72,7 +72,7 @@ export default function PortalMainLayout({ children }: { children: React.ReactNo
           </div>
 
           {/* タブナビゲーション */}
-          <nav className="-mb-px flex gap-1 overflow-x-auto">
+          <nav className="-mb-px flex gap-1 overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: "touch" }}>
             {navItems.map((item) => {
               const isActive =
                 pathname === item.href || pathname.startsWith(item.href + "/");

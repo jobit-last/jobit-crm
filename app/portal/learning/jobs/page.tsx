@@ -228,17 +228,19 @@ export default function JobsLearningPage() {
                 className="px-6 py-5"
                 style={{ backgroundColor: role.color + "08", borderBottom: `1px solid ${role.color}15` }}
               >
-                <div className="flex items-center gap-4 flex-wrap">
-                  <span className="text-3xl">{role.icon}</span>
-                  <div className="flex-1 min-w-0">
-                    <h2 className="text-xl font-bold" style={{ color: "#21242B" }}>
-                      {role.title}
-                    </h2>
-                    <p className="text-sm mt-0.5" style={{ color: role.color }}>
-                      {role.tagline}
-                    </p>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className="text-3xl shrink-0">{role.icon}</span>
+                    <div className="min-w-0">
+                      <h2 className="text-lg sm:text-xl font-bold" style={{ color: "#21242B" }}>
+                        {role.title}
+                      </h2>
+                      <p className="text-sm mt-0.5" style={{ color: role.color }}>
+                        {role.tagline}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex gap-3 shrink-0 text-xs">
+                  <div className="flex gap-3 text-xs ml-0 sm:ml-auto shrink-0">
                     <div className="text-center px-3 py-2 rounded-xl" style={{ backgroundColor: "#E8F0F6" }}>
                       <p className="text-gray-400 mb-0.5">想定年収</p>
                       <p className="font-bold" style={{ color: "#21242B" }}>{role.salary}</p>
@@ -255,7 +257,7 @@ export default function JobsLearningPage() {
                 {/* 説明 */}
                 <p className="text-sm text-gray-600 leading-relaxed">{role.description}</p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {/* 必要スキル */}
                   <div className="rounded-xl p-4" style={{ backgroundColor: "#E8F0F6" }}>
                     <h3 className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: "#16B1F3" }}>

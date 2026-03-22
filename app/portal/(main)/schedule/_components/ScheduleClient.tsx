@@ -139,13 +139,13 @@ export default function ScheduleClient({ schedules, interviews }: Props) {
         {/* 日付グリッド */}
         <div className="grid grid-cols-7">
           {cells.map((day, i) => {
-            if (day === null) return <div key={i} className="h-20 border border-gray-50" />;
+            if (day === null) return <div key={i} className="h-14 sm:h-20 border border-gray-50" />;
             const dayEvents = getEventsForDay(day);
             const isToday = `${year}-${month}-${day}` === todayStr;
             return (
               <div
                 key={i}
-                className={`h-20 border border-gray-50 p-1 rounded-lg ${isToday ? "ring-2 ring-[#2394FF] ring-inset" : ""}`}
+                className={`h-14 sm:h-20 border border-gray-50 p-0.5 sm:p-1 rounded-lg ${isToday ? "ring-2 ring-[#2394FF] ring-inset" : ""}`}
                 style={{ backgroundColor: isToday ? "#EBF5FF" : undefined }}
               >
                 <p

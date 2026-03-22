@@ -233,7 +233,7 @@ function InfoRow({
 }) {
   return (
     <div className="flex gap-4 items-start">
-      <dt className="w-32 flex-shrink-0 text-sm font-medium text-gray-500">
+      <dt className="w-24 sm:w-32 flex-shrink-0 text-sm font-medium text-gray-500">
         {label}
       </dt>
       <dd className="text-sm font-medium" style={{ color: value || children ? (isDate ? "#2394FF" : "#21242B") : "#9CA3AF" }}>

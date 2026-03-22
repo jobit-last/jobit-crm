@@ -196,10 +196,10 @@ export default function ITLearningPage() {
             {KEYWORDS.map((kw, i) => (
               <div
                 key={kw.word}
-                className={`flex gap-4 px-6 py-4 ${i % 2 === 0 ? "" : ""}`}
+                className={`flex flex-col sm:flex-row gap-2 sm:gap-4 px-4 sm:px-6 py-4`}
                 style={{ backgroundColor: i % 2 === 1 ? "#E8F0F6" : undefined }}
               >
-                <dt className="shrink-0 w-52">
+                <dt className="shrink-0 sm:w-52">
                   <span
                     className="inline-block text-xs font-bold px-3 py-1 rounded-full"
                     style={{ backgroundColor: `${MINT}18`, color: MINT }}

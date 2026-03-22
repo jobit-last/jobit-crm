@@ -41,7 +41,7 @@ export default async function InterviewPrepArticlePage({
 
       {/* Gradient B ヘッダーバナー */}
       <div
-        className="rounded-2xl px-8 py-8 mb-8 shadow-lg"
+        className="rounded-2xl px-4 sm:px-8 py-6 sm:py-8 mb-8 shadow-lg"
         style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
       >
         <div className="flex flex-wrap items-center gap-2 mb-3">

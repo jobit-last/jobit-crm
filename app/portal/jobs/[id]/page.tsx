@@ -113,7 +113,7 @@ export default function PortalJobDetailPage() {
   return (
     <div style={{ backgroundColor: "#F2F6FF", minHeight: "100vh" }}>
       {/* ヘッダー with gradient */}
-      <div style={{ background: GRADIENT_B }} className="py-10 px-4">
+      <div style={{ background: GRADIENT_B }} className="py-8 sm:py-10 px-4">
         <div className="max-w-3xl mx-auto">
           {/* パンくず */}
           <div className="flex items-center gap-2 text-xs text-blue-200 mb-4">

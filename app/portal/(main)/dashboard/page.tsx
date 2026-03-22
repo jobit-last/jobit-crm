@@ -65,7 +65,7 @@ export default async function PortalDashboardPage() {
     <div>
       {/* Hero section with gradient */}
       <div
-        className="rounded-2xl p-6 mb-8 relative overflow-hidden"
+        className="rounded-2xl p-4 sm:p-6 mb-8 relative overflow-hidden"
         style={{
           background: "linear-gradient(135deg, #16B1F3, #0649C4)",
           boxShadow: "0 4px 20px rgba(6, 73, 196, 0.25)",
