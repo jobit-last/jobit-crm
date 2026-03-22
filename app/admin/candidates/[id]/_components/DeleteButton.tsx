@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Spinner from "@/components/Spinner";
 
 export default function DeleteButton({ id }: { id: string }) {
   const router = useRouter();
@@ -27,7 +28,7 @@ export default function DeleteButton({ id }: { id: string }) {
           disabled={loading}
           className="px-3 py-2 rounded-md text-sm font-medium text-white bg-red-500 hover:bg-red-600 transition-colors disabled:opacity-60"
         >
-          {loading ? "削除中..." : "削除する"}
+          {loading ? <><Spinner size={16} className="inline mr-1.5" />削除中...</> : "削除する"}
         </button>
         <button
           onClick={() => setConfirming(false)}

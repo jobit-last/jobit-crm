@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { ApplicationStatus } from "@/types/application";
 import { APPLICATION_STATUS_LABELS } from "@/types/application";
+import Spinner from "@/components/Spinner";
 
 interface CandidateOption {
   id: string;
@@ -173,7 +174,7 @@ export default function ApplicationForm({ candidates, jobs }: Props) {
           className="px-5 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00c752] disabled:opacity-60"
           style={{ backgroundColor: "#00E05D", color: "#002D37" }}
         >
-          {loading ? "保存中..." : "登録する"}
+          {loading ? <><Spinner size={16} className="inline mr-1.5" />保存中...</> : "登録する"}
         </button>
       </div>
     </form>

@@ -9,6 +9,7 @@ import {
   type Company,
   type Temperature,
 } from "@/types/company";
+import Spinner from "@/components/Spinner";
 
 const TEMPERATURES = Object.keys(TEMPERATURE_LABELS) as Temperature[];
 
@@ -200,7 +201,7 @@ export default function CompanyDetailPage() {
                 disabled={deleting}
                 className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded text-sm font-medium transition-colors disabled:opacity-50"
               >
-                {deleting ? "削除中..." : "削除"}
+                {deleting ? <><Spinner size={16} className="inline mr-1.5" />削除中...</> : "削除"}
               </button>
             </div>
           )}
@@ -377,7 +378,7 @@ export default function CompanyDetailPage() {
                 disabled={submitting}
                 className="bg-cta hover:bg-cta-hover text-primary font-semibold px-8 py-2 rounded text-sm transition-colors disabled:opacity-50"
               >
-                {submitting ? "保存中..." : "保存する"}
+                {submitting ? <><Spinner size={16} className="inline mr-1.5" />保存中...</> : "保存する"}
               </button>
               <button
                 type="button"

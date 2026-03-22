@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import StatusBadge from "@/components/StatusBadge";
 import type { Contract, ContractStatus } from "@/types/contract";
+import Spinner from "@/components/Spinner";
 
 const STATUS_OPTIONS: { value: string; label: string }[] = [
   { value: "", label: "すべて" },
@@ -255,7 +256,7 @@ export default function ContractsPage() {
                   className="flex-1 px-4 py-2.5 border border-gray-300 text-[#002D37] rounded-lg hover:bg-gray-50 transition cursor-pointer">キャンセル</button>
                 <button type="submit" disabled={submitting}
                   className="flex-1 px-4 py-2.5 bg-[#00E05D] text-[#002D37] font-semibold rounded-lg hover:bg-[#00A645] disabled:opacity-50 transition cursor-pointer">
-                  {submitting ? "保存中..." : "保存"}
+                  {submitting ? <><Spinner size={16} className="inline mr-1.5" />保存中...</> : "保存"}
                 </button>
               </div>
             </form>
@@ -276,7 +277,7 @@ export default function ContractsPage() {
               <button onClick={() => setDeleteTarget(null)} className="flex-1 px-4 py-2.5 border border-gray-300 text-[#002D37] rounded-lg hover:bg-gray-50 transition cursor-pointer">キャンセル</button>
               <button onClick={handleDelete} disabled={deleting}
                 className="flex-1 px-4 py-2.5 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 disabled:opacity-50 transition cursor-pointer">
-                {deleting ? "削除中..." : "削除"}
+                {deleting ? <><Spinner size={16} className="inline mr-1.5" />削除中...</> : "削除"}
               </button>
             </div>
           </div>

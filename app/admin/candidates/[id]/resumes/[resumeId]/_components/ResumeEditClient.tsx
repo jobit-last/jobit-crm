@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { Resume, ResumeContent } from "@/types/resume";
+import Spinner from "@/components/Spinner";
 
 interface Props {
   candidateId: string;
@@ -156,7 +157,7 @@ export default function ResumeEditClient({ candidateId, resume }: Props) {
             className="px-5 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00c752] disabled:opacity-60"
             style={{ backgroundColor: "#00E05D", color: "#002D37" }}
           >
-            {saving ? "保存中..." : "保存する"}
+            {saving ? <><Spinner size={16} className="inline mr-1.5" />保存中...</> : "保存する"}
           </button>
         </div>
       </div>

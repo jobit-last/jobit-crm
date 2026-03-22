@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import type { CandidateStatus, StatusHistory } from "@/types/candidate";
 import { STATUS_LABELS, STATUS_COLORS } from "@/types/candidate";
+import Spinner from "@/components/Spinner";
 
 interface Props {
   candidateId: string;
@@ -86,7 +87,7 @@ export default function StatusManager({ candidateId, currentStatus, histories }:
             className="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00A645] disabled:opacity-40 disabled:cursor-not-allowed"
             style={{ backgroundColor: "#00E05D", color: "#002D37" }}
           >
-            {loading ? "保存中..." : "変更する"}
+            {loading ? <><Spinner size={16} className="inline mr-1.5" />保存中...</> : "変更する"}
           </button>
         </div>
 

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import type { User, UserRole } from "@/types/user";
+import Spinner from "@/components/Spinner";
 
 type ModalMode = "create" | "edit";
 
@@ -307,7 +308,7 @@ export default function UsersPage() {
                   disabled={submitting}
                   className="flex-1 px-4 py-2.5 bg-[#00E05D] text-[#002D37] font-semibold rounded-lg hover:bg-[#00A645] disabled:opacity-50 transition cursor-pointer"
                 >
-                  {submitting ? "保存中..." : "保存"}
+                  {submitting ? <><Spinner size={16} className="inline mr-1.5" />保存中...</> : "保存"}
                 </button>
               </div>
             </form>
@@ -339,7 +340,7 @@ export default function UsersPage() {
                 disabled={deleting}
                 className="flex-1 px-4 py-2.5 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 disabled:opacity-50 transition cursor-pointer"
               >
-                {deleting ? "削除中..." : "削除"}
+                {deleting ? <><Spinner size={16} className="inline mr-1.5" />削除中...</> : "削除"}
               </button>
             </div>
           </div>

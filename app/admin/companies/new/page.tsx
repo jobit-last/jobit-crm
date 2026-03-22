@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { TEMPERATURE_LABELS, type Temperature } from "@/types/company";
+import Spinner from "@/components/Spinner";
 
 const TEMPERATURES = Object.keys(TEMPERATURE_LABELS) as Temperature[];
 
@@ -232,7 +233,7 @@ export default function CompanyNewPage() {
               disabled={submitting}
               className="bg-cta hover:bg-cta-hover text-primary font-semibold px-8 py-2 rounded text-sm transition-colors disabled:opacity-50"
             >
-              {submitting ? "登録中..." : "登録する"}
+              {submitting ? <><Spinner size={16} className="inline mr-1.5" />登録中...</> : "登録する"}
             </button>
             <Link
               href="/admin/companies"

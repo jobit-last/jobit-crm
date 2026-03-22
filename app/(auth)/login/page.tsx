@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "@/lib/supabase/auth";
+import Spinner from "@/components/Spinner";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -97,7 +98,7 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full py-2.5 px-4 bg-[#00E05D] text-[#002D37] font-semibold rounded-lg hover:bg-[#00A645] focus:outline-none focus:ring-2 focus:ring-[#00E05D] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition cursor-pointer"
             >
-              {loading ? "ログイン中..." : "ログイン"}
+              {loading ? <><Spinner size={16} className="inline mr-1.5" />ログイン中...</> : "ログイン"}
             </button>
           </form>
         </div>

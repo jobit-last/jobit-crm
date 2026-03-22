@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import type { Job } from "@/types/job";
+import Spinner from "@/components/Spinner";
 
 const ACCENT = "#2394FF";
 const GRADIENT_B = "linear-gradient(135deg, #16B1F3, #0649C4)";
@@ -285,7 +286,7 @@ export default function PortalJobDetailPage() {
                 className="w-full sm:w-auto px-10 py-3 rounded-xl text-white font-semibold text-sm transition-opacity hover:opacity-80 disabled:opacity-50 shadow-lg"
                 style={{ background: GRADIENT_B }}
               >
-                {sending ? "送信中..." : "この求人に興味あり"}
+                {sending ? <><Spinner size={16} className="inline mr-1.5" />送信中...</> : "この求人に興味あり"}
               </button>
               <p className="text-xs text-gray-400 mt-2">担当CAに通知が届きます</p>
             </div>

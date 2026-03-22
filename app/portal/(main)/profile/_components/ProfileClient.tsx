@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { Candidate } from "@/types/candidate";
 import { STATUS_LABELS, STATUS_COLORS, GENDER_LABELS } from "@/types/candidate";
+import Spinner from "@/components/Spinner";
 
 interface Props {
   candidate: Candidate;
@@ -169,7 +170,7 @@ export default function ProfileClient({ candidate }: Props) {
                 className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition-all shadow-md hover:shadow-lg disabled:opacity-60"
                 style={{ background: "linear-gradient(135deg, #16B1F3, #0649C4)" }}
               >
-                {saving ? "保存中..." : "保存する"}
+                {saving ? <><Spinner size={16} className="inline mr-1.5" />保存中...</> : "保存する"}
               </button>
               <button
                 onClick={handleCancel}

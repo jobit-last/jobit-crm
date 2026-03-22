@@ -13,6 +13,7 @@ import {
   INTERVIEW_RESULT_LABELS,
   INTERVIEW_RESULT_COLORS,
 } from "@/types/interview";
+import Spinner from "@/components/Spinner";
 
 interface Props {
   applicationId: string;
@@ -349,7 +350,7 @@ export default function InterviewsClient({
                 className="px-5 py-2 rounded-md text-sm font-medium text-[#002D37] transition-colors hover:bg-[#00c752] disabled:opacity-60"
                 style={{ backgroundColor: "#00E05D" }}
               >
-                {submitting ? "保存中..." : editingId ? "更新する" : "登録する"}
+                {submitting ? <><Spinner size={16} className="inline mr-1.5" />保存中...</> : editingId ? "更新する" : "登録する"}
               </button>
             </div>
           </form>
@@ -426,7 +427,7 @@ export default function InterviewsClient({
                       disabled={deletingId === interview.id}
                       className="text-xs px-3 py-1.5 rounded-md border border-red-200 text-red-500 hover:bg-red-50 transition-colors disabled:opacity-40"
                     >
-                      {deletingId === interview.id ? "削除中..." : "キャンセル"}
+                      {deletingId === interview.id ? <><Spinner size={16} className="inline mr-1.5" />削除中...</> : "キャンセル"}
                     </button>
                   </div>
                 </div>
@@ -541,7 +542,7 @@ export default function InterviewsClient({
                           className="px-4 py-2 rounded-md text-sm font-medium text-[#002D37] transition-colors hover:bg-[#00c752] disabled:opacity-60"
                           style={{ backgroundColor: "#00E05D" }}
                         >
-                          {resultSubmitting ? "保存中..." : "結果を保存"}
+                          {resultSubmitting ? <><Spinner size={16} className="inline mr-1.5" />保存中...</> : "結果を保存"}
                         </button>
                       </div>
                     </form>

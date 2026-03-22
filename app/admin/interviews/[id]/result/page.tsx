@@ -12,6 +12,7 @@ import {
 import type { InterviewResult } from "@/types/interview";
 import { APPLICATION_STATUS_LABELS } from "@/types/application";
 import type { ApplicationStatus } from "@/types/application";
+import Spinner from "@/components/Spinner";
 
 const C = {
   bg:     "#EBEEEF",
@@ -310,7 +311,7 @@ export default function InterviewResultPage() {
                 onMouseEnter={(e) => { if (!submitting) e.currentTarget.style.backgroundColor = C.ctaHov; }}
                 onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = C.cta; }}
               >
-                {submitting ? "保存中..." : "結果を保存する"}
+                {submitting ? <><Spinner size={16} className="inline mr-1.5" />保存中...</> : "結果を保存する"}
               </button>
               <Link
                 href={app ? `/admin/applications/${app.id}` : "/admin/applications"}

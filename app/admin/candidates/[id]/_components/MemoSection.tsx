@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { CandidateMemo, MemoType } from "@/types/candidate";
 import { MEMO_TYPE_LABELS, MEMO_TYPE_COLORS } from "@/types/candidate";
+import Spinner from "@/components/Spinner";
 
 interface Props {
   candidateId: string;
@@ -110,7 +111,7 @@ export default function MemoSection({ candidateId, initialMemos }: Props) {
             className="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00A645] disabled:opacity-40 disabled:cursor-not-allowed"
             style={{ backgroundColor: "#00E05D", color: "#002D37" }}
           >
-            {submitting ? "保存中..." : "追加する"}
+            {submitting ? <><Spinner size={16} className="inline mr-1.5" />保存中...</> : "追加する"}
           </button>
         </div>
       </form>
@@ -167,7 +168,7 @@ export default function MemoSection({ candidateId, initialMemos }: Props) {
                   className="flex-shrink-0 text-xs text-gray-400 hover:text-red-500 transition-colors disabled:opacity-40"
                   aria-label="削除"
                 >
-                  {deletingId === memo.id ? "削除中..." : "削除"}
+                  {deletingId === memo.id ? <><Spinner size={16} className="inline mr-1.5" />削除中...</> : "削除"}
                 </button>
               </div>
             </li>

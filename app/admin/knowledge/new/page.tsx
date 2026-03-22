@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { KNOWLEDGE_CATEGORIES, type KnowledgeCategory } from "@/types/knowledge";
+import Spinner from "@/components/Spinner";
 
 const inputClass =
   "w-full border border-secondary rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent";
@@ -192,7 +193,7 @@ export default function KnowledgeNewPage() {
             disabled={submitting}
             className="bg-cta hover:bg-cta-hover text-primary font-semibold px-8 py-2 rounded text-sm transition-colors disabled:opacity-50"
           >
-            {submitting ? "登録中..." : "登録する"}
+            {submitting ? <><Spinner size={16} className="inline mr-1.5" />登録中...</> : "登録する"}
           </button>
           <Link
             href="/admin/knowledge"

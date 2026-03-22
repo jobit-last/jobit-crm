@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { Invoice, InvoiceStatus } from "@/types/invoice";
+import Spinner from "@/components/Spinner";
 import {
   INVOICE_STATUS_LABELS,
   INVOICE_STATUS_COLORS,
@@ -29,6 +30,10 @@ export default function InvoiceDetailClient({ invoice: initial }: Props) {
     setSaving(true);
     setError(null);
 
+    // 楽観的更新: APIレスポンスを待たずにUIを即座に更新
+    const previousInvoice = invoice;
+    setInvoice((prev) => ({ ...prev, status: selectedStatus }));
+
     const res = await fetch(`/api/invoices/${invoice.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -39,6 +44,9 @@ export default function InvoiceDetailClient({ invoice: initial }: Props) {
     setSaving(false);
 
     if (!res.ok) {
+      // エラー時はロールバック
+      setInvoice(previousInvoice);
+      setSelectedStatus(previousInvoice.status);
       setError(json.error ?? "エラーが発生しました");
       return;
     }
@@ -320,7 +328,7 @@ export default function InvoiceDetailClient({ invoice: initial }: Props) {
             disabled={!hasChanged || saving}
             className="w-full py-2 rounded-md text-sm font-medium text-[#002D37] bg-[#00E05D] transition-colors hover:bg-[#00A645] disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            {saving ? "保存中..." : "変更する"}
+            {saving ? <><Spinner size={16} className="inline mr-1.5" />保存中...</> : "変更する"}
           </button>
         </div>
 

@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import type { Job } from "@/types/job";
 import type { Company } from "@/types/company";
+import Spinner from "@/components/Spinner";
 
 const inputClass = "w-full border border-secondary rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent";
 const labelClass = "block text-sm font-medium text-primary mb-1";
@@ -175,7 +176,7 @@ export default function JobDetailPage() {
               </button>
               <button onClick={handleDelete} disabled={deleting}
                 className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded text-sm font-medium transition-colors disabled:opacity-50">
-                {deleting ? "削除中..." : "削除"}
+                {deleting ? <><Spinner size={16} className="inline mr-1.5" />削除中...</> : "削除"}
               </button>
             </div>
           )}
@@ -269,7 +270,7 @@ export default function JobDetailPage() {
             <div className="flex gap-3 mt-6">
               <button type="submit" disabled={submitting}
                 className="bg-cta hover:bg-cta-hover text-white px-8 py-2 rounded text-sm font-medium transition-colors disabled:opacity-50">
-                {submitting ? "保存中..." : "保存する"}
+                {submitting ? <><Spinner size={16} className="inline mr-1.5" />保存中...</> : "保存する"}
               </button>
               <button type="button" onClick={handleCancel}
                 className="bg-secondary hover:bg-gray-300 text-primary px-8 py-2 rounded text-sm font-medium transition-colors">

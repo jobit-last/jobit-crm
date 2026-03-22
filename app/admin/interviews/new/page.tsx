@@ -8,6 +8,7 @@ import {
   INTERVIEW_TYPE_LABELS,
 } from "@/types/interview";
 import type { InterviewType } from "@/types/interview";
+import Spinner from "@/components/Spinner";
 
 const C = {
   bg:      "#EBEEEF",
@@ -212,7 +213,7 @@ export default function InterviewNewPage() {
               onMouseEnter={(e) => { if (!submitting) e.currentTarget.style.backgroundColor = C.ctaHov; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = C.cta; }}
             >
-              {submitting ? "登録中..." : "面接を登録する"}
+              {submitting ? <><Spinner size={16} className="inline mr-1.5" />登録中...</> : "面接を登録する"}
             </button>
             <Link
               href="/admin/applications"

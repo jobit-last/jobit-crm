@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import Spinner from "@/components/Spinner";
 
 export default function PortalLoginPage() {
   const router = useRouter();
@@ -180,7 +181,7 @@ export default function PortalLoginPage() {
                 boxShadow: "0 4px 14px rgba(6, 73, 196, 0.3)",
               }}
             >
-              {loading ? "ログイン中..." : "ログイン"}
+              {loading ? <><Spinner size={16} className="inline mr-1.5" />ログイン中...</> : "ログイン"}
             </button>
           </form>
         </div>

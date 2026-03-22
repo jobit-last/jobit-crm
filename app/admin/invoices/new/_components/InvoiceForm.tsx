@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { InvoiceStatus } from "@/types/invoice";
 import { INVOICE_STATUS_LABELS, INVOICE_STATUS_LIST } from "@/types/invoice";
+import Spinner from "@/components/Spinner";
 
 interface Props {
   companies: { id: string; name: string }[];
@@ -234,7 +235,7 @@ export default function InvoiceForm({ companies, candidates }: Props) {
           disabled={submitting}
           className="px-6 py-2 rounded-md text-sm font-medium text-[#002D37] bg-[#00E05D] transition-colors hover:bg-[#00A645] disabled:opacity-60"
         >
-          {submitting ? "作成中..." : "請求書を作成"}
+          {submitting ? <><Spinner size={16} className="inline mr-1.5" />作成中...</> : "請求書を作成"}
         </button>
       </div>
     </form>

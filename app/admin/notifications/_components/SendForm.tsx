@@ -6,6 +6,7 @@ import {
   NOTIFICATION_TYPE_LABELS,
   TEMPLATES,
 } from "@/types/notification";
+import Spinner from "@/components/Spinner";
 
 const NOTIFICATION_TYPES: NotificationType[] = ["LINE", "SMS", "email"];
 
@@ -190,7 +191,7 @@ export default function SendForm({ candidates, onSent }: Props) {
           className="w-full py-2.5 rounded-md text-sm font-medium transition-colors hover:bg-[#00A645] disabled:opacity-50 disabled:cursor-not-allowed"
           style={{ backgroundColor: "#00E05D", color: "#002D37" }}
         >
-          {submitting ? "送信中..." : "送信する"}
+          {submitting ? <><Spinner size={16} className="inline mr-1.5" />送信中...</> : "送信する"}
         </button>
 
         <p className="text-xs text-center" style={{ color: "#9CA3AF" }}>

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { Candidate, Advisor, CandidateStatus, Gender } from "@/types/candidate";
 import { STATUS_LABELS } from "@/types/candidate";
+import Spinner from "@/components/Spinner";
 
 interface Props {
   mode: "create" | "edit";
@@ -284,7 +285,7 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
           className="px-5 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00A645] disabled:opacity-60"
           style={{ backgroundColor: "#00E05D", color: "#002D37" }}
         >
-          {loading ? "保存中..." : mode === "create" ? "登録する" : "更新する"}
+          {loading ? <><Spinner size={16} className="inline mr-1.5" />処理中...</> : mode === "create" ? "登録する" : "更新する"}
         </button>
       </div>
     </form>

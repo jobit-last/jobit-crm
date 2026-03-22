@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { Schedule, ScheduleType } from "@/types/schedule";
 import { SCHEDULE_TYPE_LABELS } from "@/types/schedule";
+import Spinner from "@/components/Spinner";
 
 const SCHEDULE_TYPES: ScheduleType[] = ["meeting", "interview"];
 
@@ -247,7 +248,7 @@ export default function ScheduleFormModal({
                   disabled={deleting}
                   className="text-sm text-red-500 hover:text-red-700 disabled:opacity-50"
                 >
-                  {deleting ? "削除中..." : "削除する"}
+                  {deleting ? <><Spinner size={16} className="inline mr-1.5" />削除中...</> : "削除する"}
                 </button>
               )}
             </div>
@@ -265,7 +266,7 @@ export default function ScheduleFormModal({
                 className="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00A645] disabled:opacity-60"
                 style={{ backgroundColor: "#00E05D", color: "#002D37" }}
               >
-                {submitting ? "保存中..." : schedule ? "更新する" : "登録する"}
+                {submitting ? <><Spinner size={16} className="inline mr-1.5" />保存中...</> : schedule ? "更新する" : "登録する"}
               </button>
             </div>
           </div>
