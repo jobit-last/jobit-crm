@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { recordLog } from "@/lib/activity-log";
 import type { UserInsert } from "@/types/user";
-import { randomUUID } from "crypto";
 
 // GET /api/users - ユーザー一覧取得
 export async function GET(request: NextRequest) {
@@ -93,6 +93,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
     if (!body.email?.trim()) {
       return NextResponse.json(
         {
@@ -105,13 +106,55 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // 1. Supabase Auth にユーザーを作成（Admin API使用）
+    const adminClient = createAdminClient();
+    const tempPassword = `Jobit!${Date.now().toString(36)}`;
+
+    const { data: authUser, error: authError } =
+      await adminClient.auth.admin.createUser({
+        email: body.email,
+        password: tempPassword,
+        email_confirm: true,
+        user_metadata: {
+          name: body.name,
+          role: body.role,
+        },
+      });
+
+    if (authError) {
+      // メールアドレス重複チェック
+      if (authError.message?.includes("already been registered")) {
+        return NextResponse.json(
+          {
+            success: false,
+            data: null,
+            message: "このメールアドレスは既に登録されています",
+            meta: {},
+          },
+          { status: 409 }
+        );
+      }
+      return NextResponse.json(
+        { success: false, data: null, message: authError.message, meta: {} },
+        { status: 500 }
+      );
+    }
+
+    // 2. public.users テーブルにレコード作成（auth.users の ID を使用）
     const { data, error } = await supabase
       .from("users")
-      .insert({ id: randomUUID(), ...body })
+      .insert({
+        id: authUser.user.id,
+        name: body.name,
+        email: body.email,
+        role: body.role,
+      })
       .select()
       .single();
 
     if (error) {
+      // public.users 作成失敗時は auth ユーザーも削除
+      await adminClient.auth.admin.deleteUser(authUser.user.id);
       return NextResponse.json(
         { success: false, data: null, message: error.message, meta: {} },
         { status: 500 }
