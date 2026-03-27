@@ -39,8 +39,9 @@ export default function UsersPage() {
     try {
       const res = await fetch("/api/users");
       if (!res.ok) throw new Error("ユーザー一覧の取得に失敗しました");
-      const data = await res.json();
-      setUsers(data);
+      const json = await res.json();
+      const list = Array.isArray(json) ? json : json.data ?? [];
+      setUsers(list);
     } catch (e) {
       setError(e instanceof Error ? e.message : "エラーが発生しました");
     } finally {
@@ -77,7 +78,8 @@ export default function UsersPage() {
     setError("");
 
     try {
-      const url = modalMode === "create" ? "/api/users" : `/api/users/${editingId}`;
+      const url =
+        modalMode === "create" ? "/api/users" : `/api/users/${editingId}`;
       const method = modalMode === "create" ? "POST" : "PUT";
 
       const res = await fetch(url, {
@@ -103,9 +105,10 @@ export default function UsersPage() {
   async function handleDelete() {
     if (!deleteTarget) return;
     setDeleting(true);
-
     try {
-      const res = await fetch(`/api/users/${deleteTarget.id}`, { method: "DELETE" });
+      const res = await fetch(`/api/users/${deleteTarget.id}`, {
+        method: "DELETE",
+      });
       if (!res.ok) {
         const data = await res.json();
         throw new Error(data.error || "削除に失敗しました");
@@ -135,7 +138,10 @@ export default function UsersPage() {
         <div className="flex items-center gap-6">
           <h1 className="text-xl font-bold">Jobit CRM</h1>
           <nav className="flex gap-4 text-sm">
-            <a href="/admin/dashboard" className="text-white/70 hover:text-white transition">
+            <a
+              href="/admin/dashboard"
+              className="text-white/70 hover:text-white transition"
+            >
               ダッシュボード
             </a>
             <a href="/admin/users" className="text-white font-medium">
@@ -167,7 +173,9 @@ export default function UsersPage() {
         {/* Table */}
         <div className="bg-white rounded-xl shadow-sm overflow-hidden overflow-x-auto">
           {loading ? (
-            <div className="px-6 py-12 text-center text-[#6B7280]">読み込み中...</div>
+            <div className="px-6 py-12 text-center text-[#6B7280]">
+              読み込み中...
+            </div>
           ) : users.length === 0 ? (
             <div className="px-6 py-12 text-center text-[#6B7280]">
               ユーザーが登録されていません
@@ -195,11 +203,16 @@ export default function UsersPage() {
               </thead>
               <tbody>
                 {users.map((user) => (
-                  <tr key={user.id} className="border-b border-gray-100 hover:bg-gray-50 transition">
+                  <tr
+                    key={user.id}
+                    className="border-b border-gray-100 hover:bg-gray-50 transition"
+                  >
                     <td className="px-6 py-4 text-sm font-medium text-[#002D37]">
                       {user.name}
                     </td>
-                    <td className="px-6 py-4 text-sm text-[#6B7280]">{user.email}</td>
+                    <td className="px-6 py-4 text-sm text-[#6B7280]">
+                      {user.email}
+                    </td>
                     <td className="px-6 py-4">
                       <span
                         className={`inline-block px-2.5 py-0.5 text-xs font-medium rounded-full ${
@@ -253,7 +266,10 @@ export default function UsersPage() {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-[#002D37] mb-1">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-[#002D37] mb-1"
+                >
                   名前
                 </label>
                 <input
@@ -267,7 +283,10 @@ export default function UsersPage() {
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-[#002D37] mb-1">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-[#002D37] mb-1"
+                >
                   メールアドレス
                 </label>
                 <input
@@ -281,13 +300,18 @@ export default function UsersPage() {
               </div>
 
               <div>
-                <label htmlFor="role" className="block text-sm font-medium text-[#002D37] mb-1">
+                <label
+                  htmlFor="role"
+                  className="block text-sm font-medium text-[#002D37] mb-1"
+                >
                   役割
                 </label>
                 <select
                   id="role"
                   value={form.role}
-                  onChange={(e) => setForm({ ...form, role: e.target.value as UserRole })}
+                  onChange={(e) =>
+                    setForm({ ...form, role: e.target.value as UserRole })
+                  }
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-[#002D37] focus:outline-none focus:ring-2 focus:ring-[#002D37]/20 focus:border-[#002D37] transition"
                 >
                   <option value="admin">管理者</option>
@@ -308,7 +332,14 @@ export default function UsersPage() {
                   disabled={submitting}
                   className="flex-1 px-4 py-2.5 bg-[#00E05D] text-[#002D37] font-semibold rounded-lg hover:bg-[#00A645] disabled:opacity-50 transition cursor-pointer"
                 >
-                  {submitting ? <><Spinner size={16} className="inline mr-1.5" />保存中...</> : "保存"}
+                  {submitting ? (
+                    <>
+                      <Spinner size={16} className="inline mr-1.5" />
+                      保存中...
+                    </>
+                  ) : (
+                    "保存"
+                  )}
                 </button>
               </div>
             </form>
@@ -319,13 +350,18 @@ export default function UsersPage() {
       {/* Delete Confirm Dialog */}
       {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setDeleteTarget(null)} />
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setDeleteTarget(null)}
+          />
           <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
             <h3 className="text-lg font-semibold text-[#002D37] mb-2">
               ユーザーの削除
             </h3>
             <p className="text-sm text-[#6B7280] mb-6">
-              <span className="font-medium text-[#002D37]">{deleteTarget.name}</span>
+              <span className="font-medium text-[#002D37]">
+                {deleteTarget.name}
+              </span>
               {" "}を削除しますか？この操作は取り消せません。
             </p>
             <div className="flex gap-3">
@@ -340,7 +376,14 @@ export default function UsersPage() {
                 disabled={deleting}
                 className="flex-1 px-4 py-2.5 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 disabled:opacity-50 transition cursor-pointer"
               >
-                {deleting ? <><Spinner size={16} className="inline mr-1.5" />削除中...</> : "削除"}
+                {deleting ? (
+                  <>
+                    <Spinner size={16} className="inline mr-1.5" />
+                    削除中...
+                  </>
+                ) : (
+                  "削除"
+                )}
               </button>
             </div>
           </div>
