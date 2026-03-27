@@ -97,7 +97,7 @@ export default function CandidatesClient({
             >
               <option value="">すべて</option>
               {advisors.map((a) => (
-                <option key={a.id} value={a.id}>{a.full_name}</option>
+                <option key={a.id} value={a.id}>{a.name}</option>
               ))}
             </select>
           </div>
@@ -165,7 +165,7 @@ export default function CandidatesClient({
                       </span>
                     </td>
                     <td className="px-4 py-3 text-gray-600">
-                      {c.ca?.full_name ?? "—"}
+                      {c.ca?.name ?? "—"}
                     </td>
                     <td className="px-4 py-3 text-gray-500">
                       {new Date(c.created_at).toLocaleDateString("ja-JP")}

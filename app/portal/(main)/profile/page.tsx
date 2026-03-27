@@ -14,7 +14,7 @@ export default async function PortalProfilePage() {
 
   const { data: candidate, error } = await supabase
     .from("candidates")
-    .select("*, ca:profiles!candidates_ca_id_fkey(id, full_name)")
+    .select("*, ca:users!candidates_ca_id_fkey(id, name)")
     .eq("email", user.email)
     .eq("is_deleted", false)
     .single();

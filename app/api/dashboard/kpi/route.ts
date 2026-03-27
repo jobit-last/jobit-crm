@@ -95,14 +95,14 @@ export async function GET() {
     // CA別担当求職者数（上位10名）
     const { data: caData } = await supabase
       .from("candidates")
-      .select("ca_id, ca:profiles!ca_id(full_name)")
+      .select("ca_id, ca:users!ca_id(name)")
       .eq("is_deleted", false)
       .not("ca_id", "is", null);
 
     const caMap: Record<string, { name: string; count: number }> = {};
     (caData || []).forEach((c: Record<string, unknown>) => {
       const caId = c.ca_id as string;
-      const caName = (c.ca as { full_name?: string } | null)?.full_name ?? caId;
+      const caName = (c.ca as { name?: string } | null)?.name ?? caId;
       if (!caMap[caId]) caMap[caId] = { name: caName, count: 0 };
       caMap[caId].count++;
     });

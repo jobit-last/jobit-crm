@@ -37,7 +37,7 @@ export interface ApplicationStatusHistory {
   changed_by: string | null;
   changed_at: string;
   // JOIN
-  changer?: { full_name: string } | null;
+  changer?: { name: string } | null;
 }
 
 export const APPLICATION_STATUS_LABELS: Record<ApplicationStatus, string> = {

@@ -14,7 +14,7 @@ export async function GET() {
   // メールアドレスで求職者を特定
   const { data: candidate, error } = await supabase
     .from("candidates")
-    .select("*, ca:profiles!candidates_ca_id_fkey(id, full_name)")
+    .select("*, ca:users!candidates_ca_id_fkey(id, name)")
     .eq("email", user.email)
     .eq("is_deleted", false)
     .single();
@@ -57,7 +57,7 @@ export async function PUT(request: Request) {
     .update(allowedFields)
     .eq("email", user.email)
     .eq("is_deleted", false)
-    .select("*, ca:profiles!candidates_ca_id_fkey(id, full_name)")
+    .select("*, ca:users!candidates_ca_id_fkey(id, name)")
     .single();
 
   if (error) {

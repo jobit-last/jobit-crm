@@ -7,11 +7,11 @@ export default async function NewCandidatePage() {
   const supabase = await createClient();
 
   const { data: advisors } = await supabase
-    .from("profiles")
-    .select("id, full_name")
-    .eq("role", "advisor")
-    .eq("is_active", true)
-    .order("full_name");
+    .from("users")
+    .select("id, name")
+    .eq("role", "ca")
+    .eq("status", "active")
+    .order("name");
 
   return (
     <div>

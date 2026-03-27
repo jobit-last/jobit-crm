@@ -27,7 +27,7 @@ export default async function ApplicationDetailPage({
       .single(),
     supabase
       .from("application_status_histories")
-      .select("*, changer:profiles!changed_by(full_name)")
+      .select("*, changer:users!changed_by(name)")
       .eq("application_id", id)
       .order("changed_at", { ascending: false }),
     supabase

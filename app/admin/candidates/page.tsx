@@ -25,7 +25,7 @@ export default async function CandidatesPage({
 
   let query = supabase
     .from("candidates")
-    .select("*, ca:profiles!candidates_ca_id_fkey(id, full_name)", { count: "exact" })
+    .select("*, ca:users!candidates_ca_id_fkey(id, name)", { count: "exact" })
     .eq("is_deleted", false)
     .order("created_at", { ascending: false })
     .range(from, to);
@@ -37,11 +37,11 @@ export default async function CandidatesPage({
   const [{ data: candidates, count }, { data: advisors }] = await Promise.all([
     query,
     supabase
-      .from("profiles")
-      .select("id, full_name")
-      .eq("role", "advisor")
-      .eq("is_active", true)
-      .order("full_name"),
+      .from("users")
+      .select("id, name")
+      .eq("role", "ca")
+      .eq("status", "active")
+      .order("name"),
   ]);
 
   return (

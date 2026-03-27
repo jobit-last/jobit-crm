@@ -102,7 +102,7 @@ export default function ProfileClient({ candidate }: Props) {
                 : null
             }
           />
-          <InfoRow label="担当CA" value={candidate.ca?.full_name ?? null} />
+          <InfoRow label="担当CA" value={candidate.ca?.name ?? null} />
           <InfoRow label="ステータス">
             <span
               className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[candidate.status]}`}

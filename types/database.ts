@@ -55,11 +55,11 @@ export type ActivityType =
 // Table Types
 // -------------------------------------------------------------
 
-/** 6.1 profiles（ユーザープロフィール） */
+/** 6.1 users（ユーザープロフィール） */
 export interface Profile {
   id: string;
   email: string;
-  full_name: string;
+  name: string;
   role: UserRole;
   avatar_url: string | null;
   is_active: boolean;

@@ -146,9 +146,9 @@ export default function MemoSection({ candidateId, initialMemos }: Props) {
                         minute: "2-digit",
                       })}
                     </span>
-                    {memo.author?.full_name && (
+                    {memo.author?.name && (
                       <span className="text-xs" style={{ color: "#6B7280" }}>
-                        by {memo.author.full_name}
+                        by {memo.author.name}
                       </span>
                     )}
                   </div>

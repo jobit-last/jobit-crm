@@ -18,18 +18,18 @@ export default async function CandidateDetailPage({
   const [{ data, error }, { data: histories }, { data: memos }] = await Promise.all([
     supabase
       .from("candidates")
-      .select("*, ca:profiles!candidates_ca_id_fkey(id, full_name)")
+      .select("*, ca:users!candidates_ca_id_fkey(id, name)")
       .eq("id", id)
       .eq("is_deleted", false)
       .single(),
     supabase
       .from("candidate_status_histories")
-      .select("*, changer:profiles!changed_by(full_name)")
+      .select("*, changer:users!changed_by(name)")
       .eq("candidate_id", id)
       .order("changed_at", { ascending: false }),
     supabase
       .from("candidate_memos")
-      .select("*, author:profiles!user_id(full_name)")
+      .select("*, author:users!user_id(name)")
       .eq("candidate_id", id)
       .order("created_at", { ascending: false }),
   ]);
@@ -138,7 +138,7 @@ export default async function CandidateDetailPage({
             担当・管理情報
           </h2>
           <dl className="space-y-3">
-            <DetailRow label="担当CA" value={candidate.ca?.full_name ?? null} />
+            <DetailRow label="担当CA" value={candidate.ca?.name ?? null} />
             <DetailRow
               label="登録日"
               value={new Date(candidate.created_at).toLocaleDateString("ja-JP")}

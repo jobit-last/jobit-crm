@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
 
     const { data, error } = await supabase
       .from("candidates")
-      .select("status, ca_id, ca:profiles!ca_id(full_name)")
+      .select("status, ca_id, ca:users!ca_id(name)")
       .gte("created_at", from)
       .lte("created_at", to)
       .eq("is_deleted", false)
@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
 
     (data || []).forEach((c: Record<string, unknown>) => {
       const caId   = c.ca_id as string;
-      const caName = (c.ca as { full_name?: string } | null)?.full_name ?? caId;
+      const caName = (c.ca as { name?: string } | null)?.name ?? caId;
       const status = c.status as string;
 
       if (!caMap[caId]) {

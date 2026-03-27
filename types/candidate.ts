@@ -32,7 +32,7 @@ export interface Candidate {
   created_at: string;
   updated_at: string;
   // JOIN
-  ca?: { id: string; full_name: string } | null;
+  ca?: { id: string; name: string } | null;
 }
 
 export type CandidateInsert = Omit<Candidate, "id" | "is_deleted" | "created_at" | "updated_at" | "ca">;
@@ -40,7 +40,7 @@ export type CandidateUpdate = Partial<CandidateInsert> & { updated_at?: string }
 
 export interface Advisor {
   id: string;
-  full_name: string;
+  name: string;
 }
 
 export interface StatusHistory {
@@ -51,7 +51,7 @@ export interface StatusHistory {
   changed_by: string | null;
   changed_at: string;
   // JOIN
-  changer?: { full_name: string } | null;
+  changer?: { name: string } | null;
 }
 
 export const STATUS_LABELS: Record<CandidateStatus, string> = {
@@ -100,7 +100,7 @@ export interface CandidateMemo {
   memo_type: MemoType;
   created_at: string;
   // JOIN
-  author?: { full_name: string } | null;
+  author?: { name: string } | null;
 }
 
 export const MEMO_TYPE_LABELS: Record<MemoType, string> = {

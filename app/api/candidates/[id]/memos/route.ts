@@ -10,7 +10,7 @@ export async function GET(
 
   const { data, error } = await supabase
     .from("candidate_memos")
-    .select("*, author:profiles!user_id(full_name)")
+    .select("*, author:users!user_id(name)")
     .eq("candidate_id", id)
     .order("created_at", { ascending: false });
 
@@ -40,7 +40,7 @@ export async function POST(
       content: content.trim(),
       memo_type: memo_type ?? "other",
     })
-    .select("*, author:profiles!user_id(full_name)")
+    .select("*, author:users!user_id(name)")
     .single();
 
   if (error) return Response.json({ error: error.message }, { status: 500 });

@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
 
   let query = supabase
     .from("candidates")
-    .select("*, ca:profiles!candidates_ca_id_fkey(id, full_name)", { count: "exact" })
+    .select("*, ca:users!candidates_ca_id_fkey(id, name)", { count: "exact" })
     .eq("is_deleted", false)
     .order("created_at", { ascending: false })
     .range(from, to);

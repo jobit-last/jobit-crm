@@ -33,9 +33,20 @@ export async function POST(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const payload: Record<string, unknown> = {
+    title: body.title,
+    scheduled_at: body.scheduled_at,
+    type: body.type,
+    user_id: user?.id ?? null,
+  };
+  if (body.candidate_id) payload.candidate_id = body.candidate_id;
+  if (body.duration_minutes != null) payload.duration_minutes = body.duration_minutes;
+  if (body.location) payload.location = body.location;
+  if (body.notes) payload.notes = body.notes;
+
   const { data, error } = await supabase
     .from("schedules")
-    .insert({ ...body, user_id: user?.id ?? null })
+    .insert(payload)
     .select("*, candidate:candidates(id, name)")
     .single();
 

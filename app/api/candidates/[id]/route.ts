@@ -11,7 +11,7 @@ export async function GET(
 
   const { data, error } = await supabase
     .from("candidates")
-    .select("*, ca:profiles!candidates_ca_id_fkey(id, full_name)")
+    .select("*, ca:users!candidates_ca_id_fkey(id, name)")
     .eq("id", id)
     .eq("is_deleted", false)
     .single();

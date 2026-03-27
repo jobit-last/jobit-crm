@@ -21,7 +21,7 @@ export default async function PortalDashboardPage() {
   // 求職者情報をメールで取得
   const { data: candidateData, error: candidateError } = await supabase
     .from("candidates")
-    .select("*, ca:profiles!candidates_ca_id_fkey(id, full_name)")
+    .select("*, ca:users!candidates_ca_id_fkey(id, name)")
     .eq("email", user.email)
     .eq("is_deleted", false)
     .single();
@@ -96,7 +96,7 @@ export default async function PortalDashboardPage() {
             </span>
             {candidate.ca && (
               <span className="text-sm" style={{ color: "rgba(255,255,255,0.85)" }}>
-                担当CA: <span className="font-medium text-white">{candidate.ca.full_name}</span>
+                担当CA: <span className="font-medium text-white">{candidate.ca.name}</span>
               </span>
             )}
           </div>

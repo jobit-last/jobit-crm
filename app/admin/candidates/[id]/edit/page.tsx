@@ -20,11 +20,11 @@ export default async function EditCandidatePage({
       .eq("is_deleted", false)
       .single(),
     supabase
-      .from("profiles")
-      .select("id, full_name")
-      .eq("role", "advisor")
-      .eq("is_active", true)
-      .order("full_name"),
+      .from("users")
+      .select("id, name")
+      .eq("role", "ca")
+      .eq("status", "active")
+      .order("name"),
   ]);
 
   if (error || !candidate) notFound();

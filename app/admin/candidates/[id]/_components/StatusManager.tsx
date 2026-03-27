@@ -140,8 +140,8 @@ export default function StatusManager({ candidateId, currentStatus, histories }:
                     hour: "2-digit",
                     minute: "2-digit",
                   })}
-                  {h.changer?.full_name && (
-                    <span className="ml-2">by {h.changer.full_name}</span>
+                  {h.changer?.name && (
+                    <span className="ml-2">by {h.changer.name}</span>
                   )}
                 </p>
               </li>
