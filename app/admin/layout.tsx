@@ -22,6 +22,7 @@ const navItems = [
   { label: "市場価値診断", href: "/admin/diagnosis/new" },
   { label: "ナレッジ管理", href: "/admin/knowledge" },
   { label: "操作ログ", href: "/admin/logs" },
+  { label: "CA管理", href: "/admin/users" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -50,7 +51,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         style={{
-          background: "linear-gradient(to bottom, #002D37 0%, #050258 25%, #1B36AE 50%, #0048D9 75%, #002D37 100%)",
+          background:
+            "linear-gradient(to bottom, #002D37 0%, #050258 25%, #1B36AE 50%, #0048D9 75%, #002D37 100%)",
         }}
       >
         <div className="h-16 flex items-center gap-3 px-6 border-b border-white/10">
@@ -65,9 +67,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             Jobit CRM
           </span>
         </div>
+
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+            const isActive =
+              pathname === item.href || pathname.startsWith(item.href + "/");
             return (
               <Link
                 key={item.href}
@@ -80,12 +84,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 }`}
                 style={
                   isActive
-                    ? { color: "#FFF32D", backgroundColor: "rgba(255, 243, 45, 0.12)" }
+                    ? {
+                        color: "#FFF32D",
+                        backgroundColor: "rgba(255, 243, 45, 0.12)",
+                      }
                     : undefined
                 }
                 onMouseEnter={(e) => {
                   if (!isActive) {
-                    e.currentTarget.style.backgroundColor = "rgba(75, 135, 255, 0.25)";
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(75, 135, 255, 0.25)";
                   }
                 }}
                 onMouseLeave={(e) => {
@@ -111,14 +119,25 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               onClick={() => setSidebarOpen(true)}
               aria-label="メニューを開く"
             >
-              <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <svg
+                className="w-6 h-6 text-gray-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               </svg>
             </button>
             <span className="text-sm" style={{ color: "#6B7280" }}>
               管理画面
             </span>
           </div>
+
           <button
             onClick={handleLogout}
             className="px-3 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-red-50 transition-colors"
@@ -126,6 +145,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             ログアウト
           </button>
         </header>
+
         <main className="flex-1 overflow-auto p-6">{children}</main>
       </div>
     </div>
