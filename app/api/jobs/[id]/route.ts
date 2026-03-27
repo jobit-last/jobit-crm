@@ -65,7 +65,13 @@ export async function PUT(
     if (location !== undefined) updateData.location = location || null;
     if (salary_min !== undefined) updateData.salary_min = salary_min ? parseInt(salary_min) : null;
     if (salary_max !== undefined) updateData.salary_max = salary_max ? parseInt(salary_max) : null;
-    if (required_skills !== undefined) updateData.required_skills = required_skills || null;
+    if (required_skills !== undefined) {
+      updateData.required_skills = required_skills
+        ? (Array.isArray(required_skills)
+            ? required_skills
+            : required_skills.split(",").map((s: string) => s.trim()).filter(Boolean))
+        : null;
+    }
     if (is_published !== undefined) updateData.is_published = is_published;
 
     const { data, error } = await supabase

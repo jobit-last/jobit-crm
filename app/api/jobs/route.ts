@@ -95,7 +95,11 @@ export async function POST(request: NextRequest) {
         location: location || null,
         salary_min: salary_min ? parseInt(salary_min) : null,
         salary_max: salary_max ? parseInt(salary_max) : null,
-        required_skills: required_skills || null,
+        required_skills: required_skills
+          ? (Array.isArray(required_skills)
+              ? required_skills
+              : required_skills.split(",").map((s: string) => s.trim()).filter(Boolean))
+          : null,
         is_published: is_published ?? false,
       })
       .select()
