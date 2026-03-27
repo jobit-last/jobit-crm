@@ -2,13 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { recordLog } from "@/lib/activity-log";
 import type { UserInsert } from "@/types/user";
+import { randomUUID } from "crypto";
 
 // GET /api/users - ユーザー一覧取得
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient();
 
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) {
       return NextResponse.json(
         { success: false, data: null, message: "認証が必要です", meta: {} },
@@ -47,11 +50,21 @@ export async function GET(request: NextRequest) {
       success: true,
       data,
       message: "",
-      meta: { total, page, per_page, total_pages: Math.ceil(total / per_page) },
+      meta: {
+        total,
+        page,
+        per_page,
+        total_pages: Math.ceil(total / per_page),
+      },
     });
   } catch {
     return NextResponse.json(
-      { success: false, data: null, message: "サーバーエラーが発生しました", meta: {} },
+      {
+        success: false,
+        data: null,
+        message: "サーバーエラーが発生しました",
+        meta: {},
+      },
       { status: 500 }
     );
   }
@@ -62,7 +75,9 @@ export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient();
 
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) {
       return NextResponse.json(
         { success: false, data: null, message: "認証が必要です", meta: {} },
@@ -78,17 +93,21 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
     if (!body.email?.trim()) {
       return NextResponse.json(
-        { success: false, data: null, message: "メールアドレスは必須です", meta: {} },
+        {
+          success: false,
+          data: null,
+          message: "メールアドレスは必須です",
+          meta: {},
+        },
         { status: 400 }
       );
     }
 
     const { data, error } = await supabase
       .from("users")
-      .insert(body)
+      .insert({ id: randomUUID(), ...body })
       .select()
       .single();
 
@@ -107,7 +126,12 @@ export async function POST(request: NextRequest) {
     );
   } catch {
     return NextResponse.json(
-      { success: false, data: null, message: "サーバーエラーが発生しました", meta: {} },
+      {
+        success: false,
+        data: null,
+        message: "サーバーエラーが発生しました",
+        meta: {},
+      },
       { status: 500 }
     );
   }
