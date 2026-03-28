@@ -18,16 +18,31 @@ interface FunnelStage {
   rate: number;
 }
 
-interface CaPerformance {
+interface SubStatuses {
+  conducted: { noshow: number; declined: number };
+  supporting: { noshow: number; declined: number; released: number };
+  offered: { noshow: number; declined: number };
+  accepted: { noshow: number; declined: number };
+}
+
+interface CaStats {
   ca: string;
-  total: number;
-  interviewed: number;
   applied: number;
-  in_selection: number;
+  setup: number;
+  conducted: number;
+  conducted_noshow: number;
+  conducted_declined: number;
+  supporting: number;
+  support_noshow: number;
+  support_declined: number;
+  support_released: number;
   offered: number;
+  offer_noshow: number;
+  offer_declined: number;
+  offer_accepted: number;
+  accepted_noshow: number;
+  accepted_declined: number;
   placed: number;
-  interview_to_selection_rate: number;
-  overall_rate: number;
 }
 
 /* ---------- ヘルパー ---------- */
@@ -44,12 +59,44 @@ function rateColor(rate: string): string {
   return "text-red-500";
 }
 
+function sumCaStats(cas: CaStats[]): CaStats {
+  return cas.reduce(
+    (acc, ca) => ({
+      ca: "合計",
+      applied: acc.applied + ca.applied,
+      setup: acc.setup + ca.setup,
+      conducted: acc.conducted + ca.conducted,
+      conducted_noshow: acc.conducted_noshow + ca.conducted_noshow,
+      conducted_declined: acc.conducted_declined + ca.conducted_declined,
+      supporting: acc.supporting + ca.supporting,
+      support_noshow: acc.support_noshow + ca.support_noshow,
+      support_declined: acc.support_declined + ca.support_declined,
+      support_released: acc.support_released + ca.support_released,
+      offered: acc.offered + ca.offered,
+      offer_noshow: acc.offer_noshow + ca.offer_noshow,
+      offer_declined: acc.offer_declined + ca.offer_declined,
+      offer_accepted: acc.offer_accepted + ca.offer_accepted,
+      accepted_noshow: acc.accepted_noshow + ca.accepted_noshow,
+      accepted_declined: acc.accepted_declined + ca.accepted_declined,
+      placed: acc.placed + ca.placed,
+    }),
+    {
+      ca: "合計", applied: 0, setup: 0, conducted: 0,
+      conducted_noshow: 0, conducted_declined: 0,
+      supporting: 0, support_noshow: 0, support_declined: 0, support_released: 0,
+      offered: 0, offer_noshow: 0, offer_declined: 0,
+      offer_accepted: 0, accepted_noshow: 0, accepted_declined: 0, placed: 0,
+    }
+  );
+}
+
 export default function AnalyticsClient() {
   const [period, setPeriod] = useState<Period>("this_month");
   const [funnel, setFunnel] = useState<FunnelStage[]>([]);
+  const [subStatuses, setSubStatuses] = useState<SubStatuses | null>(null);
   const [overallRate, setOverallRate] = useState(0);
   const [total, setTotal] = useState(0);
-  const [caPerformance, setCaPerformance] = useState<CaPerformance[]>([]);
+  const [caPerformance, setCaPerformance] = useState<CaStats[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async (p: Period) => {
@@ -63,6 +110,7 @@ export default function AnalyticsClient() {
       const caJson = await caRes.json();
       if (funnelJson.success) {
         setFunnel(funnelJson.data.funnel);
+        setSubStatuses(funnelJson.data.subStatuses || null);
         setOverallRate(funnelJson.data.overall_rate);
         setTotal(funnelJson.data.total);
       }
@@ -78,18 +126,7 @@ export default function AnalyticsClient() {
     fetchData(period);
   }, [period, fetchData]);
 
-  /* ---------- 全CA合計 ---------- */
-  const totals = caPerformance.reduce(
-    (acc, ca) => ({
-      total: acc.total + ca.total,
-      interviewed: acc.interviewed + ca.interviewed,
-      applied: acc.applied + ca.applied,
-      in_selection: acc.in_selection + ca.in_selection,
-      offered: acc.offered + ca.offered,
-      placed: acc.placed + ca.placed,
-    }),
-    { total: 0, interviewed: 0, applied: 0, in_selection: 0, offered: 0, placed: 0 }
-  );
+  const totals = caPerformance.length > 0 ? sumCaStats(caPerformance) : null;
 
   return (
     <div className="space-y-6">
@@ -98,7 +135,7 @@ export default function AnalyticsClient() {
         <div>
           <h1 className="text-2xl font-bold text-primary">歩留まり分析</h1>
           <p className="text-sm text-gray-500 mt-1">
-            求職者のステージ別転換率
+            求職者のステージ別転換率・離脱分析
           </p>
         </div>
         <div className="flex gap-1 bg-gray-100 p-1 rounded-lg">
@@ -127,16 +164,16 @@ export default function AnalyticsClient() {
           {/* サマリーカード */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-              <p className="text-sm text-gray-500">登録数</p>
+              <p className="text-sm text-gray-500">応募数</p>
               <p className="text-3xl font-bold text-primary mt-1">
                 {total}
                 <span className="text-base font-normal text-gray-400 ml-1">名</span>
               </p>
             </div>
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-              <p className="text-sm text-gray-500">面談実施数</p>
+              <p className="text-sm text-gray-500">サポート中</p>
               <p className="text-3xl font-bold text-primary mt-1">
-                {funnel.find((s) => s.stage === "面談")?.count ?? 0}
+                {funnel.find((s) => s.stage === "サポート")?.count ?? 0}
                 <span className="text-base font-normal text-gray-400 ml-1">名</span>
               </p>
             </div>
@@ -164,222 +201,166 @@ export default function AnalyticsClient() {
             <FunnelChart data={funnel} />
             <div className="mt-4 flex flex-wrap gap-3">
               {funnel.map((s, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-1.5 text-xs text-gray-500"
-                >
+                <div key={i} className="flex items-center gap-1.5 text-xs text-gray-500">
                   <span className="font-medium text-gray-700">{s.stage}</span>
                   <span>{s.count}名</span>
-                  {i > 0 && (
-                    <span className="text-gray-300">({s.rate}%)</span>
-                  )}
+                  {i > 0 && <span className="text-gray-300">({s.rate}%)</span>}
                 </div>
               ))}
             </div>
           </div>
 
-          {/* ===== CA別 詳細歩留まりテーブル ===== */}
+          {/* サブステータス離脱詳細 */}
+          {subStatuses && (
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <h2 className="text-base font-semibold text-gray-700 mb-4">
+                ステージ別 離脱詳細
+              </h2>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="border border-gray-200 rounded-lg p-4">
+                  <h3 className="text-sm font-semibold text-purple-700 mb-2">実施後</h3>
+                  <div className="space-y-1 text-sm">
+                    <div className="flex justify-between"><span className="text-gray-500">トビ</span><span className="font-medium text-red-600">{subStatuses.conducted.noshow}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">辞退</span><span className="font-medium text-orange-600">{subStatuses.conducted.declined}</span></div>
+                  </div>
+                </div>
+                <div className="border border-gray-200 rounded-lg p-4">
+                  <h3 className="text-sm font-semibold text-yellow-700 mb-2">サポート後</h3>
+                  <div className="space-y-1 text-sm">
+                    <div className="flex justify-between"><span className="text-gray-500">トビ</span><span className="font-medium text-red-600">{subStatuses.supporting.noshow}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">辞退</span><span className="font-medium text-orange-600">{subStatuses.supporting.declined}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">リリース</span><span className="font-medium text-gray-600">{subStatuses.supporting.released}</span></div>
+                  </div>
+                </div>
+                <div className="border border-gray-200 rounded-lg p-4">
+                  <h3 className="text-sm font-semibold text-green-700 mb-2">内定後</h3>
+                  <div className="space-y-1 text-sm">
+                    <div className="flex justify-between"><span className="text-gray-500">トビ</span><span className="font-medium text-red-600">{subStatuses.offered.noshow}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">辞退</span><span className="font-medium text-orange-600">{subStatuses.offered.declined}</span></div>
+                  </div>
+                </div>
+                <div className="border border-gray-200 rounded-lg p-4">
+                  <h3 className="text-sm font-semibold text-emerald-700 mb-2">承諾後</h3>
+                  <div className="space-y-1 text-sm">
+                    <div className="flex justify-between"><span className="text-gray-500">トビ</span><span className="font-medium text-red-600">{subStatuses.accepted.noshow}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">辞退</span><span className="font-medium text-orange-600">{subStatuses.accepted.declined}</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ===== CA別 歩留まり詳細テーブル（スプレッドシート形式） ===== */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-base font-semibold text-gray-700 mb-4">
               CA別 歩留まり詳細
             </h2>
-
             {caPerformance.length === 0 ? (
-              <p className="text-gray-400 text-sm text-center py-10">
-                データがありません
-              </p>
+              <p className="text-gray-400 text-sm text-center py-10">データがありません</p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm border-collapse">
                   <thead>
                     <tr className="border-b-2 border-gray-200">
-                      <th className="text-left py-3 px-2 font-semibold text-gray-600 whitespace-nowrap bg-gray-50 sticky left-0 z-10">
-                        担当CA
-                      </th>
-                      <th className="text-center py-3 px-2 font-semibold text-gray-600 whitespace-nowrap">
-                        登録
-                      </th>
-                      <th className="text-center py-3 px-2 font-semibold text-gray-600 whitespace-nowrap">
-                        面談
-                      </th>
-                      <th className="text-center py-3 px-2 font-semibold text-blue-600 whitespace-nowrap bg-blue-50">
-                        面談率
-                      </th>
-                      <th className="text-center py-3 px-2 font-semibold text-gray-600 whitespace-nowrap">
-                        応募
-                      </th>
-                      <th className="text-center py-3 px-2 font-semibold text-blue-600 whitespace-nowrap bg-blue-50">
-                        応募率
-                      </th>
-                      <th className="text-center py-3 px-2 font-semibold text-gray-600 whitespace-nowrap">
-                        面接
-                      </th>
-                      <th className="text-center py-3 px-2 font-semibold text-blue-600 whitespace-nowrap bg-blue-50">
-                        面接率
-                      </th>
-                      <th className="text-center py-3 px-2 font-semibold text-gray-600 whitespace-nowrap">
-                        内定
-                      </th>
-                      <th className="text-center py-3 px-2 font-semibold text-blue-600 whitespace-nowrap bg-blue-50">
-                        内定率
-                      </th>
-                      <th className="text-center py-3 px-2 font-semibold text-gray-600 whitespace-nowrap">
-                        入社
-                      </th>
-                      <th className="text-center py-3 px-2 font-semibold text-green-700 whitespace-nowrap bg-green-50">
-                        歩留まり率
-                      </th>
+                      <th className="text-left py-2 px-2 font-semibold text-gray-600 whitespace-nowrap bg-gray-50 sticky left-0 z-10" rowSpan={2}>担当CA</th>
+                      <th className="text-center py-1 px-2 font-semibold text-gray-600 whitespace-nowrap border-b border-gray-200" colSpan={1}>応募</th>
+                      <th className="text-center py-1 px-2 font-semibold text-gray-600 whitespace-nowrap border-b border-gray-200" colSpan={2}>設置</th>
+                      <th className="text-center py-1 px-2 font-semibold text-gray-600 whitespace-nowrap border-b border-gray-200" colSpan={4}>実施</th>
+                      <th className="text-center py-1 px-2 font-semibold text-gray-600 whitespace-nowrap border-b border-gray-200" colSpan={5}>サポート</th>
+                      <th className="text-center py-1 px-2 font-semibold text-gray-600 whitespace-nowrap border-b border-gray-200" colSpan={4}>内定</th>
+                      <th className="text-center py-1 px-2 font-semibold text-gray-600 whitespace-nowrap border-b border-gray-200" colSpan={4}>承諾</th>
+                      <th className="text-center py-1 px-2 font-semibold text-gray-600 whitespace-nowrap border-b border-gray-200" colSpan={1}>入社</th>
+                    </tr>
+                    <tr className="border-b border-gray-200 text-xs">
+                      {/* 応募 */}
+                      <th className="text-center py-1 px-1 text-gray-500">件数</th>
+                      {/* 設置 */}
+                      <th className="text-center py-1 px-1 text-gray-500">件数</th>
+                      <th className="text-center py-1 px-1 text-blue-600 bg-blue-50">率</th>
+                      {/* 実施 */}
+                      <th className="text-center py-1 px-1 text-gray-500">件数</th>
+                      <th className="text-center py-1 px-1 text-blue-600 bg-blue-50">率</th>
+                      <th className="text-center py-1 px-1 text-red-500">トビ</th>
+                      <th className="text-center py-1 px-1 text-orange-500">辞退</th>
+                      {/* サポート */}
+                      <th className="text-center py-1 px-1 text-gray-500">件数</th>
+                      <th className="text-center py-1 px-1 text-blue-600 bg-blue-50">率</th>
+                      <th className="text-center py-1 px-1 text-red-500">トビ</th>
+                      <th className="text-center py-1 px-1 text-orange-500">辞退</th>
+                      <th className="text-center py-1 px-1 text-gray-500">リリース</th>
+                      {/* 内定 */}
+                      <th className="text-center py-1 px-1 text-gray-500">件数</th>
+                      <th className="text-center py-1 px-1 text-blue-600 bg-blue-50">率</th>
+                      <th className="text-center py-1 px-1 text-red-500">トビ</th>
+                      <th className="text-center py-1 px-1 text-orange-500">辞退</th>
+                      {/* 承諾 */}
+                      <th className="text-center py-1 px-1 text-gray-500">件数</th>
+                      <th className="text-center py-1 px-1 text-blue-600 bg-blue-50">率</th>
+                      <th className="text-center py-1 px-1 text-red-500">トビ</th>
+                      <th className="text-center py-1 px-1 text-orange-500">辞退</th>
+                      {/* 入社 */}
+                      <th className="text-center py-1 px-1 text-emerald-600 bg-green-50">件数</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {caPerformance.map((ca, idx) => {
-                      const interviewRate = pct(ca.interviewed, ca.total);
-                      const applyRate = pct(ca.applied, ca.interviewed);
-                      const selectionRate = pct(ca.in_selection, ca.applied);
-                      const offerRate = pct(ca.offered, ca.in_selection);
-                      const overallR = pct(ca.placed, ca.total);
-                      return (
-                        <tr
-                          key={idx}
-                          className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
-                        >
-                          <td className="py-3 px-2 font-medium text-gray-800 whitespace-nowrap bg-white sticky left-0 z-10">
-                            {ca.ca}
-                          </td>
-                          <td className="text-center py-3 px-2 font-semibold">
-                            {ca.total}
-                          </td>
-                          <td className="text-center py-3 px-2">
-                            {ca.interviewed}
-                          </td>
-                          <td className={`text-center py-3 px-2 font-medium bg-blue-50 ${rateColor(interviewRate)}`}>
-                            {interviewRate}
-                          </td>
-                          <td className="text-center py-3 px-2">
-                            {ca.applied}
-                          </td>
-                          <td className={`text-center py-3 px-2 font-medium bg-blue-50 ${rateColor(applyRate)}`}>
-                            {applyRate}
-                          </td>
-                          <td className="text-center py-3 px-2">
-                            {ca.in_selection}
-                          </td>
-                          <td className={`text-center py-3 px-2 font-medium bg-blue-50 ${rateColor(selectionRate)}`}>
-                            {selectionRate}
-                          </td>
-                          <td className="text-center py-3 px-2">
-                            {ca.offered}
-                          </td>
-                          <td className={`text-center py-3 px-2 font-medium bg-blue-50 ${rateColor(offerRate)}`}>
-                            {offerRate}
-                          </td>
-                          <td className="text-center py-3 px-2 font-semibold">
-                            {ca.placed}
-                          </td>
-                          <td className={`text-center py-3 px-2 font-bold bg-green-50 ${rateColor(overallR)}`}>
-                            {overallR}
-                          </td>
-                        </tr>
-                      );
-                    })}
-
+                    {caPerformance.map((ca, idx) => (
+                      <tr key={idx} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                        <td className="py-2 px-2 font-medium text-gray-800 whitespace-nowrap bg-white sticky left-0 z-10">{ca.ca}</td>
+                        <td className="text-center py-2 px-1 font-semibold">{ca.applied}</td>
+                        <td className="text-center py-2 px-1">{ca.setup}</td>
+                        <td className={`text-center py-2 px-1 bg-blue-50 font-medium ${rateColor(pct(ca.setup, ca.applied))}`}>{pct(ca.setup, ca.applied)}</td>
+                        <td className="text-center py-2 px-1">{ca.conducted}</td>
+                        <td className={`text-center py-2 px-1 bg-blue-50 font-medium ${rateColor(pct(ca.conducted, ca.setup))}`}>{pct(ca.conducted, ca.setup)}</td>
+                        <td className="text-center py-2 px-1 text-red-600">{ca.conducted_noshow || ""}</td>
+                        <td className="text-center py-2 px-1 text-orange-600">{ca.conducted_declined || ""}</td>
+                        <td className="text-center py-2 px-1">{ca.supporting}</td>
+                        <td className={`text-center py-2 px-1 bg-blue-50 font-medium ${rateColor(pct(ca.supporting, ca.conducted))}`}>{pct(ca.supporting, ca.conducted)}</td>
+                        <td className="text-center py-2 px-1 text-red-600">{ca.support_noshow || ""}</td>
+                        <td className="text-center py-2 px-1 text-orange-600">{ca.support_declined || ""}</td>
+                        <td className="text-center py-2 px-1 text-gray-500">{ca.support_released || ""}</td>
+                        <td className="text-center py-2 px-1">{ca.offered}</td>
+                        <td className={`text-center py-2 px-1 bg-blue-50 font-medium ${rateColor(pct(ca.offered, ca.supporting))}`}>{pct(ca.offered, ca.supporting)}</td>
+                        <td className="text-center py-2 px-1 text-red-600">{ca.offer_noshow || ""}</td>
+                        <td className="text-center py-2 px-1 text-orange-600">{ca.offer_declined || ""}</td>
+                        <td className="text-center py-2 px-1">{ca.offer_accepted}</td>
+                        <td className={`text-center py-2 px-1 bg-blue-50 font-medium ${rateColor(pct(ca.offer_accepted, ca.offered))}`}>{pct(ca.offer_accepted, ca.offered)}</td>
+                        <td className="text-center py-2 px-1 text-red-600">{ca.accepted_noshow || ""}</td>
+                        <td className="text-center py-2 px-1 text-orange-600">{ca.accepted_declined || ""}</td>
+                        <td className="text-center py-2 px-1 font-bold bg-green-50 text-emerald-700">{ca.placed}</td>
+                      </tr>
+                    ))}
                     {/* 合計行 */}
-                    <tr className="border-t-2 border-gray-300 bg-gray-50 font-bold">
-                      <td className="py-3 px-2 text-gray-800 whitespace-nowrap bg-gray-50 sticky left-0 z-10">
-                        合計
-                      </td>
-                      <td className="text-center py-3 px-2">{totals.total}</td>
-                      <td className="text-center py-3 px-2">{totals.interviewed}</td>
-                      <td className={`text-center py-3 px-2 bg-blue-50 ${rateColor(pct(totals.interviewed, totals.total))}`}>
-                        {pct(totals.interviewed, totals.total)}
-                      </td>
-                      <td className="text-center py-3 px-2">{totals.applied}</td>
-                      <td className={`text-center py-3 px-2 bg-blue-50 ${rateColor(pct(totals.applied, totals.interviewed))}`}>
-                        {pct(totals.applied, totals.interviewed)}
-                      </td>
-                      <td className="text-center py-3 px-2">{totals.in_selection}</td>
-                      <td className={`text-center py-3 px-2 bg-blue-50 ${rateColor(pct(totals.in_selection, totals.applied))}`}>
-                        {pct(totals.in_selection, totals.applied)}
-                      </td>
-                      <td className="text-center py-3 px-2">{totals.offered}</td>
-                      <td className={`text-center py-3 px-2 bg-blue-50 ${rateColor(pct(totals.offered, totals.in_selection))}`}>
-                        {pct(totals.offered, totals.in_selection)}
-                      </td>
-                      <td className="text-center py-3 px-2">{totals.placed}</td>
-                      <td className={`text-center py-3 px-2 bg-green-50 ${rateColor(pct(totals.placed, totals.total))}`}>
-                        {pct(totals.placed, totals.total)}
-                      </td>
-                    </tr>
+                    {totals && (
+                      <tr className="border-t-2 border-gray-300 bg-gray-50 font-bold">
+                        <td className="py-2 px-2 text-gray-800 whitespace-nowrap bg-gray-50 sticky left-0 z-10">合計</td>
+                        <td className="text-center py-2 px-1">{totals.applied}</td>
+                        <td className="text-center py-2 px-1">{totals.setup}</td>
+                        <td className={`text-center py-2 px-1 bg-blue-50 ${rateColor(pct(totals.setup, totals.applied))}`}>{pct(totals.setup, totals.applied)}</td>
+                        <td className="text-center py-2 px-1">{totals.conducted}</td>
+                        <td className={`text-center py-2 px-1 bg-blue-50 ${rateColor(pct(totals.conducted, totals.setup))}`}>{pct(totals.conducted, totals.setup)}</td>
+                        <td className="text-center py-2 px-1 text-red-600">{totals.conducted_noshow || ""}</td>
+                        <td className="text-center py-2 px-1 text-orange-600">{totals.conducted_declined || ""}</td>
+                        <td className="text-center py-2 px-1">{totals.supporting}</td>
+                        <td className={`text-center py-2 px-1 bg-blue-50 ${rateColor(pct(totals.supporting, totals.conducted))}`}>{pct(totals.supporting, totals.conducted)}</td>
+                        <td className="text-center py-2 px-1 text-red-600">{totals.support_noshow || ""}</td>
+                        <td className="text-center py-2 px-1 text-orange-600">{totals.support_declined || ""}</td>
+                        <td className="text-center py-2 px-1 text-gray-500">{totals.support_released || ""}</td>
+                        <td className="text-center py-2 px-1">{totals.offered}</td>
+                        <td className={`text-center py-2 px-1 bg-blue-50 ${rateColor(pct(totals.offered, totals.supporting))}`}>{pct(totals.offered, totals.supporting)}</td>
+                        <td className="text-center py-2 px-1 text-red-600">{totals.offer_noshow || ""}</td>
+                        <td className="text-center py-2 px-1 text-orange-600">{totals.offer_declined || ""}</td>
+                        <td className="text-center py-2 px-1">{totals.offer_accepted}</td>
+                        <td className={`text-center py-2 px-1 bg-blue-50 ${rateColor(pct(totals.offer_accepted, totals.offered))}`}>{pct(totals.offer_accepted, totals.offered)}</td>
+                        <td className="text-center py-2 px-1 text-red-600">{totals.accepted_noshow || ""}</td>
+                        <td className="text-center py-2 px-1 text-orange-600">{totals.accepted_declined || ""}</td>
+                        <td className="text-center py-2 px-1 bg-green-50 text-emerald-700">{totals.placed}</td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
             )}
           </div>
-
-          {/* ===== CA別 個別カード ===== */}
-          {caPerformance.length > 0 && (
-            <div className="space-y-4">
-              <h2 className="text-base font-semibold text-gray-700">
-                CA別 個別レポート
-              </h2>
-              {caPerformance.map((ca, idx) => {
-                const stages = [
-                  { label: "登録", count: ca.total, prev: 0 },
-                  { label: "面談", count: ca.interviewed, prev: ca.total },
-                  { label: "応募", count: ca.applied, prev: ca.interviewed },
-                  { label: "面接", count: ca.in_selection, prev: ca.applied },
-                  { label: "内定", count: ca.offered, prev: ca.in_selection },
-                  { label: "入社", count: ca.placed, prev: ca.offered },
-                ];
-                return (
-                  <div
-                    key={idx}
-                    className="bg-white rounded-xl shadow-sm border border-gray-100 p-5"
-                  >
-                    <div className="flex items-center justify-between mb-3">
-                      <h3 className="font-semibold text-gray-800">
-                        {ca.ca}
-                      </h3>
-                      <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                        歩留まり率: {pct(ca.placed, ca.total)}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1 overflow-x-auto">
-                      {stages.map((s, i) => {
-                        const rate = i === 0 ? "" : pct(s.count, s.prev);
-                        return (
-                          <div key={i} className="flex items-center gap-1">
-                            {i > 0 && (
-                              <div className="flex flex-col items-center px-1">
-                                <span className={`text-xs font-medium ${rateColor(rate)}`}>
-                                  {rate}
-                                </span>
-                                <span className="text-gray-300">→</span>
-                              </div>
-                            )}
-                            <div className={`text-center px-3 py-2 rounded-lg min-w-[60px] ${
-                              i === 0
-                                ? "bg-blue-50 border border-blue-200"
-                                : i === stages.length - 1
-                                ? "bg-green-50 border border-green-200"
-                                : "bg-gray-50 border border-gray-200"
-                            }`}>
-                              <div className="text-[10px] text-gray-500">
-                                {s.label}
-                              </div>
-                              <div className="text-lg font-bold text-gray-800">
-                                {s.count}
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
         </>
       )}
     </div>
