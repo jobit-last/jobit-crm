@@ -30,21 +30,43 @@ interface MyKpi {
   offered: number;
 }
 
-interface Props {
-  caName: string;
+interface CaDataItem {
   candidates: CandidateItem[];
-  stages: Stage[];
   myKpi: MyKpi;
   alertCount: number;
 }
 
-function daysAgo(dateStr: string): number {
-  return Math.floor((Date.now() - new Date(dateStr).getTime()) / (1000 * 60 * 60 * 24));
+interface Props {
+  currentCaId: string;
+  caList: { id: string; name: string }[];
+  allCaData: Record<string, CaDataItem>;
+  stages: Stage[];
 }
 
-export default function MyDashboardClient({ caName, candidates, stages, myKpi, alertCount }: Props) {
+function daysAgo(dateStr: string): number {
+  return Math.floor(
+    (Date.now() - new Date(dateStr).getTime()) / (1000 * 60 * 60 * 24)
+  );
+}
+
+export default function MyDashboardClient({
+  currentCaId,
+  caList,
+  allCaData,
+  stages,
+}: Props) {
+  const [selectedCaId, setSelectedCaId] = useState(currentCaId);
   const [dragOverStage, setDragOverStage] = useState<string | null>(null);
   const [updating, setUpdating] = useState<string | null>(null);
+
+  const currentData = allCaData[selectedCaId] || {
+    candidates: [],
+    myKpi: { total: 0, thisMonth: 0, active: 0, placed: 0, offered: 0 },
+    alertCount: 0,
+  };
+  const { candidates, myKpi, alertCount } = currentData;
+  const selectedCa = caList.find((ca) => ca.id === selectedCaId);
+  const caName = selectedCa?.name || "";
 
   async function handleDrop(candidateId: string, newStatus: string) {
     setUpdating(candidateId);
@@ -70,6 +92,42 @@ export default function MyDashboardClient({ caName, candidates, stages, myKpi, a
         <p className="text-sm text-gray-500 mt-1">{caName}の担当状況</p>
       </div>
 
+      {/* CA選択タブ */}
+      <div className="border-b border-gray-200">
+        <div className="flex gap-1 overflow-x-auto pb-px">
+          {caList.map((ca) => {
+            const isSelected = ca.id === selectedCaId;
+            const caData = allCaData[ca.id];
+            const count = caData?.myKpi?.total || 0;
+            return (
+              <button
+                key={ca.id}
+                onClick={() => setSelectedCaId(ca.id)}
+                className={`flex-shrink-0 px-4 py-2.5 text-sm font-medium rounded-t-lg transition-colors relative ${
+                  isSelected
+                    ? "text-blue-600 bg-white border border-gray-200 border-b-white -mb-px"
+                    : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                }`}
+              >
+                {ca.name}
+                <span
+                  className={`ml-1.5 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-xs ${
+                    isSelected
+                      ? "bg-blue-100 text-blue-600"
+                      : "bg-gray-100 text-gray-500"
+                  }`}
+                >
+                  {count}
+                </span>
+                {ca.id === currentCaId && !isSelected && (
+                  <span className="ml-1 text-xs text-gray-400">(自分)</span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* KPIカード */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
         <div className="bg-white rounded-xl shadow-sm p-4">
@@ -78,7 +136,9 @@ export default function MyDashboardClient({ caName, candidates, stages, myKpi, a
         </div>
         <div className="bg-white rounded-xl shadow-sm p-4">
           <p className="text-xs text-gray-400">今月の新規</p>
-          <p className="text-2xl font-bold text-purple-600">{myKpi.thisMonth}</p>
+          <p className="text-2xl font-bold text-purple-600">
+            {myKpi.thisMonth}
+          </p>
         </div>
         <div className="bg-white rounded-xl shadow-sm p-4">
           <p className="text-xs text-gray-400">アクティブ</p>
@@ -86,28 +146,47 @@ export default function MyDashboardClient({ caName, candidates, stages, myKpi, a
         </div>
         <div className="bg-white rounded-xl shadow-sm p-4">
           <p className="text-xs text-gray-400">内定</p>
-          <p className="text-2xl font-bold text-emerald-600">{myKpi.offered}</p>
+          <p className="text-2xl font-bold text-emerald-600">
+            {myKpi.offered}
+          </p>
         </div>
         <div className="bg-white rounded-xl shadow-sm p-4">
           <p className="text-xs text-gray-400 flex items-center gap-1">
             要フォロー
-            {alertCount > 0 && <span className="w-2 h-2 rounded-full bg-red-500 inline-block" />}
+            {alertCount > 0 && (
+              <span className="w-2 h-2 rounded-full bg-red-500 inline-block" />
+            )}
           </p>
-          <p className={"text-2xl font-bold " + (alertCount > 0 ? "text-red-600" : "text-gray-400")}>{alertCount}</p>
+          <p
+            className={
+              "text-2xl font-bold " +
+              (alertCount > 0 ? "text-red-600" : "text-gray-400")
+            }
+          >
+            {alertCount}
+          </p>
         </div>
       </div>
 
       {/* カンバンボード */}
       <div>
-        <h2 className="text-base font-semibold text-gray-700 mb-3">パイプライン（ドラッグ&ドロップでステータス変更）</h2>
-        <div className="flex gap-3 overflow-x-auto pb-4" style={{ minHeight: 400 }}>
+        <h2 className="text-base font-semibold text-gray-700 mb-3">
+          パイプライン（ドラッグ&ドロップでステータス変更）
+        </h2>
+        <div
+          className="flex gap-3 overflow-x-auto pb-4"
+          style={{ minHeight: 400 }}
+        >
           {stages.map((stage) => {
             const items = candidates.filter((c) => c.status === stage.key);
             const isOver = dragOverStage === stage.key;
             return (
               <div
                 key={stage.key}
-                className={"flex-shrink-0 rounded-xl p-3 transition-colors " + (isOver ? "ring-2 ring-blue-400" : "")}
+                className={
+                  "flex-shrink-0 rounded-xl p-3 transition-colors " +
+                  (isOver ? "ring-2 ring-blue-400" : "")
+                }
                 style={{
                   width: 220,
                   backgroundColor: isOver ? "#EBF5FF" : "#F9FAFB",
@@ -128,8 +207,13 @@ export default function MyDashboardClient({ caName, candidates, stages, myKpi, a
                 {/* ステージヘッダー */}
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: stage.color }} />
-                    <span className="text-xs font-semibold text-gray-700">{stage.label}</span>
+                    <span
+                      className="w-2.5 h-2.5 rounded-full"
+                      style={{ backgroundColor: stage.color }}
+                    />
+                    <span className="text-xs font-semibold text-gray-700">
+                      {stage.label}
+                    </span>
                   </div>
                   <span className="text-xs font-bold px-1.5 py-0.5 rounded-full bg-white text-gray-500 shadow-sm">
                     {items.length}
@@ -140,28 +224,45 @@ export default function MyDashboardClient({ caName, candidates, stages, myKpi, a
                 <div className="space-y-2">
                   {items.map((c) => {
                     const days = daysAgo(c.updated_at);
-                    const isAlert = days >= 3 && !["placed", "failed", "closed"].includes(c.status);
+                    const isAlert =
+                      days >= 3 &&
+                      !["placed", "failed", "closed"].includes(c.status);
                     return (
                       <div
                         key={c.id}
                         draggable
-                        onDragStart={(e) => e.dataTransfer.setData("text/plain", c.id)}
-                        className={"bg-white rounded-lg p-3 shadow-sm cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow border-l-3 " + (updating === c.id ? "opacity-50" : "")}
-                        style={{ borderLeftWidth: 3, borderLeftColor: stage.color }}
+                        onDragStart={(e) =>
+                          e.dataTransfer.setData("text/plain", c.id)
+                        }
+                        className={
+                          "bg-white rounded-lg p-3 shadow-sm cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow border-l-3 " +
+                          (updating === c.id ? "opacity-50" : "")
+                        }
+                        style={{
+                          borderLeftWidth: 3,
+                          borderLeftColor: stage.color,
+                        }}
                       >
-                        <Link href={"/admin/candidates/" + c.id} className="block">
+                        <Link
+                          href={"/admin/candidates/" + c.id}
+                          className="block"
+                        >
                           <p className="text-sm font-medium text-gray-800 truncate hover:text-blue-600">
                             {c.name}
                           </p>
                           {c.current_company && (
-                            <p className="text-xs text-gray-400 truncate mt-0.5">{c.current_company}</p>
+                            <p className="text-xs text-gray-400 truncate mt-0.5">
+                              {c.current_company}
+                            </p>
                           )}
                           <div className="flex items-center justify-between mt-2">
                             <span className="text-xs text-gray-400">
                               {days === 0 ? "今日" : days + "日前"}
                             </span>
                             {isAlert && (
-                              <span className="text-xs text-red-500 font-medium">要対応</span>
+                              <span className="text-xs text-red-500 font-medium">
+                                要対応
+                              </span>
                             )}
                           </div>
                         </Link>
@@ -176,4 +277,4 @@ export default function MyDashboardClient({ caName, candidates, stages, myKpi, a
       </div>
     </div>
   );
-}
+                        }
