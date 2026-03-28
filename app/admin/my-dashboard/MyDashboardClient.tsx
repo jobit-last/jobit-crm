@@ -43,6 +43,15 @@ interface Props {
   stages: Stage[];
 }
 
+// サブステータス（離脱済み）
+const TERMINAL_STATUSES = [
+  "placed",
+  "conducted_noshow", "conducted_declined",
+  "support_noshow", "support_declined", "support_released",
+  "offer_noshow", "offer_declined",
+  "accepted_noshow", "accepted_declined",
+];
+
 function daysAgo(dateStr: string): number {
   return Math.floor(
     (Date.now() - new Date(dateStr).getTime()) / (1000 * 60 * 60 * 24)
@@ -217,7 +226,7 @@ export default function MyDashboardClient({
                     const days = daysAgo(c.updated_at);
                     const isAlert =
                       days >= 3 &&
-                      !["placed", "failed", "closed"].includes(c.status);
+                      !TERMINAL_STATUSES.includes(c.status);
                     return (
                       <div
                         key={c.id}
