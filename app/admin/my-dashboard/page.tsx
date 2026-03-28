@@ -3,14 +3,13 @@ import { redirect } from "next/navigation";
 import MyDashboardClient from "./MyDashboardClient";
 
 const PIPELINE_STAGES = [
-  { key: "new", label: "新規登録", color: "#3B82F6" },
-  { key: "interview_scheduling", label: "面談調整中", color: "#0EA5E9" },
-  { key: "interviewed", label: "面談済み", color: "#8B5CF6" },
-  { key: "job_proposed", label: "求人提案中", color: "#EAB308" },
-  { key: "applying", label: "応募中", color: "#F97316" },
-  { key: "in_selection", label: "選考中", color: "#F59E0B" },
+  { key: "applied", label: "応募", color: "#3B82F6" },
+  { key: "setup", label: "設置", color: "#0EA5E9" },
+  { key: "conducted", label: "実施", color: "#8B5CF6" },
+  { key: "supporting", label: "サポート中", color: "#EAB308" },
   { key: "offered", label: "内定", color: "#10B981" },
-  { key: "placed", label: "入社", color: "#059669" },
+  { key: "offer_accepted", label: "内定承諾", color: "#059669" },
+  { key: "placed", label: "入社", color: "#0D9488" },
 ] as const;
 
 function computeKpiAndAlert(
@@ -40,14 +39,22 @@ function computeKpiAndAlert(
     (c) => c.created_at >= monthStart && c.created_at <= monthEnd
   );
 
+  const terminalStatuses = [
+    "placed",
+    "conducted_noshow", "conducted_declined",
+    "support_noshow", "support_declined", "support_released",
+    "offer_noshow", "offer_declined",
+    "accepted_noshow", "accepted_declined",
+  ];
+
   const myKpi = {
     total: candidates.length,
     thisMonth: thisMonthCandidates.length,
     active: candidates.filter(
-      (c) => !["placed", "failed", "closed"].includes(c.status)
+      (c) => !terminalStatuses.includes(c.status)
     ).length,
     placed: candidates.filter((c) => c.status === "placed").length,
-    offered: candidates.filter((c) => c.status === "offered").length,
+    offered: candidates.filter((c) => c.status === "offered" || c.status === "offer_accepted").length,
   };
 
   const threeDaysAgo = new Date(
@@ -55,7 +62,7 @@ function computeKpiAndAlert(
   ).toISOString();
   const alertCount = candidates.filter(
     (c) =>
-      !["placed", "failed", "closed"].includes(c.status) &&
+      !terminalStatuses.includes(c.status) &&
       c.updated_at < threeDaysAgo
   ).length;
 
