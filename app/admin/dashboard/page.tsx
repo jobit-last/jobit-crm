@@ -1,27 +1,37 @@
 import { createClient } from "@/lib/supabase/server";
+import { STATUS_LABELS, MAIN_STATUSES, SUB_STATUSES } from "@/types/candidate";
+import type { CandidateStatus } from "@/types/candidate";
 import KpiCard from "./KpiCard";
 import DashboardCharts from "./DashboardCharts";
 import ActionItems from "./ActionItems";
 
 const KPI_CARDS = [
   { key: "new_candidates", label: "今月の新規求職者", icon: "👤", color: "#3B82F6", target: 10 },
-  { key: "interviewed", label: "今月の面談数", icon: "💬", color: "#8B5CF6", target: 8 },
-  { key: "in_selection", label: "今月の面接数", icon: "📋", color: "#F59E0B", target: 5 },
+  { key: "conducted", label: "今月の実施数", icon: "💬", color: "#8B5CF6", target: 8 },
+  { key: "supporting", label: "サポート中", icon: "📋", color: "#F59E0B", target: 5 },
   { key: "offered", label: "今月の内定数", icon: "🎉", color: "#10B981", target: 3 },
   { key: "placed", label: "今月の入社数", icon: "🏢", color: "#002D37", target: 2 },
 ] as const;
 
 type KpiKey = (typeof KPI_CARDS)[number]["key"];
 
+// 終了ステータべ（フォローアップ不要）
+const TERMINAL_STATUSES: CandidateStatus[] = [
+  "placed",
+  "conducted_noshow", "conducted_declined",
+  "support_noshow", "support_declined", "support_released",
+  "offer_noshow", "offer_declined",
+  "accepted_noshow", "accepted_declined",
+];
+
 export default async function DashboardPage() {
   const supabase = await createClient();
+
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
   const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59).toISOString();
-
   const prevMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString();
   const prevMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59).toISOString();
-
   const twelveMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 11, 1).toISOString();
 
   const { data: thisMonthAll } = await supabase
@@ -41,18 +51,18 @@ export default async function DashboardPage() {
 
   const kpiThis: Record<KpiKey, number> = {
     new_candidates: thisMonthNew,
-    interviewed:
-      active.filter((c) => c.status === "interviewed" && c.updated_at >= monthStart && c.updated_at <= monthEnd).length ||
-      (thisMonthAll ?? []).filter((c) => c.status === "interviewed").length,
-    in_selection:
-      active.filter((c) => c.status === "in_selection" && c.updated_at >= monthStart && c.updated_at <= monthEnd).length ||
-      (thisMonthAll ?? []).filter((c) => c.status === "in_selection").length,
-    offered:
-      active.filter((c) => c.status === "offered" && c.updated_at >= monthStart && c.updated_at <= monthEnd).length ||
-      (thisMonthAll ?? []).filter((c) => c.status === "offered").length,
-    placed:
-      active.filter((c) => c.status === "placed" && c.updated_at >= monthStart && c.updated_at <= monthEnd).length ||
-      (thisMonthAll ?? []).filter((c) => c.status === "placed").length,
+    conducted: active.filter(
+      (c) => c.status === "conducted" && c.updated_at >= monthStart && c.updated_at <= monthEnd
+    ).length || (thisMonthAll ?? []).filter((c) => c.status === "conducted").length,
+    supporting: active.filter(
+      (c) => c.status === "supporting" && c.updated_at >= monthStart && c.updated_at <= monthEnd
+    ).length || (thisMonthAll ?? []).filter((c) => c.status === "supporting").length,
+    offered: active.filter(
+      (c) => c.status === "offered" && c.updated_at >= monthStart && c.updated_at <= monthEnd
+    ).length || (thisMonthAll ?? []).filter((c) => c.status === "offered").length,
+    placed: active.filter(
+      (c) => c.status === "placed" && c.updated_at >= monthStart && c.updated_at <= monthEnd
+    ).length || (thisMonthAll ?? []).filter((c) => c.status === "placed").length,
   };
 
   const { data: prevMonthAll } = await supabase
@@ -65,8 +75,8 @@ export default async function DashboardPage() {
   const prevMonth = prevMonthAll ?? [];
   const kpiPrev: Record<KpiKey, number> = {
     new_candidates: prevMonth.length,
-    interviewed: prevMonth.filter((c) => c.status === "interviewed").length,
-    in_selection: prevMonth.filter((c) => c.status === "in_selection").length,
+    conducted: prevMonth.filter((c) => c.status === "conducted").length,
+    supporting: prevMonth.filter((c) => c.status === "supporting").length,
     offered: prevMonth.filter((c) => c.status === "offered").length,
     placed: prevMonth.filter((c) => c.status === "placed").length,
   };
@@ -88,21 +98,12 @@ export default async function DashboardPage() {
     const k = d.getFullYear() + "/" + String(d.getMonth() + 1).padStart(2, "0");
     if (k in monthlyMap) monthlyMap[k]++;
   });
-  const monthlyRegistrations = Object.entries(monthlyMap).map(([month, count]) => ({ month, count }));
+  const monthlyRegistrations = Object.entries(monthlyMap).map(([month, count]) => ({
+    month,
+    count,
+  }));
 
-  const STATUS_LABELS: Record<string, string> = {
-    new: "新規登録",
-    interview_scheduling: "面談調整中",
-    interviewed: "面談済み",
-    job_proposed: "求人提案中",
-    applying: "応募中",
-    in_selection: "選考中",
-    offered: "内定",
-    placed: "入社",
-    failed: "不合格",
-    closed: "対応終了",
-  };
-
+  // ステータス別集計（types/candidate.tsのSTATUS_LABELSを使用）
   const { data: allCandidates } = await supabase
     .from("candidates")
     .select("status")
@@ -114,10 +115,12 @@ export default async function DashboardPage() {
   (allCandidates ?? []).forEach((c) => {
     if (c.status in statusMap) statusMap[c.status]++;
   });
-  const statusCounts = Object.entries(statusMap).map(([status, count]) => ({
-    status: STATUS_LABELS[status],
-    count,
-  }));
+  const statusCounts = Object.entries(statusMap)
+    .filter(([, count]) => count > 0)
+    .map(([status, count]) => ({
+      status: STATUS_LABELS[status as CandidateStatus],
+      count,
+    }));
 
   const { data: caRaw } = await supabase
     .from("candidates")
@@ -137,12 +140,14 @@ export default async function DashboardPage() {
     .slice(0, 10)
     .map(({ name, count }) => ({ ca: name, count }));
 
+  // フォローアップ必要（終了ステータス以外にs日以上更新なし）
   const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString();
+  const terminalList = TERMINAL_STATUSES.map((s) => `"${s}"`).join(",");
   const { data: needFollowUp } = await supabase
     .from("candidates")
     .select("id, name, status, updated_at, ca:users!ca_id(name)")
     .eq("is_deleted", false)
-    .not("status", "in", '("placed","failed","closed")')
+    .not("status", "in", `(${terminalList})`)
     .lte("updated_at", threeDaysAgo)
     .order("updated_at", { ascending: true })
     .limit(10);
@@ -150,7 +155,9 @@ export default async function DashboardPage() {
   const weekEnd = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString();
   const { data: upcomingInterviews } = await supabase
     .from("interviews")
-    .select("id, scheduled_at, application:applications(candidate:candidates(name), job:jobs(title, company:companies(name)))")
+    .select(
+      "id, scheduled_at, application:applications(candidate:candidates(name), job:jobs(title, company:companies(name)))"
+    )
     .gte("scheduled_at", now.toISOString())
     .lte("scheduled_at", weekEnd)
     .order("scheduled_at", { ascending: true })
