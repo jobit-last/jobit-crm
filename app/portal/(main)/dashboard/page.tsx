@@ -4,21 +4,15 @@ import Link from "next/link";
 import type { Candidate } from "@/types/candidate";
 import { STATUS_LABELS, STATUS_COLORS } from "@/types/candidate";
 import type { Application } from "@/types/application";
-import {
-  APPLICATION_STATUS_LABELS,
-  APPLICATION_STATUS_COLORS,
-} from "@/types/application";
+import { APPLICATION_STATUS_LABELS, APPLICATION_STATUS_COLORS } from "@/types/application";
+import ProgressTimeline from "./ProgressTimeline";
 
 export default async function PortalDashboardPage() {
   const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) redirect("/portal/login");
 
-  // 求職者情報をメールで取得
   const { data: candidateData, error: candidateError } = await supabase
     .from("candidates")
     .select("*, ca:users!candidates_ca_id_fkey(id, name)")
@@ -42,9 +36,7 @@ export default async function PortalDashboardPage() {
   // 進行中の選考を取得（直近3件）
   const { data: applications } = await supabase
     .from("applications")
-    .select(
-      `*, job:jobs(id, title, company:companies(id, name))`
-    )
+    .select(`*, job:jobs(id, title, company:companies(id, name))`)
     .eq("candidate_id", candidate.id)
     .not("status", "in", '("placed","failed","declined")')
     .order("created_at", { ascending: false })
@@ -61,6 +53,14 @@ export default async function PortalDashboardPage() {
     .limit(1)
     .maybeSingle();
 
+  // 全選考のステータス履歴（タイムライン用）
+  const { data: allApplications } = await supabase
+    .from("applications")
+    .select(`id, status, created_at, updated_at, job:jobs(id, title, company:companies(id, name))`)
+    .eq("candidate_id", candidate.id)
+    .order("updated_at", { ascending: false })
+    .limit(10);
+
   return (
     <div>
       {/* Hero section with gradient */}
@@ -71,7 +71,6 @@ export default async function PortalDashboardPage() {
           boxShadow: "0 4px 20px rgba(6, 73, 196, 0.25)",
         }}
       >
-        {/* Subtle decorative circles */}
         <div
           className="absolute -top-10 -right-10 w-40 h-40 rounded-full"
           style={{ background: "rgba(255,255,255,0.08)" }}
@@ -103,21 +102,18 @@ export default async function PortalDashboardPage() {
         </div>
       </div>
 
+      {/* 選考進捗タイムライン */}
+      <ProgressTimeline candidateStatus={candidate.status} />
+
       {/* サマリーカード */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-8">
-        <div
-          className="bg-white rounded-xl shadow-sm p-5 border-l-4"
-          style={{ borderLeftColor: "#2394FF" }}
-        >
+        <div className="bg-white rounded-xl shadow-sm p-5 border-l-4" style={{ borderLeftColor: "#2394FF" }}>
           <p className="text-xs font-medium text-gray-400 mb-1">進行中の選考</p>
           <p className="text-3xl font-bold" style={{ color: "#2394FF" }}>
             {(applications as Application[] | null)?.length ?? 0}
           </p>
         </div>
-        <div
-          className="bg-white rounded-xl shadow-sm p-5 border-l-4"
-          style={{ borderLeftColor: "#00B59A" }}
-        >
+        <div className="bg-white rounded-xl shadow-sm p-5 border-l-4" style={{ borderLeftColor: "#00B59A" }}>
           <p className="text-xs font-medium text-gray-400 mb-1">次の面接</p>
           {nextInterview?.scheduled_at ? (
             <p className="text-lg font-bold" style={{ color: "#21242B" }}>
@@ -136,10 +132,7 @@ export default async function PortalDashboardPage() {
             <p className="text-lg font-bold text-gray-300">予定なし</p>
           )}
         </div>
-        <div
-          className="bg-white rounded-xl shadow-sm p-5 border-l-4"
-          style={{ borderLeftColor: "#F67A34" }}
-        >
+        <div className="bg-white rounded-xl shadow-sm p-5 border-l-4" style={{ borderLeftColor: "#F67A34" }}>
           <p className="text-xs font-medium text-gray-400 mb-1">ステータス</p>
           <p className="text-lg font-bold" style={{ color: "#21242B" }}>
             {STATUS_LABELS[candidate.status]}
@@ -197,15 +190,10 @@ export default async function PortalDashboardPage() {
           <h2 className="text-base font-semibold" style={{ color: "#16B1F3" }}>
             進行中の選考
           </h2>
-          <Link
-            href="/portal/applications"
-            className="text-sm font-medium hover:underline"
-            style={{ color: "#2394FF" }}
-          >
+          <Link href="/portal/applications" className="text-sm font-medium hover:underline" style={{ color: "#2394FF" }}>
             すべて見る
           </Link>
         </div>
-
         {!applications || applications.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
             <p className="text-sm text-gray-400">進行中の選考はありません</p>
@@ -242,7 +230,6 @@ export default async function PortalDashboardPage() {
         <h2 className="text-base font-semibold mb-4" style={{ color: "#16B1F3" }}>
           次の面接日程
         </h2>
-
         {!nextInterview ? (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
             <p className="text-sm text-gray-400">予定されている面接はありません</p>
