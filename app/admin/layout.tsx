@@ -9,6 +9,7 @@ import { signOut } from "@/lib/supabase/auth";
 const navItems = [
   { label: "ダッシュボード", href: "/admin/dashboard" },
   { label: "マイダッシュボード", href: "/admin/my-dashboard" },
+  { label: "歩留まり分析", href: "/admin/analytics" },
   { label: "求職者管理", href: "/admin/candidates" },
   { label: "企業管理", href: "/admin/companies" },
   { label: "求人管理", href: "/admin/jobs" },
@@ -19,7 +20,6 @@ const navItems = [
   { label: "契約書管理", href: "/admin/contracts" },
   { label: "覚書管理", href: "/admin/memorandums" },
   { label: "請求書管理", href: "/admin/invoices" },
-  { label: "歩留まり分析", href: "/admin/analytics" },
   { label: "市場価値診断", href: "/admin/diagnosis/new" },
   { label: "ナレッジ管理", href: "/admin/knowledge" },
   { label: "操作ログ", href: "/admin/logs" },
@@ -56,7 +56,8 @@ export default function AdminLayout({
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         style={{
-          background: "linear-gradient(to bottom, #002D37 0%, #050258 25%, #1B36AE 50%, #0048D9 75%, #002D37 100%)",
+          background:
+            "linear-gradient(to bottom, #002D37 0%, #050258 25%, #1B36AE 50%, #0048D9 75%, #002D37 100%)",
         }}
       >
         <div className="h-16 flex items-center gap-3 px-6 border-b border-white/10">
@@ -74,14 +75,18 @@ export default function AdminLayout({
 
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+            const isActive =
+              pathname === item.href ||
+              pathname.startsWith(item.href + "/");
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setSidebarOpen(false)}
                 className={`block px-3 py-2 rounded-md text-sm transition-all duration-150 ${
-                  isActive ? "font-semibold" : "text-white/80 hover:text-white"
+                  isActive
+                    ? "font-semibold"
+                    : "text-white/80 hover:text-white"
                 }`}
                 style={
                   isActive
@@ -93,7 +98,8 @@ export default function AdminLayout({
                 }
                 onMouseEnter={(e) => {
                   if (!isActive) {
-                    e.currentTarget.style.backgroundColor = "rgba(75, 135, 255, 0.25)";
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(75, 135, 255, 0.25)";
                   }
                 }}
                 onMouseLeave={(e) => {
@@ -137,7 +143,6 @@ export default function AdminLayout({
               管理画面
             </span>
           </div>
-
           <button
             onClick={handleLogout}
             className="px-3 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-red-50 transition-colors"
@@ -145,7 +150,6 @@ export default function AdminLayout({
             ログアウト
           </button>
         </header>
-
         <main className="flex-1 overflow-auto p-6">{children}</main>
       </div>
     </div>
