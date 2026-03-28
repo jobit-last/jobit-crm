@@ -180,8 +180,8 @@ export default async function DashboardPage() {
       </div>
 
       <ActionItems
-        needFollowUp={needFollowUp ?? []}
-        upcomingInterviews={upcomingInterviews ?? []}
+        needFollowUp={(needFollowUp ?? []) as any}
+        upcomingInterviews={(upcomingInterviews ?? []) as any}
       />
 
       <DashboardCharts
