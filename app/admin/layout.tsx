@@ -8,6 +8,7 @@ import { signOut } from "@/lib/supabase/auth";
 
 const navItems = [
   { label: "ダッシュボード", href: "/admin/dashboard" },
+  { label: "マイダッシュボード", href: "/admin/my-dashboard" },
   { label: "求職者管理", href: "/admin/candidates" },
   { label: "企業管理", href: "/admin/companies" },
   { label: "求人管理", href: "/admin/jobs" },
@@ -25,7 +26,11 @@ const navItems = [
   { label: "CA管理", href: "/admin/users" },
 ];
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -51,8 +56,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         style={{
-          background:
-            "linear-gradient(to bottom, #002D37 0%, #050258 25%, #1B36AE 50%, #0048D9 75%, #002D37 100%)",
+          background: "linear-gradient(to bottom, #002D37 0%, #050258 25%, #1B36AE 50%, #0048D9 75%, #002D37 100%)",
         }}
       >
         <div className="h-16 flex items-center gap-3 px-6 border-b border-white/10">
@@ -70,17 +74,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
-            const isActive =
-              pathname === item.href || pathname.startsWith(item.href + "/");
+            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setSidebarOpen(false)}
                 className={`block px-3 py-2 rounded-md text-sm transition-all duration-150 ${
-                  isActive
-                    ? "font-semibold"
-                    : "text-white/80 hover:text-white"
+                  isActive ? "font-semibold" : "text-white/80 hover:text-white"
                 }`}
                 style={
                   isActive
@@ -92,8 +93,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 }
                 onMouseEnter={(e) => {
                   if (!isActive) {
-                    e.currentTarget.style.backgroundColor =
-                      "rgba(75, 135, 255, 0.25)";
+                    e.currentTarget.style.backgroundColor = "rgba(75, 135, 255, 0.25)";
                   }
                 }}
                 onMouseLeave={(e) => {
