@@ -92,40 +92,31 @@ export default function MyDashboardClient({
         <p className="text-sm text-gray-500 mt-1">{caName}の担当状況</p>
       </div>
 
-      {/* CA選択タブ */}
-      <div className="border-b border-gray-200">
-        <div className="flex gap-1 overflow-x-auto pb-px">
+      {/* CA選択プルダウン */}
+      <div className="flex items-center gap-3">
+        <label
+          htmlFor="ca-select"
+          className="text-sm font-medium text-gray-600"
+        >
+          担当CA:
+        </label>
+        <select
+          id="ca-select"
+          value={selectedCaId}
+          onChange={(e) => setSelectedCaId(e.target.value)}
+          className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        >
           {caList.map((ca) => {
-            const isSelected = ca.id === selectedCaId;
             const caData = allCaData[ca.id];
             const count = caData?.myKpi?.total || 0;
+            const isSelf = ca.id === currentCaId;
             return (
-              <button
-                key={ca.id}
-                onClick={() => setSelectedCaId(ca.id)}
-                className={`flex-shrink-0 px-4 py-2.5 text-sm font-medium rounded-t-lg transition-colors relative ${
-                  isSelected
-                    ? "text-blue-600 bg-white border border-gray-200 border-b-white -mb-px"
-                    : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-                }`}
-              >
-                {ca.name}
-                <span
-                  className={`ml-1.5 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-xs ${
-                    isSelected
-                      ? "bg-blue-100 text-blue-600"
-                      : "bg-gray-100 text-gray-500"
-                  }`}
-                >
-                  {count}
-                </span>
-                {ca.id === currentCaId && !isSelected && (
-                  <span className="ml-1 text-xs text-gray-400">(自分)</span>
-                )}
-              </button>
+              <option key={ca.id} value={ca.id}>
+                {ca.name}（{count}名）{isSelf ? " ★自分" : ""}
+              </option>
             );
           })}
-        </div>
+        </select>
       </div>
 
       {/* KPIカード */}
@@ -277,4 +268,4 @@ export default function MyDashboardClient({
       </div>
     </div>
   );
-                        }
+}
