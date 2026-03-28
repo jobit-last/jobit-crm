@@ -22,7 +22,6 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const [form, setForm] = useState({
     name: initialData.name ?? "",
     email: initialData.email ?? "",
@@ -32,7 +31,7 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
     current_company: initialData.current_company ?? "",
     current_salary: initialData.current_salary?.toString() ?? "",
     desired_salary: initialData.desired_salary?.toString() ?? "",
-    status: (initialData.status ?? "new") as CandidateStatus,
+    status: (initialData.status ?? "applied") as CandidateStatus,
     ca_id: initialData.ca_id ?? "",
   });
 
@@ -97,7 +96,10 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
 
       {/* 基本情報 */}
       <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 className="text-base font-semibold mb-4" style={{ color: "#002D37" }}>
+        <h2
+          className="text-base font-semibold mb-4"
+          style={{ color: "#002D37" }}
+        >
           基本情報
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -115,7 +117,6 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
               placeholder="山田 太郎"
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               メールアドレス
@@ -129,7 +130,6 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
               placeholder="example@email.com"
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               電話番号
@@ -143,7 +143,6 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
               placeholder="090-0000-0000"
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               生年月日
@@ -156,9 +155,10 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
               className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             />
           </div>
-
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">性別</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              性別
+            </label>
             <select
               name="gender"
               value={form.gender}
@@ -167,7 +167,9 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
             >
               <option value="">未選択</option>
               {GENDER_OPTIONS.map((g) => (
-                <option key={g.value} value={g.value}>{g.label}</option>
+                <option key={g.value} value={g.value}>
+                  {g.label}
+                </option>
               ))}
             </select>
           </div>
@@ -176,7 +178,10 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
 
       {/* 職歴・希望条件 */}
       <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 className="text-base font-semibold mb-4" style={{ color: "#002D37" }}>
+        <h2
+          className="text-base font-semibold mb-4"
+          style={{ color: "#002D37" }}
+        >
           職歴・希望条件
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -193,7 +198,6 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
               placeholder="株式会社〇〇"
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               現在の年収（万円）
@@ -208,7 +212,6 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
               placeholder="500"
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               希望年収（万円）
@@ -228,7 +231,10 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
 
       {/* 担当・ステータス */}
       <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 className="text-base font-semibold mb-4" style={{ color: "#002D37" }}>
+        <h2
+          className="text-base font-semibold mb-4"
+          style={{ color: "#002D37" }}
+        >
           担当・ステータス
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -243,14 +249,15 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
             >
-              {(Object.entries(STATUS_LABELS) as [CandidateStatus, string][]).map(
-                ([key, label]) => (
-                  <option key={key} value={key}>{label}</option>
-                )
-              )}
+              {(
+                Object.entries(STATUS_LABELS) as [CandidateStatus, string][]
+              ).map(([key, label]) => (
+                <option key={key} value={key}>
+                  {label}
+                </option>
+              ))}
             </select>
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               担当CA
@@ -263,7 +270,9 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
             >
               <option value="">未割り当て</option>
               {advisors.map((a) => (
-                <option key={a.id} value={a.id}>{a.name}</option>
+                <option key={a.id} value={a.id}>
+                  {a.name}
+                </option>
               ))}
             </select>
           </div>
@@ -285,7 +294,16 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
           className="px-5 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00A645] disabled:opacity-60"
           style={{ backgroundColor: "#00E05D", color: "#002D37" }}
         >
-          {loading ? <><Spinner size={16} className="inline mr-1.5" />処理中...</> : mode === "create" ? "登録する" : "更新する"}
+          {loading ? (
+            <>
+              <Spinner size={16} className="inline mr-1.5" />
+              処理中...
+            </>
+          ) : mode === "create" ? (
+            "登録する"
+          ) : (
+            "更新する"
+          )}
         </button>
       </div>
     </form>
