@@ -11,19 +11,19 @@ const KPI_CARDS = [
   { key: "placed", label: "今月の入社数", icon: "🏢", color: "#002D37", target: 2 },
 ] as const;
 
+type KpiKey = (typeof KPI_CARDS)[number]["key"];
+
 export default async function DashboardPage() {
   const supabase = await createClient();
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
   const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59).toISOString();
 
-  // 先月の範囲
   const prevMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString();
   const prevMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59).toISOString();
 
   const twelveMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 11, 1).toISOString();
 
-  // 今月KPI — 全ステータスの候補者を取得（今月作成された全件）
   const { data: thisMonthAll } = await supabase
     .from("candidates")
     .select("status, created_at")
@@ -31,23 +31,30 @@ export default async function DashboardPage() {
     .lte("created_at", monthEnd)
     .eq("is_deleted", false);
 
-  // 今月のステータス別集計（アクティブな候補者全体から）
   const { data: activeAll } = await supabase
     .from("candidates")
     .select("status, updated_at")
     .eq("is_deleted", false);
 
-  const thisMonthNew = (thisMonthAll || []).length;
-  const active = activeAll || [];
-  const kpiThis = {
+  const thisMonthNew = (thisMonthAll ?? []).length;
+  const active = activeAll ?? [];
+
+  const kpiThis: Record<KpiKey, number> = {
     new_candidates: thisMonthNew,
-    interviewed: active.filter((c) => c.status === "interviewed" && c.updated_at >= monthStart && c.updated_at <= monthEnd).length || (thisMonthAll || []).filter((c) => c.status === "interviewed").length,
-    in_selection: active.filter((c) => c.status === "in_selection" && c.updated_at >= monthStart && c.updated_at <= monthEnd).length || (thisMonthAll || []).filter((c) => c.status === "in_selection").length,
-    offered: active.filter((c) => c.status === "offered" && c.updated_at >= monthStart && c.updated_at <= monthEnd).length || (thisMonthAll || []).filter((c) => c.status === "offered").length,
-    placed: active.filter((c) => c.status === "placed" && c.updated_at >= monthStart && c.updated_at <= monthEnd).length || (thisMonthAll || []).filter((c) => c.status === "placed").length,
+    interviewed:
+      active.filter((c) => c.status === "interviewed" && c.updated_at >= monthStart && c.updated_at <= monthEnd).length ||
+      (thisMonthAll ?? []).filter((c) => c.status === "interviewed").length,
+    in_selection:
+      active.filter((c) => c.status === "in_selection" && c.updated_at >= monthStart && c.updated_at <= monthEnd).length ||
+      (thisMonthAll ?? []).filter((c) => c.status === "in_selection").length,
+    offered:
+      active.filter((c) => c.status === "offered" && c.updated_at >= monthStart && c.updated_at <= monthEnd).length ||
+      (thisMonthAll ?? []).filter((c) => c.status === "offered").length,
+    placed:
+      active.filter((c) => c.status === "placed" && c.updated_at >= monthStart && c.updated_at <= monthEnd).length ||
+      (thisMonthAll ?? []).filter((c) => c.status === "placed").length,
   };
 
-  // 先月KPI
   const { data: prevMonthAll } = await supabase
     .from("candidates")
     .select("status, created_at, updated_at")
@@ -55,8 +62,8 @@ export default async function DashboardPage() {
     .lte("created_at", prevMonthEnd)
     .eq("is_deleted", false);
 
-  const prevMonth = prevMonthAll || [];
-  const kpiPrev = {
+  const prevMonth = prevMonthAll ?? [];
+  const kpiPrev: Record<KpiKey, number> = {
     new_candidates: prevMonth.length,
     interviewed: prevMonth.filter((c) => c.status === "interviewed").length,
     in_selection: prevMonth.filter((c) => c.status === "in_selection").length,
@@ -64,7 +71,6 @@ export default async function DashboardPage() {
     placed: prevMonth.filter((c) => c.status === "placed").length,
   };
 
-  // 月別登録数（過去12ヶ月）
   const { data: monthlyRaw } = await supabase
     .from("candidates")
     .select("created_at")
@@ -74,17 +80,16 @@ export default async function DashboardPage() {
   const monthlyMap: Record<string, number> = {};
   for (let i = 11; i >= 0; i--) {
     const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const key = `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, "0")}`;
-    monthlyMap[key] = 0;
+    const k = d.getFullYear() + "/" + String(d.getMonth() + 1).padStart(2, "0");
+    monthlyMap[k] = 0;
   }
-  (monthlyRaw || []).forEach((c) => {
+  (monthlyRaw ?? []).forEach((c) => {
     const d = new Date(c.created_at);
-    const key = `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, "0")}`;
-    if (key in monthlyMap) monthlyMap[key]++;
+    const k = d.getFullYear() + "/" + String(d.getMonth() + 1).padStart(2, "0");
+    if (k in monthlyMap) monthlyMap[k]++;
   });
   const monthlyRegistrations = Object.entries(monthlyMap).map(([month, count]) => ({ month, count }));
 
-  // ステータス別件数
   const STATUS_LABELS: Record<string, string> = {
     new: "新規登録",
     interview_scheduling: "面談調整中",
@@ -106,7 +111,7 @@ export default async function DashboardPage() {
   const statusMap: Record<string, number> = Object.fromEntries(
     Object.keys(STATUS_LABELS).map((k) => [k, 0])
   );
-  (allCandidates || []).forEach((c) => {
+  (allCandidates ?? []).forEach((c) => {
     if (c.status in statusMap) statusMap[c.status]++;
   });
   const statusCounts = Object.entries(statusMap).map(([status, count]) => ({
@@ -114,7 +119,6 @@ export default async function DashboardPage() {
     count,
   }));
 
-  // CA別担当求職者数
   const { data: caRaw } = await supabase
     .from("candidates")
     .select("ca_id, ca:users!ca_id(name)")
@@ -122,7 +126,7 @@ export default async function DashboardPage() {
     .not("ca_id", "is", null);
 
   const caMap: Record<string, { name: string; count: number }> = {};
-  (caRaw || []).forEach((c: Record<string, unknown>) => {
+  (caRaw ?? []).forEach((c: Record<string, unknown>) => {
     const caId = c.ca_id as string;
     const caName = (c.ca as { name?: string } | null)?.name ?? caId;
     if (!caMap[caId]) caMap[caId] = { name: caName, count: 0 };
@@ -133,7 +137,6 @@ export default async function DashboardPage() {
     .slice(0, 10)
     .map(({ name, count }) => ({ ca: name, count }));
 
-  // アクションアイテム: フォロー必要な求職者
   const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString();
   const { data: needFollowUp } = await supabase
     .from("candidates")
@@ -144,7 +147,6 @@ export default async function DashboardPage() {
     .order("updated_at", { ascending: true })
     .limit(10);
 
-  // 今週の面接予定
   const weekEnd = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString();
   const { data: upcomingInterviews } = await supabase
     .from("interviews")
@@ -154,16 +156,15 @@ export default async function DashboardPage() {
     .order("scheduled_at", { ascending: true })
     .limit(5);
 
-  const currentMonth = `${now.getFullYear()}年${now.getMonth() + 1}月`;
+  const currentMonth = now.getFullYear() + "年" + (now.getMonth() + 1) + "月";
 
   return (
     <div className="space-y-6">
-      {/* ヘッダー */}
       <div>
         <h1 className="text-2xl font-bold text-primary">ダッシュボード</h1>
         <p className="text-sm text-gray-500 mt-1">{currentMonth}の実績</p>
       </div>
-      {/* KPIカード */}
+
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
         {KPI_CARDS.map(({ key, label, icon, color, target }) => (
           <KpiCard
@@ -177,12 +178,12 @@ export default async function DashboardPage() {
           />
         ))}
       </div>
-      {/* アクションアイテム */}
+
       <ActionItems
-        needFollowUp={needFollowUp || []}
-        upcomingInterviews={upcomingInterviews || []}
+        needFollowUp={needFollowUp ?? []}
+        upcomingInterviews={upcomingInterviews ?? []}
       />
-      {/* グラフ */}
+
       <DashboardCharts
         monthlyRegistrations={monthlyRegistrations}
         statusCounts={statusCounts}
