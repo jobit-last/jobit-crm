@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
 
     const signUpData = await signUpRes.json();
 
-    if (signUpRes.ok && signUpData.id) {
+    if (signUpRes.ok && signUpData.user?.id) {
       portalAccount = { email: body.email, password };
     }
     // æ¢ã«Authã¢ã«ã¦ã³ããå­å¨ããå ´åã¯ã¹ã­ããï¼ã¨ã©ã¼ã«ããªãï¼
