@@ -1,17 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
 import { recordLog } from "@/lib/activity-log";
 import type { UserInsert } from "@/types/user";
+
+/** LD-XXXX 形式の連番IDを生成 */
+async function generateLdLoginId(supabase: Awaited<ReturnType<typeof createClient>>): Promise<string> {
+  const { data } = await supabase
+    .from("users")
+    .select("ld_login_id")
+    .not("ld_login_id", "is", null)
+    .order("ld_login_id", { ascending: false })
+    .limit(1);
+
+  let nextNum = 1;
+  if (data && data.length > 0 && data[0].ld_login_id) {
+    const match = data[0].ld_login_id.match(/LD-(\d+)/);
+    if (match) nextNum = parseInt(match[1]) + 1;
+  }
+
+  return `LD-${String(nextNum).padStart(4, "0")}`;
+}
 
 // GET /api/users - ユーザー一覧取得
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient();
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       return NextResponse.json(
         { success: false, data: null, message: "認証が必要です", meta: {} },
@@ -50,21 +65,11 @@ export async function GET(request: NextRequest) {
       success: true,
       data,
       message: "",
-      meta: {
-        total,
-        page,
-        per_page,
-        total_pages: Math.ceil(total / per_page),
-      },
+      meta: { total, page, per_page, total_pages: Math.ceil(total / per_page) },
     });
   } catch {
     return NextResponse.json(
-      {
-        success: false,
-        data: null,
-        message: "サーバーエラーが発生しました",
-        meta: {},
-      },
+      { success: false, data: null, message: "サーバーエラーが発生しました", meta: {} },
       { status: 500 }
     );
   }
@@ -75,9 +80,7 @@ export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient();
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       return NextResponse.json(
         { success: false, data: null, message: "認証が必要です", meta: {} },
@@ -85,96 +88,106 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body: UserInsert = await request.json();
+    const body = await request.json();
+    const { create_ld_account, ...userData } = body as UserInsert & { create_ld_account?: boolean };
 
-    if (!body.name?.trim()) {
+    if (!userData.name?.trim()) {
       return NextResponse.json(
         { success: false, data: null, message: "名前は必須です", meta: {} },
         { status: 400 }
       );
     }
 
-    if (!body.email?.trim()) {
+    if (!userData.email?.trim()) {
       return NextResponse.json(
-        {
-          success: false,
-          data: null,
-          message: "メールアドレスは必須です",
-          meta: {},
-        },
+        { success: false, data: null, message: "メールアドレスは必須です", meta: {} },
         { status: 400 }
       );
     }
 
-    // 1. Supabase Auth にユーザーを作成（Admin API使用）
-    const adminClient = createAdminClient();
-    const tempPassword = `Jobit!${Date.now().toString(36)}`;
+    let ldLoginId: string | null = null;
 
-    const { data: authUser, error: authError } =
-      await adminClient.auth.admin.createUser({
-        email: body.email,
-        password: tempPassword,
-        email_confirm: true,
-        user_metadata: {
-          name: body.name,
-          role: body.role,
-        },
-      });
+    // LDアカウント作成が要求された場合
+    if (create_ld_account) {
+      ldLoginId = await generateLdLoginId(supabase);
 
-    if (authError) {
-      // メールアドレス重複チェック
-      if (authError.message?.includes("already been registered")) {
-        return NextResponse.json(
-          {
-            success: false,
-            data: null,
-            message: "このメールアドレスは既に登録されています",
-            meta: {},
+      // Supabase Auth でLDユーザーを作成（初期パスワード = ログインID）
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+      const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+      const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
+      if (serviceKey) {
+        const authRes = await fetch(`${supabaseUrl}/auth/v1/admin/users`, {
+          method: "POST",
+          headers: {
+            apikey: serviceKey,
+            Authorization: `Bearer ${serviceKey}`,
+            "Content-Type": "application/json",
           },
-          { status: 409 }
-        );
+          body: JSON.stringify({
+            email: userData.email,
+            password: ldLoginId,
+            email_confirm: true,
+          }),
+        });
+
+        if (!authRes.ok) {
+          const authErr = await authRes.json();
+          return NextResponse.json(
+            { success: false, data: null, message: `LDアカウント作成に失敗しました: ${authErr.msg || authErr.message || JSON.stringify(authErr)}`, meta: {} },
+            { status: 500 }
+          );
+        }
+      } else {
+        const authRes = await fetch(`${supabaseUrl}/auth/v1/signup`, {
+          method: "POST",
+          headers: {
+            apikey: anonKey,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: userData.email,
+            password: ldLoginId,
+          }),
+        });
+
+        if (!authRes.ok) {
+          const authErr = await authRes.json();
+          return NextResponse.json(
+            { success: false, data: null, message: `LDアカウント作成に失敗しました: ${authErr.msg || authErr.message || JSON.stringify(authErr)}`, meta: {} },
+            { status: 500 }
+          );
+        }
       }
-      return NextResponse.json(
-        { success: false, data: null, message: authError.message, meta: {} },
-        { status: 500 }
-      );
     }
 
-    // 2. public.users テーブルにレコード作成（auth.users の ID を使用）
+    const insertData = {
+      ...userData,
+      ...(ldLoginId ? { ld_login_id: ldLoginId } : {}),
+    };
+
     const { data, error } = await supabase
       .from("users")
-      .insert({
-        id: authUser.user.id,
-        name: body.name,
-        email: body.email,
-        role: body.role,
-      })
+      .insert(insertData)
       .select()
       .single();
 
     if (error) {
-      // public.users 作成失敗時は auth ユーザーも削除
-      await adminClient.auth.admin.deleteUser(authUser.user.id);
       return NextResponse.json(
         { success: false, data: null, message: error.message, meta: {} },
         { status: 500 }
       );
     }
 
-    await recordLog("create", `ユーザー作成: ${body.name} (${body.email})`);
+    await recordLog("create", `ユーザー作成: ${userData.name} (${userData.email})${ldLoginId ? ` [${ldLoginId}]` : ""}`);
 
     return NextResponse.json(
-      { success: true, data, message: "ユーザーを作成しました", meta: {} },
+      { success: true, data, message: "ユーザーを作成しました", meta: {}, ld_login_id: ldLoginId },
       { status: 201 }
     );
   } catch {
     return NextResponse.json(
-      {
-        success: false,
-        data: null,
-        message: "サーバーエラーが発生しました",
-        meta: {},
-      },
+      { success: false, data: null, message: "サーバーエラーが発生しました", meta: {} },
       { status: 500 }
     );
   }
