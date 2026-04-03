@@ -22,10 +22,8 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [portalAccount, setPortalAccount] = useState<{
-    email: string;
-    password: string;
-  } | null>(null);
+  const [createPortal, setCreatePortal] = useState(false);
+  const [portalResult, setPortalResult] = useState<{ email: string; loginId: string } | null>(null);
 
   const [form, setForm] = useState({
     name: initialData.name ?? "",
@@ -45,22 +43,16 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleCloseModal() {
-    setPortalAccount(null);
-    router.push("/admin/candidates");
-    router.refresh();
-  }
-
-  function handleCopyCredentials() {
-    if (!portalAccount) return;
-    const text = `ポータルログイン情報\nメール: ${portalAccount.email}\nパスワード: ${portalAccount.password}\nURL: ${window.location.origin}/portal/login`;
-    navigator.clipboard.writeText(text);
-  }
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    if (createPortal && !form.email) {
+      setError("ポータルアカウントを作成するにはメールアドレスが必須です");
+      setLoading(false);
+      return;
+    }
 
     const payload = {
       name: form.name,
@@ -73,6 +65,7 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
       desired_salary: form.desired_salary ? parseInt(form.desired_salary) : null,
       status: form.status,
       ca_id: form.ca_id || null,
+      create_portal: createPortal,
     };
 
     const url =
@@ -95,9 +88,12 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
       return;
     }
 
-    // ポータルアカウントが作成された場合はモーダル表示
-    if (mode === "create" && json.portalAccount) {
-      setPortalAccount(json.portalAccount);
+    // ポータルアカウント作成時はログイン情報を表示
+    if (createPortal && json.portal_login_id) {
+      setPortalResult({
+        email: form.email,
+        loginId: json.portal_login_id,
+      });
       return;
     }
 
@@ -106,6 +102,13 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
         ? `/admin/candidates/${json.data.id}`
         : `/admin/candidates/${initialData.id}`
     );
+    router.refresh();
+  }
+
+  function handlePortalResultClose() {
+    const id = portalResult ? undefined : undefined;
+    setPortalResult(null);
+    router.push(`/admin/candidates`);
     router.refresh();
   }
 
@@ -141,22 +144,17 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                メールアドレス（ポータルログイン用）
+                メールアドレス {createPortal && <span className="text-red-500">*</span>}
               </label>
               <input
                 type="email"
                 name="email"
                 value={form.email}
                 onChange={handleChange}
+                required={createPortal}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
                 placeholder="example@email.com"
               />
-              {mode === "create" && (
-                <p className="mt-1 text-xs text-blue-600">
-                  ※ メールアドレスを入力すると、求職者ポータルのログインアカウントが自動作成されます。
-                  登録完了後にパスワードが表示されますのでお控えください。
-                </p>
-              )}
             </div>
 
             <div>
@@ -299,6 +297,55 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
           </div>
         </section>
 
+        {/* ポータルアカウント */}
+        {mode === "create" && (
+          <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 className="text-base font-semibold mb-4" style={{ color: "#002D37" }}>
+              ポータルアカウント
+            </h2>
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={createPortal}
+                onChange={(e) => setCreatePortal(e.target.checked)}
+                className="w-4 h-4 rounded border-gray-300 text-[#002D37] focus:ring-[#002D37]"
+              />
+              <span className="text-sm text-gray-700">
+                ポータルアカウントを同時に作成する
+              </span>
+            </label>
+            {createPortal && (
+              <p className="mt-2 text-xs text-gray-500">
+                登録完了後にログインID（PT-XXXX形式）が自動生成され、画面に表示されます。メールアドレスとログインIDを求職者にお伝えください。
+              </p>
+            )}
+          </section>
+        )}
+
+        {/* 編集モードでportal_login_id表示 */}
+        {mode === "edit" && initialData.portal_login_id && (
+          <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 className="text-base font-semibold mb-4" style={{ color: "#002D37" }}>
+              ポータルアカウント
+            </h2>
+            <div className="flex items-center gap-4">
+              <div>
+                <span className="text-sm text-gray-500">ログインID:</span>
+                <span className="ml-2 text-sm font-mono font-semibold text-[#002D37]">
+                  {initialData.portal_login_id}
+                </span>
+              </div>
+              <span className={`inline-block px-2 py-0.5 text-xs font-medium rounded-full ${
+                initialData.portal_active
+                  ? "bg-green-100 text-green-700"
+                  : "bg-gray-100 text-gray-500"
+              }`}>
+                {initialData.portal_active ? "有効" : "無効"}
+              </span>
+            </div>
+          </section>
+        )}
+
         {/* ボタン */}
         <div className="flex items-center justify-end gap-3">
           <button
@@ -319,55 +366,45 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
         </div>
       </form>
 
-      {/* ポータルアカウント作成完了モーダル */}
-      {portalAccount && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
-              <h3 className="text-lg font-bold text-white">ポータルアカウントが作成されました</h3>
-              <p className="text-blue-100 text-sm mt-1">
-                以下のログイン情報を求職者にお伝えください
-              </p>
+      {/* ポータルアカウント作成完了ダイアログ */}
+      {portalResult && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+            <div className="text-center mb-4">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-100 mb-3">
+                <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-[#002D37]">
+                ポータルアカウントを作成しました
+              </h3>
             </div>
-            <div className="px-6 py-5 space-y-3">
+
+            <div className="bg-gray-50 rounded-lg p-4 space-y-3 mb-6">
               <div>
-                <p className="text-xs text-gray-500 mb-1">ポータルURL</p>
-                <p className="text-sm font-mono bg-gray-50 px-3 py-2 rounded break-all">
-                  {typeof window !== "undefined" ? window.location.origin : ""}/portal/login
-                </p>
+                <span className="text-xs text-gray-500 block">メールアドレス</span>
+                <span className="text-sm font-medium text-[#002D37]">{portalResult.email}</span>
               </div>
               <div>
-                <p className="text-xs text-gray-500 mb-1">メールアドレス</p>
-                <p className="text-sm font-mono bg-gray-50 px-3 py-2 rounded">
-                  {portalAccount.email}
-                </p>
+                <span className="text-xs text-gray-500 block">ログインID（初期パスワード）</span>
+                <span className="text-lg font-mono font-bold text-[#002D37] tracking-wider">
+                  {portalResult.loginId}
+                </span>
               </div>
-              <div>
-                <p className="text-xs text-gray-500 mb-1">初期パスワード</p>
-                <p className="text-base font-bold font-mono bg-gray-50 px-3 py-2 rounded tracking-wider">
-                  {portalAccount.password}
-                </p>
-              </div>
-              <p className="text-xs text-amber-600 mt-2">
-                ※ このパスワードは再表示できません。必ず控えてから閉じてください。
-              </p>
             </div>
-            <div className="px-6 pb-5 flex gap-3 justify-end">
-              <button
-                type="button"
-                onClick={handleCopyCredentials}
-                className="px-4 py-2 text-sm rounded-md border border-gray-300 hover:bg-gray-50 transition-colors"
-              >
-                コピー
-              </button>
-              <button
-                type="button"
-                onClick={handleCloseModal}
-                className="px-4 py-2 text-sm rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-              >
-                閉じる
-              </button>
-            </div>
+
+            <p className="text-xs text-gray-500 mb-4">
+              この情報を求職者にお伝えください。ログインIDは初期パスワードとしても使用されます。この画面を閉じると再表示できません。
+            </p>
+
+            <button
+              onClick={handlePortalResultClose}
+              className="w-full px-4 py-2.5 bg-[#002D37] text-white font-semibold rounded-lg hover:bg-[#003d4d] transition cursor-pointer"
+            >
+              確認しました
+            </button>
           </div>
         </div>
       )}
