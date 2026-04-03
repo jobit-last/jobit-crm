@@ -2,24 +2,6 @@ import { createClient } from "@/lib/supabase/server";
 import { recordLog } from "@/lib/activity-log";
 import { NextRequest } from "next/server";
 
-function generatePassword(length = 10): string {
-  const upper = "ABCDEFGHJKLMNPQRSTUVWXYZ";
-  const lower = "abcdefghjkmnpqrstuvwxyz";
-  const digits = "23456789";
-  const all = upper + lower + digits;
-  const pick = (s: string) => s[Math.floor(Math.random() * s.length)];
-  // 最低1文字ずつ含める
-  const required = [pick(upper), pick(lower), pick(digits)];
-  const rest = Array.from({ length: length - 3 }, () => pick(all));
-  // シャッフル
-  const arr = [...required, ...rest];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr.join("");
-}
-
 export async function GET(request: NextRequest) {
   const supabase = await createClient();
   const { searchParams } = request.nextUrl;
@@ -49,46 +31,106 @@ export async function GET(request: NextRequest) {
   return Response.json({ data, count, page, limit });
 }
 
+/** PT-XXXX 形式の連番IDを生成 */
+async function generatePortalLoginId(supabase: Awaited<ReturnType<typeof createClient>>): Promise<string> {
+  // 現在の最大番号を取得
+  const { data } = await supabase
+    .from("candidates")
+    .select("portal_login_id")
+    .not("portal_login_id", "is", null)
+    .order("portal_login_id", { ascending: false })
+    .limit(1);
+
+  let nextNum = 1;
+  if (data && data.length > 0 && data[0].portal_login_id) {
+    const match = data[0].portal_login_id.match(/PT-(\d+)/);
+    if (match) nextNum = parseInt(match[1]) + 1;
+  }
+
+  return `PT-${String(nextNum).padStart(4, "0")}`;
+}
+
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
   const body = await request.json();
 
-  // 1. candidates テーブルに登録
+  const { create_portal, ...candidateData } = body;
+
+  let portalLoginId: string | null = null;
+
+  // ポータルアカウント作成が要求された場合
+  if (create_portal && candidateData.email) {
+    portalLoginId = await generatePortalLoginId(supabase);
+
+    // Supabase Auth でポータルユーザーを作成（初期パスワード = ログインID）
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
+    if (serviceKey) {
+      // Service Role Key がある場合: admin APIでメール確認不要で作成
+      const authRes = await fetch(`${supabaseUrl}/auth/v1/admin/users`, {
+        method: "POST",
+        headers: {
+          apikey: serviceKey,
+          Authorization: `Bearer ${serviceKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: candidateData.email,
+          password: portalLoginId,
+          email_confirm: true,
+        }),
+      });
+
+      if (!authRes.ok) {
+        const authErr = await authRes.json();
+        return Response.json(
+          { error: `ポータルアカウント作成に失敗しました: ${authErr.msg || authErr.message || JSON.stringify(authErr)}` },
+          { status: 500 }
+        );
+      }
+    } else {
+      // Service Role Key がない場合: signUp API で作成
+      const authRes = await fetch(`${supabaseUrl}/auth/v1/signup`, {
+        method: "POST",
+        headers: {
+          apikey: anonKey,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: candidateData.email,
+          password: portalLoginId,
+        }),
+      });
+
+      if (!authRes.ok) {
+        const authErr = await authRes.json();
+        return Response.json(
+          { error: `ポータルアカウント作成に失敗しました: ${authErr.msg || authErr.message || JSON.stringify(authErr)}` },
+          { status: 500 }
+        );
+      }
+    }
+  }
+
+  const insertData = {
+    ...candidateData,
+    is_deleted: false,
+    ...(portalLoginId ? { portal_login_id: portalLoginId, portal_active: true } : {}),
+  };
+
   const { data, error } = await supabase
     .from("candidates")
-    .insert({ ...body, is_deleted: false })
+    .insert(insertData)
     .select()
     .single();
 
   if (error) return Response.json({ error: error.message }, { status: 500 });
-
-  // 2. メールアドレスがあればポータル用 Auth アカウントを作成
-  let portalAccount: { email: string; password: string } | null = null;
-
-  if (body.email) {
-    const password = generatePassword(10);
-
-    // Supabase Auth REST API を直接呼び出し（サーバーサイドなのでセッション影響なし）
-    const signUpRes = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/signup`,
-      {
-        method: "POST",
-        headers: {
-          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: body.email, password }),
-      }
-    );
-
-    const signUpData = await signUpRes.json();
-
-    if (signUpRes.ok && signUpData.user?.id) {
-      portalAccount = { email: body.email, password };
-    }
-    // 既にAuthアカウントが存在する場合はスキップ（エラーにしない）
-  }
-
   await recordLog("create", `求職者作成: ${data.name ?? data.id}`);
-  return Response.json({ data, portalAccount }, { status: 201 });
+
+  return Response.json(
+    { data, portal_login_id: portalLoginId },
+    { status: 201 }
+  );
 }
