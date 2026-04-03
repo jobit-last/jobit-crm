@@ -52,7 +52,14 @@ const navItems: NavItem[] = [
   { label: "市場価値診断", href: "/admin/diagnosis/new" },
   { label: "ナレッジ管理", href: "/admin/knowledge" },
   { label: "操作ログ", href: "/admin/logs" },
-  { label: "CA管理", href: "/admin/users" },
+  {
+    label: "ユーザー管理",
+    href: "/admin/users",
+    children: [
+      { label: "LDユーザー", href: "/admin/users" },
+      { label: "ポータルユーザー", href: "/admin/portal-users" },
+    ],
+  },
 ];
 
 /** 指定パス配下がアクティブかを判定する */
