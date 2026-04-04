@@ -17,23 +17,17 @@ const STATUS_COLORS: Record<string, string> = {
 
 // Status labels (Japanese)
 const STATUS_LABELS: Record<string, string> = {
-  new: "新規登録",
-  interview_scheduling: "面談調整中",
-  interviewed: "面談済み",
-  job_proposed: "求人提案中",
-  applying: "応募中",
-  in_selection: "選考中",
-  offered: "内定",
-  placed: "入社",
-  failed: "不合格",
-  closed: "対応終了",
+  new: "æ°è¦ç»é²",
+  interview_scheduling: "é¢è«èª¿æ´ä¸­",
+  interviewed: "é¢è«æ¸ã¿",
+  job_proposed: "æ±äººææ¡ä¸­",
+  applying: "å¿åä¸­",
+  in_selection: "é¸èä¸­",
+  offered: "åå®",
+  placed: "å¥ç¤¾",
+  failed: "ä¸åæ ¼",
+  closed: "å¯¾å¿çµäº",
 };
-
-interface StatusRecord {
-  status: string;
-  started_at: string;
-  ended_at: string | null;
-}
 
 interface CandidateData {
   id: string;
@@ -76,45 +70,6 @@ export async function GET(request: NextRequest) {
 
     const { from, to } = getDateRange();
 
-    // Query status_history with candidates and users (CA) information
-    let query = supabase
-      .from("status_history")
-      .select(
-        `
-        id,
-        candidate_id,
-        status,
-        started_at,
-        ended_at,
-        candidates!inner (
-          id,
-          name,
-          ca_id,
-          users!candidates_ca_id_fkey (
-            id,
-            name
-          )
-        )
-      `
-      )
-      .gte("started_at", from)
-      .lte("started_at", to)
-      .order("candidate_id")
-      .order("started_at", { referencedTable: "status_history", ascending: true });
-
-    if (caId) {
-      query = query.eq("candidates.ca_id", caId);
-    }
-
-    const { data: statusHistoryData, error: statusError } = await query;
-
-    if (statusError) {
-      return NextResponse.json(
-        { success: false, error: statusError.message },
-        { status: 500 }
-      );
-    }
-
     // Fetch all CAs for dropdown
     const { data: casData, error: casError } = await supabase
       .from("users")
@@ -129,66 +84,176 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Group status history by candidate
-    type CandidateMap = Record<
-      string,
-      {
-        id: string;
-        name: string;
-        ca_id: string;
-        ca_name: string;
-        statuses: StatusRecord[];
-      }
-    >;
-
-    const candidateMap: CandidateMap = {};
-
-    (statusHistoryData || []).forEach((record: any) => {
-      const candidateId = record.candidate_id;
-      const candidate = record.candidates;
-      const ca = candidate.users;
-
-      if (!candidateMap[candidateId]) {
-        candidateMap[candidateId] = {
-          id: candidate.id,
-          name: candidate.name,
-          ca_id: candidate.ca_id,
-          ca_name: ca?.name || "未割り当て",
-          statuses: [],
-        };
-      }
-
-      candidateMap[candidateId].statuses.push({
-        status: record.status,
-        started_at: record.started_at,
-        ended_at: record.ended_at,
-      });
-    });
-
-    // Transform to response format
-    const candidates: CandidateData[] = Object.values(candidateMap)
-      .map((candidate) => {
-        const timeline = candidate.statuses.map((status) => ({
-          status: status.status,
-          label: STATUS_LABELS[status.status] || status.status,
-          color: STATUS_COLORS[status.status] || "#9CA3AF",
-          start: status.started_at,
-          end: status.ended_at || new Date().toISOString(),
-        }));
-
-        return {
-          id: candidate.id,
-          name: candidate.name,
-          ca_name: candidate.ca_name,
-          timeline,
-        };
-      })
-      .sort((a, b) => a.name.localeCompare(b.name));
-
     const cas: CaOption[] = (casData || []).map((ca: any) => ({
       id: ca.id,
       name: ca.name,
     }));
+
+    // Try to get timeline data from candidate_status_histories table
+    let candidates: CandidateData[] = [];
+
+    try {
+      // Query candidate_status_histories with candidate info
+      let historyQuery = supabase
+        .from("candidate_status_histories")
+        .select(
+          `
+          id,
+          candidate_id,
+          from_status,
+          to_status,
+          changed_at,
+          changed_by,
+          candidates!inner (
+            id,
+            name,
+            ca_id,
+            users!candidates_ca_id_fkey (
+              id,
+              name
+            )
+          )
+        `
+        )
+        .gte("changed_at", from)
+        .lte("changed_at", to)
+        .order("changed_at", { ascending: true });
+
+      if (caId) {
+        historyQuery = historyQuery.eq("candidates.ca_id", caId);
+      }
+
+      const { data: historyData, error: historyError } = await historyQuery;
+
+      if (!historyError && historyData && historyData.length > 0) {
+        // Group by candidate and build timeline from status transitions
+        type CandidateMap = Record<
+          string,
+          {
+            id: string;
+            name: string;
+            ca_name: string;
+            transitions: Array<{
+              to_status: string;
+              changed_at: string;
+            }>;
+          }
+        >;
+
+        const candidateMap: CandidateMap = {};
+
+        historyData.forEach((record: any) => {
+          const candidateId = record.candidate_id;
+          const candidate = record.candidates;
+          const ca = candidate?.users;
+
+          if (!candidateMap[candidateId]) {
+            candidateMap[candidateId] = {
+              id: candidate?.id || candidateId,
+              name: candidate?.name || "ä¸æ",
+              ca_name: ca?.name || "æªå²ãå½ã¦",
+              transitions: [],
+            };
+          }
+
+          candidateMap[candidateId].transitions.push({
+            to_status: record.to_status,
+            changed_at: record.changed_at,
+          });
+        });
+
+        // Convert transitions to timeline segments
+        candidates = Object.values(candidateMap)
+          .map((candidate) => {
+            const timeline = candidate.transitions.map((t, idx) => {
+              const nextTransition = candidate.transitions[idx + 1];
+              return {
+                status: t.to_status,
+                label: STATUS_LABELS[t.to_status] || t.to_status,
+                color: STATUS_COLORS[t.to_status] || "#9CA3AF",
+                start: t.changed_at,
+                end: nextTransition ? nextTransition.changed_at : new Date().toISOString(),
+              };
+            });
+
+            return {
+              id: candidate.id,
+              name: candidate.name,
+              ca_name: candidate.ca_name,
+              timeline,
+            };
+          })
+          .sort((a, b) => a.name.localeCompare(b.name));
+      } else {
+        // Fallback: build basic timeline from candidates table using created_at and current status
+        let candidatesQuery = supabase
+          .from("candidates")
+          .select("id, name, status, created_at, ca_id, ca:users!ca_id(id, name)")
+          .eq("is_deleted", false)
+          .gte("created_at", from)
+          .lte("created_at", to);
+
+        if (caId) {
+          candidatesQuery = candidatesQuery.eq("ca_id", caId);
+        }
+
+        const { data: candidatesData, error: candidatesError } = await candidatesQuery;
+
+        if (!candidatesError && candidatesData) {
+          candidates = candidatesData
+            .map((c: any) => ({
+              id: c.id,
+              name: c.name,
+              ca_name: (c.ca as { name?: string } | null)?.name || "æªå²ãå½ã¦",
+              timeline: [
+                {
+                  status: c.status,
+                  label: STATUS_LABELS[c.status] || c.status,
+                  color: STATUS_COLORS[c.status] || "#9CA3AF",
+                  start: c.created_at,
+                  end: new Date().toISOString(),
+                },
+              ],
+            }))
+            .sort((a: CandidateData, b: CandidateData) => a.name.localeCompare(b.name));
+        }
+      }
+    } catch (e) {
+      // Table might not exist - use fallback from candidates table
+      console.warn("Status history not available, using fallback:", e);
+
+      let candidatesQuery = supabase
+        .from("candidates")
+        .select("id, name, status, created_at, ca_id, ca:users!ca_id(id, name)")
+        .eq("is_deleted", false)
+        .gte("created_at", from)
+        .lte("created_at", to);
+
+      if (caId) {
+        candidatesQuery = candidatesQuery.eq("ca_id", caId);
+      }
+
+      const { data: candidatesData, error: candidatesError } = await candidatesQuery;
+
+      if (!candidatesError && candidatesData) {
+        candidates = candidatesData
+          .map((c: any) => ({
+            id: c.id,
+            name: c.name,
+            ca_name: (c.ca as { name?: string } | null)?.name || "æªå²ãå½ã¦",
+            timeline: [
+              {
+                status: c.status,
+                label: STATUS_LABELS[c.status] || c.status,
+                color: STATUS_COLORS[c.status] || "#9CA3AF",
+                start: c.created_at,
+                end: new Date().toISOString(),
+              },
+            ],
+          }))
+          .sort((a: CandidateData, b: CandidateData) => a.name.localeCompare(b.name));
+      }
+    }
 
     return NextResponse.json({
       success: true,
