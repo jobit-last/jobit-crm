@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     const { name, industry, company_size, location, website,
-            contact_name, contact_email, contact_phone, temperature, notes } = body;
+            contact_name, contact_email, contact_phone, temperature, ra_id, notes } = body;
 
     if (!name || typeof name !== "string" || name.trim() === "") {
       return NextResponse.json(
@@ -81,6 +81,7 @@ export async function POST(request: NextRequest) {
         contact_email: contact_email || null,
         contact_phone: contact_phone || null,
         temperature: temperature || null,
+        ra_id: ra_id || null,
         notes: notes || null,
       })
       .select()
