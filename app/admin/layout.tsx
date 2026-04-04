@@ -16,7 +16,12 @@ const navItems: NavItem[] = [
     children: [
       { label: "マイダッシュボード", href: "/admin/dashboard" },
       { label: "歩留まり分析", href: "/admin/analytics" },
+      { label: "数値分析", href: "/admin/analytics/demographics" },
     ],
+  },
+  {
+    label: "ガントチャート",
+    href: "/admin/gantt",
   },
   {
     label: "求職者管理",
