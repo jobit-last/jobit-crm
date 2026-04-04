@@ -180,15 +180,15 @@ export default function DemographicsClient() {
                     tick={{ fontSize: 12 }}
                     width={95}
                   />
-                  <Tooltip formatter={(value) => value} />
+                  <Tooltip formatter={(value: unknown) => [`${value}`, "件数"]} />
                   <Bar dataKey="count" fill={COLORS[0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
 
-            {/+ 円グラフ */}
+            {/* 円グラフ */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-base font-semibold text-gray-700 mb-4">内訣（構成比）</h2>
+              <h2 className="text-base font-semibold text-gray-700 mb-4">内訳（構成比）</h2>
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
@@ -210,9 +210,9 @@ export default function DemographicsClient() {
                     ))}
                   </Pie>
                   <Tooltip
-                    formatter={(value) => {
+                    formatter={(value: unknown) => {
                       if (typeof value === "number") return [value, "件数"];
-                      return value;
+                      return [`${value}`, "件数"];
                     }}
                   />
                 </PieChart>
