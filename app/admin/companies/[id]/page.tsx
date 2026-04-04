@@ -37,7 +37,7 @@ export default function CompanyDetailPage() {
   const [successMsg, setSuccessMsg] = useState("");
   const [activeTab, setActiveTab] = useState<TabType>("detail");
 
-  // RAä¸è¦§
+  // RA一覧
   const [raList, setRaList] = useState<RaOption[]>([]);
 
   const [form, setForm] = useState({
@@ -54,7 +54,7 @@ export default function CompanyDetailPage() {
     notes: "",
   });
 
-  // RAä¸è¦§ãåå¾
+  // RA一覧を取得
   useEffect(() => {
     fetch("/api/users?role=ra")
       .then((r) => r.json())
@@ -66,7 +66,7 @@ export default function CompanyDetailPage() {
         setRaList(list);
       })
       .catch(() => {
-        // usersã¨ã³ããã¤ã³ããå¯¾å¿ãã¦ããªãå ´åãå¨ã¦ã¼ã¶ã¼ãè©¦è¡
+        // usersエンドポイントが対応していない場合、全ユーザーを試行
         fetch("/api/users")
           .then((r) => r.json())
           .then((json) => {
@@ -87,7 +87,7 @@ export default function CompanyDetailPage() {
       const res = await fetch(`/api/companies/${id}`);
       const json = await res.json();
       if (!res.ok || !json.success) {
-        setError("ä¼æ¥­æå ±ã®åå¾ã«å¤±æãã¾ãã");
+        setError("企業情報の取得に失敗しました");
         return;
       }
       const c: Company = json.data;
@@ -106,7 +106,7 @@ export default function CompanyDetailPage() {
         notes: c.notes || "",
       });
     } catch {
-      setError("éä¿¡ã¨ã©ã¼ãçºçãã¾ãã");
+      setError("通信エラーが発生しました");
     } finally {
       setLoading(false);
     }
@@ -125,7 +125,7 @@ export default function CompanyDetailPage() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name.trim()) {
-      setError("ä¼æ¥­åã¯å¿é ã§ã");
+      setError("企業名は必須です");
       return;
     }
     setSubmitting(true);
@@ -143,33 +143,33 @@ export default function CompanyDetailPage() {
       });
       const json = await res.json();
       if (!res.ok || !json.success) {
-        setError(json.message || "æ´æ°ã«å¤±æãã¾ãã");
+        setError(json.message || "更新に失敗しました");
         return;
       }
       setCompany(json.data);
       setEditing(false);
-      setSuccessMsg("æ´æ°ãã¾ãã");
+      setSuccessMsg("更新しました");
       setTimeout(() => setSuccessMsg(""), 3000);
     } catch {
-      setError("éä¿¡ã¨ã©ã¼ãçºçãã¾ãã");
+      setError("通信エラーが発生しました");
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleDelete = async () => {
-    if (!confirm(`ã${company?.name}ããåé¤ãã¦ãããããã§ããï¼`)) return;
+    if (!confirm(`「${company?.name}」を削除してもよろしいですか？`)) return;
     setDeleting(true);
     try {
       const res = await fetch(`/api/companies/${id}`, { method: "DELETE" });
       const json = await res.json();
       if (!res.ok || !json.success) {
-        setError(json.message || "åé¤ã«å¤±æãã¾ãã");
+        setError(json.message || "削除に失敗しました");
         return;
       }
       router.push("/admin/companies");
     } catch {
-      setError("éä¿¡ã¨ã©ã¼ãçºçãã¾ãã");
+      setError("通信エラーが発生しました");
     } finally {
       setDeleting(false);
     }
@@ -201,4 +201,451 @@ export default function CompanyDetailPage() {
       month: "2-digit",
       day: "2-digit",
       hour: "2-digit",
-      minute: "2-d6°¢6WDW'&÷".	®Kú8*8:8;Î8Îy®yIþ8~8î8~8ò"°¢ÒfæÆÇ°¢6WE7V&ÖGFærfÇ6R°¢Ð¢Ó° ¢6öç7BæFÆTFVÆWFRÒ7æ2Óâ°¢b6öæf&Ò8ÂG¶6ö×çòææÖWÞ8Þ8).X®N8~8n8(.8(8(Þ8~8N8~88¾ûÉö&WGW&ã°¢6WDFVÆWFærG'VR°¢G'°¢6öç7B&W2ÒvBfWF6öö6ö×æW2òG¶GÖÂ²ÖWFöC¢$DTÄUDR"Ò°¢6öç7B§6öâÒvB&W2æ§6öâ°¢b&W2æö²ÇÂ§6öâç7V66W72°¢6WDW'&÷"§6öâæÖW76vRÇÂ.X®N8¾ZKiY~8~8î8~8ò"°¢&WGW&ã°¢Ð¢&÷WFW"çW6"öFÖâö6ö×æW2"°¢Ò6F6°¢6WDW'&÷".	®Kú8*8:8;Î8Îy®yIþ8~8î8~8ò"°¢ÒfæÆÇ°¢6WDFVÆWFærfÇ6R°¢Ð¢Ó° ¢6öç7BæFÆT6æ6VÂÒÓâ°¢b6ö×ç°¢6WDf÷&Ò°¢æÖS¢6ö×çææÖRÀ¢æGW7G'¢6ö×çææGW7G'ÇÂ""À¢6ö×ç÷6¦S¢6ö×çæ6ö×ç÷6¦RÇÂ""À¢Æö6Föã¢6ö×çæÆö6FöâÇÂ""À¢vV'6FS¢6ö×ççvV'6FRÇÂ""À¢6öçF7EöæÖS¢6ö×çæ6öçF7EöæÖRÇÂ""À¢6öçF7EöVÖÃ¢6ö×çæ6öçF7EöVÖÂÇÂ""À¢6öçF7E÷öæS¢6ö×çæ6öçF7E÷öæRÇÂ""À¢FV×W&GW&S¢6ö×ççFV×W&GW&R2FV×W&GW&RÇÂ""À¢&öC¢6ö×çç&öBÇÂ""À¢æ÷FW3¢6ö×çææ÷FW2ÇÂ""À¢Ò°¢Ð¢6WDVFFærfÇ6R°¢6WDW'&÷"""°¢Ó° ¢6öç7Bf÷&ÖDFFRÒFFU7G&æs¢7G&ærÓà¢æWrFFRFFU7G&ærçFôÆö6ÆTFFU7G&ær&¦Ô¥"Â°¢V#¢&çVÖW&2"À¢ÖöçF¢#"ÖFvB"À¢F¢#"ÖFvB"À¢÷W#¢#"ÖFvB"À¢ÖçWFS¢#"ÖFvB"À¢Ò° ¢bÆöFær°¢&WGW&â¢ÆFb6Æ74æÖSÒ&ÖâÖ×67&VVâ&rÖ&6¶w&÷VæBfÆWFV×2Ö6VçFW"§W7FgÖ6VçFW"#à¢ÆFb6Æ74æÖSÒ'FWBÖw&ÓS#îªÞ8þëÎ8þKÒââãÂöFcà¢ÂöFcà¢°¢Ð ¢&WGW&â¢ÆFb6Æ74æÖSÒ&ÖâÖ×67&VVâ&rÖ&6¶w&÷VæB#à¢ÆFb6Æ74æÖSÒ&Ö×rÓGÂ×ÖWFòÓBÓ#à¢ÆFb6Æ74æÖSÒ&fÆWFV×2Ö6VçFW"§W7FgÖ&WGvVVâÖ"Ób#à¢ÆFb6Æ74æÖSÒ&fÆWFV×2Ö6VçFW"vÓ2#à¢ÄÆæ°¢&VcÒ"öFÖâö6ö×æW2 ¢6Æ74æÖSÒ'FWB×6ÒFWBÖw&ÓS÷fW#§FWB×&Ö'G&ç6FöâÖ6öÆ÷'2 ¢à¢fÆ'#²KÈjZÞKjp¢ÂôÆæ³à¢Æ6Æ74æÖSÒ'FWBÓ'ÂföçBÖ&öÆBFWB×&Ö'#ç¶6ö×çòææÖWÓÂöà¢¶6ö×çòçFV×W&GW&Rbb¢Ç7à¢6Æ74æÖS×¶æÆæRÖ&Æö6²Ó2Ó&÷VæFVBÖgVÆÂFWB×2föçBÖÖVFVÒG°¢DTÕU$EU$Uô4ôÄõ%5¶6ö×ççFV×W&GW&R2FV×W&GW&UÐ¢ÖÐ¢à¢µDTÕU$EU$UôÄ$TÅ5¶6ö×ççFV×W&GW&R2FV×W&GW&U×Ð¢Â÷7ãà¢Ð¢ÂöFcà¢²VFFærbb7FfUF"ÓÓÒ&FWFÂ"bb¢ÆFb6Æ74æÖSÒ&fÆWvÓ"#à¢Æ'WGFöà¢öä6Æ6³×²Óâ6WDVFFærG'VRÐ¢6Æ74æÖSÒ&&rÖ7F÷fW#¦&rÖ7FÖ÷fW"FWB×&Ö'föçB×6VÖ&öÆBÓRÓ"&÷VæFVBFWB×6ÒG&ç6FöâÖ6öÆ÷'2 ¢à¢{z¸`¢Âö'WGFöãà¢Æ'WGFöà¢öä6Æ6³×¶æFÆTFVÆWFWÐ¢F6&ÆVC×¶FVÆWFæwÐ¢6Æ74æÖSÒ&&r×&VBÓS÷fW#¦&r×&VBÓcFWB×vFRÓRÓ"&÷VæFVBFWB×6ÒföçBÖÖVFVÒG&ç6FöâÖ6öÆ÷'2F6&ÆVC¦÷6GÓS ¢à¢¶FVÆWFæròÃãÅ7ææW"6¦S×³gÒ6Æ74æÖSÒ&æÆæR×"ÓãR"óîX®NKÒââãÂóâ¢.X®B'Ð¢Âö'WGFöãà¢ÂöFcà¢Ð¢ÂöFcà ¢²ò¢8+þ89b¢÷Ð¢ÆFb6Æ74æÖSÒ&fÆW&÷&FW"Ö"&÷&FW"Öw&Ó#Ö"Ób#à¢Æ'WGFöà¢öä6Æ6³×²Óâ6WD7FfUF"&FWFÂ"Ð¢6Æ74æÖS×¶ÓBÓ"FWB×6ÒföçBÖÖVFVÒ&÷&FW"Ö"Ó"G&ç6FöâÖ6öÆ÷'2G°¢7FfUF"ÓÓÒ&FWFÂ ¢ò&&÷&FW"Ö&ÇVRÓcFWBÖ&ÇVRÓc ¢¢&&÷&FW"×G&ç7&VçBFWBÖw&ÓS÷fW#§FWBÖw&Ós ¢ÖÐ¢à¢KÈjZÞ>{K ¢Âö'WGFöãà¢Æ'WGFöà¢öä6Æ6³×²Óâ6WD7FfUF"&¦ö"×÷7Fær"Ð¢6Æ74æÖS×¶ÓBÓ"FWB×6ÒföçBÖÖVFVÒ&÷&FW"Ö"Ó"G&ç6FöâÖ6öÆ÷'2G°¢7FfUF"ÓÓÒ&¦ö"×÷7Fær ¢ò&&÷&FW"Ö&ÇVRÓcFWBÖ&ÇVRÓc ¢¢&&÷&FW"×G&ç7&VçBFWBÖw&ÓS÷fW#§FWBÖw&Ós ¢ÖÐ¢à¢k.K«¥U$ÎKÙÎh ¢Âö'WGFöãà¢ÂöFcà ¢·7V66W74×6rbb¢ÆFb6Æ74æÖSÒ&&rÖw&VVâÓS&÷&FW"&÷&FW"Öw&VVâÓ#FWBÖw&VVâÓs&÷VæFVBÓBÓ2FWB×6ÒÖ"ÓB#à¢·7V66W74×6wÐ¢ÂöFcà¢Ð¢¶W'&÷"bb¢ÆFb6Æ74æÖSÒ&&r×&VBÓS&÷&FW"&÷&FW"×&VBÓ#FWB×&VBÓs&÷VæFVBÓBÓ2FWB×6ÒÖ"ÓB#à¢¶W'&÷'Ð¢ÂöFcà¢Ð ¢²ò¢KÈ.jZÞ>{K8+þ89b¢÷Ð¢¶7FfUF"ÓÓÒ&FWFÂ"bb¢Æf÷&Òöå7V&ÖC×¶æFÆU6fWÓà¢ÆFb6Æ74æÖSÒ&&r×vFR&÷VæFVBÖÆr6F÷rÓb76R×ÓR#à¢Æ"6Æ74æÖSÒ'FWBÖ&6RföçB×6VÖ&öÆBFWB×&Ö'&÷&FW"Ö"&÷&FW"×6V6öæF'"Ó"#à¢Yû®iÊÎh8^Z¢Âö#à ¢ÆFcà¢ÆÆ&VÂ6Æ74æÖS×¶Æ&VÄ6Æ77Óà¢KÈjZÞYÒÇ7â6Æ74æÖSÒ'FWB×&VBÓS#â£Â÷7ãà¢ÂöÆ&VÃà¢ÆçW@¢GSÒ'FWB ¢æÖSÒ&æÖR ¢fÇVS×¶f÷&ÒææÖWÐ¢öä6ævS×¶æFÆT6ævWÐ¢F6&ÆVC×²VFFæwÐ¢6Æ74æÖS×¶G¶çWD6Æ77ÒF6&ÆVC¦&rÖw&ÓSF6&ÆVC§FWBÖw&ÓsÐ¢óà¢ÂöFcà ¢ÆFb6Æ74æÖSÒ&w&Bw&BÖ6öÇ2ÓÖC¦w&BÖ6öÇ2Ó"vÓB#à¢ÆFcà¢ÆÆ&VÂ6Æ74æÖS×¶Æ&VÄ6Æ77ÓîjZÞzãÂöÆ&VÃà¢ÆçW@¢GSÒ'FWB ¢æÖSÒ&æGW7G' ¢fÇVS×¶f÷&ÒææGW7G'Ð¢öä6ævS×¶æFÆT6ævWÐ¢F6&ÆVC×²VFFæwÐ¢6Æ74æÖS×¶G¶çWD6Æ77ÒF6&ÆVC¦&rÖw&ÓSF6&ÆVC§FWBÖw&ÓsÐ¢óà¢ÂöFcà¢ÆFcà¢ÆÆ&VÂ6Æ74æÖS×¶Æ&VÄ6Æ77ÓîKÈjZÞhþjÂöÆ&VÃà¢ÆçW@¢GSÒ'FWB ¢æÖSÒ&6ö×ç÷6¦R ¢fÇVS×¶f÷&Òæ6ö×ç÷6¦WÐ¢öä6ævS×¶æFÆT6ævWÐ¢F6&ÆVC×²VFFæwÐ¢6Æ74æÖS×¶G¶çWD6Æ77ÒF6&ÆVC¦&rÖw&ÓSF6&ÆVC§FWBÖw&ÓsÐ¢óà¢ÂöFcà¢ÂöFcà ¢ÆFb6Æ74æÖSÒ&w&Bw&BÖ6öÇ2ÓÖC¦w&BÖ6öÇ2Ó"vÓB#à¢ÆFcà¢ÆÆ&VÂ6Æ74æÖS×¶Æ&VÄ6Æ77ÓîhYÊYËÂöÆ&VÃà¢ÆçW@¢GSÒ'FWB ¢æÖSÒ&Æö6Föâ ¢fÇVS×¶f÷&ÒæÆö6FöçÐ¢öä6ævS×¶æFÆT6ævWÐ¢F6&ÆVC×²VFFæwÐ¢6Æ74æÖS×¶G¶çWD6Æ77ÒF6&ÆVC¦&rÖw&ÓSF6&ÆVC§FWBÖw&ÓsÐ¢óà¢ÂöFcà¢ÆFcà¢ÆÆ&VÂ6Æ74æÖS×¶Æ&VÄ6Æ77ÓîhêyJk[ªcÂöÆ&VÃà¢Ç6VÆV7@¢æÖSÒ'FV×W&GW&R ¢fÇVS×¶f÷&ÒçFV×W&GW&WÐ¢öä6ævS×¶æFÆT6ævWÐ¢F6&ÆVC×²VFFæwÐ¢6Æ74æÖS×¶G¶çWD6Æ77ÒF6&ÆVC¦&rÖw&ÓSF6&ÆVC§FWBÖw&ÓsÐ¢à¢Æ÷FöâfÇVSÒ"#îiÊ®ÞZé£Âö÷Föãà¢µDTÕU$EU$U2æÖBÓâ¢Æ÷Föâ¶W×·GÒfÇVS×·GÓà¢µDTÕU$EU$UôÄ$TÅ5·E×Ð¢Âö÷Föãà¢Ð¢Â÷6VÆV7Cà¢ÂöFcà¢ÂöFcà ¢²ò¢h¸^[Ù5$¢÷Ð¢ÆFcà¢ÆÆ&VÂ6Æ74æÖS×¶Æ&VÄ6Æ77Óîh¸^[Ù5$ÂöÆ&VÃà¢Ç6VÆV7@¢æÖSÒ'&öB ¢fÇVS×¶f÷&Òç&öGÐ¢öä6ævS×¶æFÆT6ævWÐ¢F6&ÆVC×²VFFæwÐ¢6Æ74æÖS×¶G¶çWD6Æ77ÒF6&ÆVC¦&rÖw&ÓSF6&ÆVC§FWBÖw&ÓsÐ¢à¢Æ÷FöâfÇVSÒ"#îiÊ®X.8(®[Ù>8cÂö÷Föãà¢·&Æ7BæÖ&Óâ¢Æ÷Föâ¶W×·&æGÒfÇVS×·&æGÓà¢·&ææÖWÐ¢Âö÷Föãà¢Ð¢Â÷6VÆV7Cà¢ÂöFcà ¢ÆFcà¢ÆÆ&VÂ6Æ74æÖS×¶Æ&VÄ6Æ77ÓåvV.8+^8*N88ÂöÆ&VÃà¢ÆçW@¢GSÒ'W&Â ¢æÖSÒ'vV'6FR ¢fÇVS×¶f÷&ÒçvV'6FWÐ¢öä6ævS×¶æFÆT6ævWÐ¢F6&ÆVC×²VFFæwÐ¢6Æ74æÖS×¶G¶çWD6Æ77ÒF6&ÆVC¦&rÖw&ÓSF6&ÆVC§FWBÖw&ÓsÐ¢óà¢ÂöFcà ¢Æ"6Æ74æÖSÒ'FWBÖ&6RföçB×6VÖ&öÆBFWB×&Ö'&÷&FW"Ö"&÷&FW"×6V6öæF'"Ó"BÓ"#à¢h¸^[Ù>^h8^Z¢Âö#à ¢ÆFcà¢ÆÆ&VÂ6Æ74æÖS×¶Æ&VÄ6Æ77Óîh¸^[Ù>^YÓÂöÆ&VÃà¢ÆçW@¢GSÒ'FWB ¢æÖSÒ&6öçF7EöæÖR ¢fÇVS×¶f÷&Òæ6öçF7EöæÖWÐ¢öä6ævS×¶æFÆT6ævWÐ¢F6&ÆVC×²VFFæwÐ¢6Æ74æÖS×¶G¶çWD6Æ77ÒF6&ÆVC¦&rÖw&ÓSF6&ÆVC§FWBÖw&ÓsÐ¢óà¢ÂöFcà ¢ÆFb6Æ74æÖSÒ&w&Bw&BÖ6öÇ2ÓÖC¦w&BÖ6öÇ2Ó"vÓB#à¢ÆFcà¢ÆÆ&VÂ6Æ74æÖS×¶Æ&VÄ6Æ77Óî8:8;Î8:¾8*.888:Î8+ÂöÆ&VÃà¢ÆçW@¢GSÒ&VÖÂ ¢æÖSÒ&6öçF7EöVÖÂ ¢fÇVS×¶f÷&Òæ6öçF7EöVÖÇÐ¢öä6ævS×¶æFÆT6ævWÐ¢F6&ÆVC×²VFFæwÐ¢6Æ74æÖS×¶G¶çWD6Æ77ÒF6&ÆVC¦&rÖw&ÓSF6&ÆVC§FWBÖw&ÓsÐ¢óà¢ÂöFcà¢ÆFcà¢ÆÆ&VÂ6Æ74æÖS×¶Æ&VÄ6Æ77Óî»¾yZ®XûsÂöÆ&VÃà¢ÆçW@¢GSÒ'FVÂ ¢æÖSÒ&6öçF7E÷öæR ¢fÇVS×¶f÷&Òæ6öçF7E÷öæWÐ¢öä6ævS×¶æFÆT6ævWÐ¢F6&ÆVC×²VFFæwÐ¢6Æ74æÖS×¶G¶çWD6Æ77ÒF6&ÆVC¦&rÖw&ÓSF6&ÆVC§FWBÖw&ÓsÐ¢óà¢ÂöFcà¢ÂöFcà ¢Æ"6Æ74æÖSÒ'FWBÖ&6RföçB×6VÖ&öÆBFWB×&Ö'&÷&FW"Ö"&÷&FW"×6V6öæF'"Ó"BÓ"#à¢X)0¢Âö#à ¢ÆFcà¢ÆÆ&VÂ6Æ74æÖS×¶Æ&VÄ6Æ77Óî8:8:.8;¾X)3ÂöÆ&VÃà¢ÇFWF&V¢æÖSÒ&æ÷FW2 ¢fÇVS×¶f÷&Òææ÷FW7Ð¢öä6ævS×¶æFÆT6ævWÐ¢&÷w3×³GÐ¢F6&ÆVC×²VFFæwÐ¢6Æ74æÖS×¶G¶çWD6Æ77ÒF6&ÆVC¦&rÖw&ÓSF6&ÆVC§FWBÖw&ÓsÐ¢óà¢ÂöFcà ¢¶6ö×çbb¢ÆFb6Æ74æÖSÒ'BÓ"&÷&FW"×B&÷&FW"×6V6öæF'FWB×2FWBÖw&ÓC76R×Ó#à¢Çîy¾Ë.izS¢¶f÷&ÖDFFR6ö×çæ7&VFVEöBÓÂ÷à¢Çîi»NikizS¢¶f÷&ÖDFFR6ö×ççWFFVEöBÓÂ÷à¢ÂöFcà¢Ð¢ÂöFcà ¢¶VFFærbb¢ÆFb6Æ74æÖSÒ&fÆWvÓ2×BÓb#à¢Æ'WGFöà¢GSÒ'7V&ÖB ¢F6&ÆVC×·7V&ÖGFæwÐ¢6Æ74æÖSÒ&&rÖ7F÷fW#¦&rÖ7FÖ÷fW"FWB×&Ö'föçB×6VÖ&öÆBÓÓ"&÷VæFVBFWB×6ÒG&ç6FöâÖ6öÆ÷'2F6&ÆVC¦÷6GÓS ¢à¢·7V&ÖGFæròÃãÅ7ææW"6¦S×³gÒ6Æ74æÖSÒ&æÆæR×"ÓãR"óîKùÞZÙKÒââãÂóâ¢.KùÞZÙ88(²'Ð¢Âö'WGFöãà¢Æ'WGFöà¢GSÒ&'WGFöâ ¢öä6Æ6³×¶æFÆT6æ6VÇÐ¢6Æ74æÖSÒ&&r×6V6öæF'÷fW#¦&rÖw&Ó3FWB×&Ö'ÓÓ"&÷VæFVBFWB×6ÒföçBÖÖVFVÒG&ç6FöâÖ6öÆ÷'2 ¢à¢8*Þ8:>8;>8+¾8:°¢Âö'WGFöãà¢ÂöFcà¢Ð¢Âöf÷&Óà¢Ð ¢²ò¢k.K«¥U$ÎKÙÎh8+þ89b¢÷Ð¢¶7FfUF"ÓÓÒ&¦ö"×÷7Fær"bb¢Ä¦ö%÷7FæuF"6ö×çæÖS×¶6ö×çòææÖRÇÂ"'Ò6ö×çC×¶GÒóà¢Ð¢ÂöFcà¢ÂöFcà¢°§Ð ¢ò¢¢k.K«¥U$ÎKÙÎh8+þ89n8+>8;>89Þ8;Î88Þ8;>88¢ð¦gVæ7Föâ¦ö%÷7FæuF"²6ö×çæÖRÂ6ö×çBÓ¢²6ö×çæÖS¢7G&æs²6ö×çC¢7G&ærÒ°¢6öç7B¶¦ö%FFÆRÂ6WD¦ö%FFÆUÒÒW6U7FFR""°¢6öç7B¶¦ö$FW67&FöâÂ6WD¦ö$FW67&FöåÒÒW6U7FFR""°¢6öç7B·6Æ'Â6WE6Æ'ÒÒW6U7FFR""°¢6öç7B¶Æö6FöâÂ6WDÆö6FöåÒÒW6U7FFR""°¢6öç7B¶V×Æ÷ÖVçEGRÂ6WDV×Æ÷ÖVçEGUÒÒW6U7FFR""°¢6öç7B·G&æærÂ6WEG&ææuÒÒW6U7FFR""°¢6öç7B¶vVæW&FVEW&ÂÂ6WDvVæW&FVEW&ÅÒÒW6U7FFR""°¢6öç7B¶6÷VBÂ6WD6÷VEÒÒW6U7FFRfÇ6R° ¢6öç7BvVæW&FUW&ÂÒÓâ°¢6öç7B&×2ÒæWrU$Å6V&6&×2°¢&×2ç6WB&6ö×ç"Â6ö×çæÖR°¢&×2ç6WB&6ö×çöB"Â6ö×çB°¢b¦ö%FFÆR&×2ç6WB'FFÆR"Â¦ö%FFÆR°¢b¦ö$FW67&Föâ&×2ç6WB&FW67&Föâ"Â¦ö$FW67&Föâ°¢b6Æ'&×2ç6WB'6Æ'"Â6Æ'°¢bÆö6Föâ&×2ç6WB&Æö6Föâ"ÂÆö6Föâ°¢bV×Æ÷ÖVçEGR&×2ç6WB'GR"ÂV×Æ÷ÖVçEGR°¢bG&æær&×2ç6WB'G&æær"ÂG&æær° ¢6öç7BW&ÂÒGG3¢ò÷GwFf6ævVç7&·76Ræ6öÒövVæW&F÷"æFÖÃòG·&×2çFõ7G&ærÖ°¢6WDvVæW&FVEW&ÂW&Â°¢Ó° ¢6öç7B6÷W&ÂÒÓâ°¢æfvF÷"æ6Æ&ö&Bçw&FUFWBvVæW&FVEW&Â°¢6WD6÷VBG'VR°¢6WEFÖV÷WBÓâ6WD6÷VBfÇ6RÂ#°¢Ó° ¢&WGW&â¢ÆFb6Æ74æÖSÒ&&r×vFR&÷VæFVBÖÆr6F÷rÓb76R×ÓR#à¢Æ"6Æ74æÖSÒ'FWBÖ&6RföçB×6VÖ&öÆBFWB×&Ö'&÷&FW"Ö"&÷&FW"×6V6öæF'"Ó"#à¢k.K«¥U$ÎKÙÎh ¢Âö#à¢Ç6Æ74æÖSÒ'FWB×6ÒFWBÖw&ÓS#à¢k.K«®h8^Z8).XZ^X©¾8~8eU$Î8).yIþh8~8î88.yIþh8^8(Î8õU$Î8).8+>89N8;Î8~8nk.K«®8+^8*N888¾hë.È8~8Þ8î88 ¢Â÷à ¢ÆFb6Æ74æÖSÒ&w&Bw&BÖ6öÇ2ÓÖC¦w&BÖ6öÇ2Ó"vÓB#à¢ÆFcà¢ÆÆ&VÂ6Æ74æÖS×¶Æ&VÄ6Æ77Óîk.K«®8+þ8*N888:³ÂöÆ&VÃà¢ÆçW@¢GSÒ'FWB ¢fÇVS×¶¦ö%FFÆWÐ¢öä6ævS×²RÓâ6WD¦ö%FFÆRRçF&vWBçfÇVRÐ¢Æ6VöÆFW#Ò.Kè³¢89^8:Þ8;>888*8;>888*8;>8+88¾8*" ¢6Æ74æÖS×¶çWD6Æ77Ð¢óà¢ÂöFcà¢ÆFcà¢ÆÆ&VÂ6Æ74æÖS×¶Æ&VÄ6Æ77ÓîXºNX¹YËÂöÆ&VÃà¢ÆçW@¢GSÒ'FWB ¢fÇVS×¶Æö6FöçÐ¢öä6ævS×²RÓâ6WDÆö6FöâRçF&vWBçfÇVRÐ¢Æ6VöÆFW#Ò.Kè³¢iÛKªÎ;Þk¾~XË¢ ¢6Æ74æÖS×¶çWD6Æ77Ð¢óà¢ÂöFcà¢ÂöFcà ¢ÆFb6Æ74æÖSÒ&w&Bw&BÖ6öÇ2ÓÖC¦w&BÖ6öÇ2Ó"vÓB#à¢ÆFcà¢ÆÆ&VÂ6Æ74æÖS×¶Æ&VÄ6Æ77Óî{ZnKãÂöÆ&VÃà¢ÆçW@¢GSÒ'FWB ¢fÇVS×·6Æ'Ð¢öä6ævS×²RÓâ6WE6Æ'RçF&vWBçfÇVRÐ¢Æ6VöÆFW#Ò.Kè³¢CK~8	ÃcKr ¢6Æ74æÖS×¶çWD6Æ77Ð¢óà¢ÂöFcà¢ÆFcà¢ÆÆ&VÂ6Æ74æÖS×¶Æ&VÄ6Æ77Óî¸~yJ[Ú.hX³ÂöÆ&VÃà¢Ç6VÆV7@¢fÇVS×¶V×Æ÷ÖVçEGWÐ¢öä6ævS×²RÓâ6WDV×Æ÷ÖVçEGRRçF&vWBçfÇVRÐ¢6Æ74æÖS×¶çWD6Æ77Ð¢à¢Æ÷FöâfÇVSÒ"#îh©î8~8n8þ88^8CÂö÷Föãà¢Æ÷FöâfÇVSÒ.jÚ>zKîY:#îjÚ>zKîY:Âö÷Föãà¢Æ÷FöâfÇVSÒ.ZY{HNzKîY:#îZY{HNzKîY:Âö÷Föãà¢Æ÷FöâfÇVSÒ.kKî>zKîY:#îkKî>zKîY:Âö÷Föãà¢Æ÷FöâfÇVSÒ.898;Î888;¾8*.8:¾898*N88#î898;Î888;¾8*.8:¾898*N88Âö÷Föãà¢Æ÷FöâfÇVSÒ.jZÞX¹ZyNr#îjZÞX¹ZyNsÂö÷Föãà¢Â÷6VÆV7Cà¢ÂöFcà¢ÂöFcà ¢ÆFcà¢ÆÆ&VÂ6Æ74æÖS×¶Æ&VÄ6Æ77Óîk.K«®Xh^ZëÂöÆ&VÃà¢ÇFWF&V¢fÇVS×¶¦ö$FW67&FöçÐ¢öä6ævS×²RÓâ6WD¦ö$FW67&FöâRçF&vWBçfÇVRÐ¢&÷w3×³gÐ¢Æ6VöÆFW#Ò.k.K«®8î>{KªÎiî8).XZ^X©²âââ ¢6Æ74æÖS×¶G¶çWD6Æ77ÒföçBÖÖöæòFWB×6ÖÐ¢óà¢ÂöFcà ¢ÆFcà¢ÆÆ&VÂ6Æ74æÖS×¶Æ&VÄ6Æ77Óîz	NKúî8;¾888:Î8;Î88¾8;>8+>{KÂöÆ&VÃà¢ÇFWF&V¢fÇVS×·G&ææwÐ¢öä6ævS×²RÓâ6WEG&æærRçF&vWBçfÇVRÐ¢&÷w3×³7Ð¢Æ6VöÆFW#Ò.XZ^zKî[èÎ8îz	NKúîXh^Zë8888:Î8;Î88¾8;>8+Xn[ªn8®8âââ ¢6Æ74æÖS×¶G¶çWD6Æ77ÒföçBÖÖöæòFWB×6ÖÐ¢óà¢ÂöFcà ¢ÆFb6Æ74æÖSÒ&fÆWvÓ2#à¢Æ'WGFöà¢GSÒ&'WGFöâ ¢öä6Æ6³×¶vVæW&FUW&ÇÐ¢6Æ74æÖSÒ&&rÖ7F÷fW#¦&rÖ7FÖ÷fW"FWB×&Ö'föçB×6VÖ&öÆBÓbÓ"&÷VæFVBFWB×6ÒG&ç6FöâÖ6öÆ÷'2 ¢à¢U$ÎyIþh ¢Âö'WGFöãà¢ÂöFcà ¢¶vVæW&FVEW&Âbb¢ÆFb6Æ74æÖSÒ&&rÖw&ÓS&÷&FW"&÷&FW"Öw&Ó#&÷VæFVBÖÆrÓB76R×Ó2#à¢ÆÆ&VÂ6Æ74æÖS×¶Æ&VÄ6Æ77ÓîyIþh8^8(Î8þk.K«¥U$ÃÂöÆ&VÃà¢ÆFb6Æ74æÖSÒ&fÆWvÓ"#à¢ÆçW@¢GSÒ'FWB ¢fÇVS×¶vVæW&FVEW&ÇÐ¢&VDöæÇ¢6Æ74æÖS×¶G¶çWD6Æ77Ò&r×vFRfÆWÓÐ¢óà¢Æ'WGFöà¢GSÒ&'WGFöâ ¢öä6Æ6³×¶6÷W&ÇÐ¢6Æ74æÖSÒ&&rÖ&ÇVRÓc÷fW#¦&rÖ&ÇVRÓsFWB×vFRÓBÓ"&÷VæFVBFWB×6ÒföçBÖÖVFVÒG&ç6FöâÖ6öÆ÷'2vFW76RÖæ÷w& ¢à¢¶6÷VBò.8+>89N8;Îk8ò"¢.8+>89N8;Â'Ð¢Âö'WGFöãà¢ÂöFcà¢ÆFb6Æ74æÖSÒ&fÆWvÓ"#à¢Æ¢&Vc×¶vVæW&FVEW&ÇÐ¢F&vWCÒ%ö&Ææ² ¢&VÃÒ&æö÷VæW"æ÷&VfW'&W" ¢6Æ74æÖSÒ'FWB×6ÒFWBÖ&ÇVRÓc÷fW#§VæFW&ÆæR ¢à¢89~8:Î89>8:^8;Î8).h¾8òg&'#°¢Âöà¢ÂöFcà¢ÂöFcà¢Ð¢ÂöFcà¢°§Ð
+      minute: "2-digit",
+    });
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-gray-500">読み込み中...</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <Link
+              href="/admin/companies"
+              className="text-sm text-gray-500 hover:text-primary transition-colors"
+            >
+              &larr; 企業一覧
+            </Link>
+            <h1 className="text-2xl font-bold text-primary">{company?.name}</h1>
+            {company?.temperature && (
+              <span
+                className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
+                  TEMPERATURE_COLORS[company.temperature as Temperature]
+                }`}
+              >
+                {TEMPERATURE_LABELS[company.temperature as Temperature]}
+              </span>
+            )}
+          </div>
+          {!editing && activeTab === "detail" && (
+            <div className="flex gap-2">
+              <button
+                onClick={() => setEditing(true)}
+                className="bg-cta hover:bg-cta-hover text-primary font-semibold px-5 py-2 rounded text-sm transition-colors"
+              >
+                編集
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded text-sm font-medium transition-colors disabled:opacity-50"
+              >
+                {deleting ? <><Spinner size={16} className="inline mr-1.5" />削除中...</> : "削除"}
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* タブ */}
+        <div className="flex border-b border-gray-200 mb-6">
+          <button
+            onClick={() => setActiveTab("detail")}
+            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === "detail"
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            企業詳細
+          </button>
+          <button
+            onClick={() => setActiveTab("job-posting")}
+            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === "job-posting"
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            求人URL作成
+          </button>
+        </div>
+
+        {successMsg && (
+          <div className="bg-green-50 border border-green-200 text-green-700 rounded px-4 py-3 text-sm mb-4">
+            {successMsg}
+          </div>
+        )}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 rounded px-4 py-3 text-sm mb-4">
+            {error}
+          </div>
+        )}
+
+        {/* 企業詳細タブ */}
+        {activeTab === "detail" && (
+          <form onSubmit={handleSave}>
+            <div className="bg-white rounded-lg shadow p-6 space-y-5">
+              <h2 className="text-base font-semibold text-primary border-b border-secondary pb-2">
+                基本情報
+              </h2>
+
+              <div>
+                <label className={labelClass}>
+                  企業名 <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  disabled={!editing}
+                  className={`${inputClass} disabled:bg-gray-50 disabled:text-gray-700`}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className={labelClass}>業種</label>
+                  <input
+                    type="text"
+                    name="industry"
+                    value={form.industry}
+                    onChange={handleChange}
+                    disabled={!editing}
+                    className={`${inputClass} disabled:bg-gray-50 disabled:text-gray-700`}
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>企業規模</label>
+                  <input
+                    type="text"
+                    name="company_size"
+                    value={form.company_size}
+                    onChange={handleChange}
+                    disabled={!editing}
+                    className={`${inputClass} disabled:bg-gray-50 disabled:text-gray-700`}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className={labelClass}>所在地</label>
+                  <input
+                    type="text"
+                    name="location"
+                    value={form.location}
+                    onChange={handleChange}
+                    disabled={!editing}
+                    className={`${inputClass} disabled:bg-gray-50 disabled:text-gray-700`}
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>採用温度</label>
+                  <select
+                    name="temperature"
+                    value={form.temperature}
+                    onChange={handleChange}
+                    disabled={!editing}
+                    className={`${inputClass} disabled:bg-gray-50 disabled:text-gray-700`}
+                  >
+                    <option value="">未設定</option>
+                    {TEMPERATURES.map((t) => (
+                      <option key={t} value={t}>
+                        {TEMPERATURE_LABELS[t]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* 担当RA */}
+              <div>
+                <label className={labelClass}>担当RA</label>
+                <select
+                  name="ra_id"
+                  value={form.ra_id}
+                  onChange={handleChange}
+                  disabled={!editing}
+                  className={`${inputClass} disabled:bg-gray-50 disabled:text-gray-700`}
+                >
+                  <option value="">未割り当て</option>
+                  {raList.map((ra) => (
+                    <option key={ra.id} value={ra.id}>
+                      {ra.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className={labelClass}>Webサイト</label>
+                <input
+                  type="url"
+                  name="website"
+                  value={form.website}
+                  onChange={handleChange}
+                  disabled={!editing}
+                  className={`${inputClass} disabled:bg-gray-50 disabled:text-gray-700`}
+                />
+              </div>
+
+              <h2 className="text-base font-semibold text-primary border-b border-secondary pb-2 pt-2">
+                担当者情報
+              </h2>
+
+              <div>
+                <label className={labelClass}>担当者名</label>
+                <input
+                  type="text"
+                  name="contact_name"
+                  value={form.contact_name}
+                  onChange={handleChange}
+                  disabled={!editing}
+                  className={`${inputClass} disabled:bg-gray-50 disabled:text-gray-700`}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className={labelClass}>メールアドレス</label>
+                  <input
+                    type="email"
+                    name="contact_email"
+                    value={form.contact_email}
+                    onChange={handleChange}
+                    disabled={!editing}
+                    className={`${inputClass} disabled:bg-gray-50 disabled:text-gray-700`}
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>電話番号</label>
+                  <input
+                    type="tel"
+                    name="contact_phone"
+                    value={form.contact_phone}
+                    onChange={handleChange}
+                    disabled={!editing}
+                    className={`${inputClass} disabled:bg-gray-50 disabled:text-gray-700`}
+                  />
+                </div>
+              </div>
+
+              <h2 className="text-base font-semibold text-primary border-b border-secondary pb-2 pt-2">
+                備考
+              </h2>
+
+              <div>
+                <label className={labelClass}>メモ・備考</label>
+                <textarea
+                  name="notes"
+                  value={form.notes}
+                  onChange={handleChange}
+                  rows={4}
+                  disabled={!editing}
+                  className={`${inputClass} disabled:bg-gray-50 disabled:text-gray-700`}
+                />
+              </div>
+
+              {company && (
+                <div className="pt-2 border-t border-secondary text-xs text-gray-400 space-y-1">
+                  <p>登録日: {formatDate(company.created_at)}</p>
+                  <p>更新日: {formatDate(company.updated_at)}</p>
+                </div>
+              )}
+            </div>
+
+            {editing && (
+              <div className="flex gap-3 mt-6">
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="bg-cta hover:bg-cta-hover text-primary font-semibold px-8 py-2 rounded text-sm transition-colors disabled:opacity-50"
+                >
+                  {submitting ? <><Spinner size={16} className="inline mr-1.5" />保存中...</> : "保存する"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCancel}
+                  className="bg-secondary hover:bg-gray-300 text-primary px-8 py-2 rounded text-sm font-medium transition-colors"
+                >
+                  キャンセル
+                </button>
+              </div>
+            )}
+          </form>
+        )}
+
+        {/* 求人URL作成タブ */}
+        {activeTab === "job-posting" && (
+          <JobPostingTab companyName={company?.name || ""} companyId={id} />
+        )}
+      </div>
+    </div>
+  );
+}
+
+/** 求人URL作成タブコンポーネント */
+function JobPostingTab({ companyName, companyId }: { companyName: string; companyId: string }) {
+  const [jobTitle, setJobTitle] = useState("");
+  const [jobDescription, setJobDescription] = useState("");
+  const [salary, setSalary] = useState("");
+  const [location, setLocation] = useState("");
+  const [employmentType, setEmploymentType] = useState("");
+  const [training, setTraining] = useState("");
+  const [generatedUrl, setGeneratedUrl] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  const generateUrl = () => {
+    const params = new URLSearchParams();
+    params.set("company", companyName);
+    params.set("company_id", companyId);
+    if (jobTitle) params.set("title", jobTitle);
+    if (jobDescription) params.set("description", jobDescription);
+    if (salary) params.set("salary", salary);
+    if (location) params.set("location", location);
+    if (employmentType) params.set("type", employmentType);
+    if (training) params.set("training", training);
+
+    const url = `https://phtwtfci.gensparkspace.com/generator.html?${params.toString()}`;
+    setGeneratedUrl(url);
+  };
+
+  const copyUrl = () => {
+    navigator.clipboard.writeText(generatedUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow p-6 space-y-5">
+      <h2 className="text-base font-semibold text-primary border-b border-secondary pb-2">
+        求人URL作成
+      </h2>
+      <p className="text-sm text-gray-500">
+        求人情報を入力してURLを生成します。生成されたURLをコピーして求人サイトに掲載できます。
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className={labelClass}>求人タイトル</label>
+          <input
+            type="text"
+            value={jobTitle}
+            onChange={(e) => setJobTitle(e.target.value)}
+            placeholder="例: フロントエンドエンジニア"
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label className={labelClass}>勤務地</label>
+          <input
+            type="text"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder="例: 東京都渋谷区"
+            className={inputClass}
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className={labelClass}>給与</label>
+          <input
+            type="text"
+            value={salary}
+            onChange={(e) => setSalary(e.target.value)}
+            placeholder="例: 400万〜600万"
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label className={labelClass}>雇用形態</label>
+          <select
+            value={employmentType}
+            onChange={(e) => setEmploymentType(e.target.value)}
+            className={inputClass}
+          >
+            <option value="">選択してください</option>
+            <option value="正社員">正社員</option>
+            <option value="契紀社員">契約社員</option>
+            <option value="派遣社員">派遣社員</option>
+            <option value="パート・アルバイト">パート・アルバイト</option>
+            <option value="業務委託">業務委託</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label className={labelClass}>求人内容</label>
+        <textarea
+          value={jobDescription}
+          onChange={(e) => setJobDescription(e.target.value)}
+          rows={6}
+          placeholder="求人の詳細説明を入力..."
+          className={`${inputClass} font-mono text-sm`}
+        />
+      </div>
+
+      <div>
+        <label className={labelClass}>研修・トレーニング詳細</label>
+        <textarea
+          value={training}
+          onChange={(e) => setTraining(e.target.value)}
+          rows={3}
+          placeholder="入社後の研修内容、トレーニング制度など..."
+          className={`${inputClass} font-mono text-sm`}
+        />
+      </div>
+
+      <div className="flex gap-3">
+        <button
+          type="button"
+          onClick={generateUrl}
+          className="bg-cta hover:bg-cta-hover text-primary font-semibold px-6 py-2 rounded text-sm transition-colors"
+        >
+          URL生成
+        </button>
+      </div>
+
+      {generatedUrl && (
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 space-y-3">
+          <label className={labelClass}>生成された求人URL</label>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={generatedUrl}
+              readOnly
+              className={`${inputClass} bg-white flex-1`}
+            />
+            <button
+              type="button"
+              onClick={copyUrl}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-medium transition-colors whitespace-nowrap"
+            >
+              {copied ? "コピー済み!" : "コピー"}
+            </button>
+          </div>
+          <div className="flex gap-2">
+            <a
+              href={generatedUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-blue-600 hover:underline"
+            >
+              プレビューを開く &rarr;
+            </a>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
