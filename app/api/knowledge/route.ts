@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { KNOWLEDGE_CATEGORIES, type KnowledgeCategory } from "@/types/knowledge";
+import { KNOWLEDGE_CATEGORIES, type KnowledgeCategory, type SelectionResult } from "@/types/knowledge";
+
+const VALID_SELECTION_RESULTS: SelectionResult[] = ["offered", "rejected", "declined", "withdrawn"];
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,17 +12,21 @@ export async function GET(request: NextRequest) {
     const q        = searchParams.get("q") || "";
     const category = searchParams.get("category") || "";
     const tag      = searchParams.get("tag") || "";
+    const candidate_id = searchParams.get("candidate_id") || "";
+    const company_id   = searchParams.get("company_id") || "";
     const page     = parseInt(searchParams.get("page") || "1", 10);
     const per_page = parseInt(searchParams.get("per_page") || "20", 10);
 
     let query = supabase
       .from("knowledge")
-      .select("*", { count: "exact" })
+      .select("*, candidate:candidates(id, name), company:companies(id, name)", { count: "exact" })
       .order("created_at", { ascending: false });
 
-    if (q)        query = query.ilike("title", `%${q}%`);
-    if (category) query = query.eq("category", category);
-    if (tag)      query = query.contains("tags", [tag]);
+    if (q)            query = query.ilike("title", `%${q}%`);
+    if (category)     query = query.eq("category", category);
+    if (tag)          query = query.contains("tags", [tag]);
+    if (candidate_id) query = query.eq("candidate_id", candidate_id);
+    if (company_id)   query = query.eq("company_id", company_id);
 
     const from = (page - 1) * per_page;
     query = query.range(from, from + per_page - 1);
@@ -54,7 +60,7 @@ export async function POST(request: NextRequest) {
     const supabase = await createClient();
     const body = await request.json();
 
-    const { title, content, category, tags } = body;
+    const { title, content, category, tags, candidate_id, company_id, selection_result, result_reason } = body;
 
     if (!title || typeof title !== "string" || title.trim() === "") {
       return NextResponse.json(
@@ -72,6 +78,11 @@ export async function POST(request: NextRequest) {
       ? tags.filter((t): t is string => typeof t === "string" && t.trim() !== "")
       : [];
 
+    const safeSelectionResult =
+      selection_result && VALID_SELECTION_RESULTS.includes(selection_result as SelectionResult)
+        ? selection_result
+        : null;
+
     const { data, error } = await supabase
       .from("knowledge")
       .insert({
@@ -79,8 +90,12 @@ export async function POST(request: NextRequest) {
         content: content || null,
         category: safeCategory,
         tags: safeTags,
+        candidate_id: candidate_id || null,
+        company_id: company_id || null,
+        selection_result: safeSelectionResult,
+        result_reason: result_reason || null,
       })
-      .select()
+      .select("*, candidate:candidates(id, name), company:companies(id, name)")
       .single();
 
     if (error) {
