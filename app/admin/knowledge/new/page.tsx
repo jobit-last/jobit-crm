@@ -30,7 +30,7 @@ export default function KnowledgeNewPage() {
   const [error, setError] = useState("");
   const [tagInput, setTagInput] = useState("");
 
-  // æ±è·äã»ä¼æ¥­ã®é¸æè¢
+  // 求職者・企業の選択肢
   const [candidates, setCandidates] = useState<CandidateOption[]>([]);
   const [companies, setCompanies] = useState<CompanyOption[]>([]);
   const [candidateSearch, setCandidateSearch] = useState("");
@@ -47,7 +47,7 @@ export default function KnowledgeNewPage() {
     result_reason: "",
   });
 
-  // æ±è·èä¸è¦§ãåå¾
+  // 求職者一覧を取得
   useEffect(() => {
     fetch("/api/candidates?limit=1000")
       .then((r) => r.json())
@@ -61,7 +61,7 @@ export default function KnowledgeNewPage() {
       .catch(() => {});
   }, []);
 
-  // ä¼æ¥­ä¸è¦§ãåå¾
+  // 企業一覧を取得
   useEffect(() => {
     fetch("/api/companies?per_page=1000")
       .then((r) => r.json())
@@ -100,12 +100,12 @@ export default function KnowledgeNewPage() {
     }
   };
 
-  const isSelectionResult = form.category === "é¸èçµæ";
+  const isSelectionResult = form.category === "選考結果";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.title.trim()) {
-      setError("ã¿ã¤ãã«ã¯å¿é ã§ã");
+      setError("タイトルは必須です");
       return;
     }
     setSubmitting(true);
@@ -127,18 +127,18 @@ export default function KnowledgeNewPage() {
       });
       const json = await res.json();
       if (!res.ok || !json.success) {
-        setError(json.message || "ç»é²ã«å¤±æãã¾ãã");
+        setError(json.message || "登録に失敗しました");
         return;
       }
       router.push(`/admin/knowledge/${json.data.id}`);
     } catch {
-      setError("éä¿¡ã¨ã©ã¼ãçºçãã¾ãã");
+      setError("通信エラーが発生しました");
     } finally {
       setSubmitting(false);
     }
   };
 
-  // ãã£ã«ã¿ãããåè£
+  // フィルタされた候補
   const filteredCandidates = candidateSearch
     ? candidates.filter((c) => c.name.includes(candidateSearch))
     : candidates;
@@ -153,9 +153,9 @@ export default function KnowledgeNewPage() {
           href="/admin/knowledge"
           className="text-sm text-gray-500 hover:text-primary transition-colors"
         >
-          &larr; ãã¬ãã¸ä¸è¦§
+          &larr; ナレッジ一覧
         </Link>
-        <h1 className="text-2xl font-bold text-primary">ãã¬ãã¸ æ°è¦ç»é²</h1>
+        <h1 className="text-2xl font-bold text-primary">ナレッジ 新規登録</h1>
       </div>
 
       <form onSubmit={handleSubmit}>
@@ -166,45 +166,45 @@ export default function KnowledgeNewPage() {
             </div>
           )}
 
-          {/* ã¿ã¤ãã« */}
+          {/* タイトル */}
           <div>
             <label className={labelClass}>
-              ã¿ã¤ãã« <span className="text-red-500">*</span>
+              タイトル <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               name="title"
               value={form.title}
               onChange={handleChange}
-              placeholder="ãã¬ãã¸ã®ã¿ã¤ãã«ãå¥å"
+              placeholder="ナレッジのタイトルを入力"
               className={inputClass}
             />
           </div>
 
-          {/* ã«ãã´ãª */}
+          {/* カテゴリ */}
           <div>
-            <label className={labelClass}>ã«ãã´ãª</label>
+            <label className={labelClass}>カテゴリ</label>
             <select
               name="category"
               value={form.category}
               onChange={handleChange}
               className={inputClass}
             >
-              <option value="">æªè¨­å®</option>
+              <option value="">未設定</option>
               {KNOWLEDGE_CATEGORIES.map((c) => (
                 <option key={c} value={c}>{c}</option>
               ))}
             </select>
           </div>
 
-          {/* æ±è·èç´ã¥ã */}
+          {/* 求職者紐づけ */}
           <div>
-            <label className={labelClass}>ç´ã¥ãæ±è·è</label>
+            <label className={labelClass}>紐づけ求職者</label>
             <input
               type="text"
               value={candidateSearch}
               onChange={(e) => setCandidateSearch(e.target.value)}
-              placeholder="æ±è·èåã§æ¤ç´¢..."
+              placeholder="求職者名で検索..."
               className={`${inputClass} mb-1`}
             />
             <select
@@ -213,21 +213,21 @@ export default function KnowledgeNewPage() {
               onChange={handleChange}
               className={inputClass}
             >
-              <option value="">æªè¨­å®</option>
+              <option value="">未設定</option>
               {filteredCandidates.map((c) => (
                 <option key={c.id} value={c.id}>{c.name}</option>
               ))}
             </select>
           </div>
 
-          {/* ä¼æ¥­ç´ã¥ã */}
+          {/* 企業紐づけ */}
           <div>
-            <label className={labelClass}>é¢é£ä¼æ¥­</label>
+            <label className={labelClass}>関連企業</label>
             <input
               type="text"
               value={companySearch}
               onChange={(e) => setCompanySearch(e.target.value)}
-              placeholder="ä¼æ¥­åã§æ¤ç´¢..."
+              placeholder="企業名で検索..."
               className={`${inputClass} mb-1`}
             />
             <select
@@ -236,27 +236,27 @@ export default function KnowledgeNewPage() {
               onChange={handleChange}
               className={inputClass}
             >
-              <option value="">æªè¨­å®</option>
+              <option value="">未設定</option>
               {filteredCompanies.map((c) => (
                 <option key={c.id} value={c.id}>{c.name}</option>
               ))}
             </select>
           </div>
 
-          {/* é¸èçµæã»ã¯ã·ã§ã³ï¼ã«ãã´ãª=é¸èçµæã®å ´åã®ã¿è¡¨ç¤ºï¼ */}
+          {/* 選考結果セクション（カテゴリ=選考結果の場合のみ表示） */}
           {isSelectionResult && (
             <div className="bg-rose-50 border border-rose-200 rounded-lg p-4 space-y-4">
-              <h3 className="text-sm font-semibold text-rose-700">é¸èçµæè©³ç´°</h3>
+              <h3 className="text-sm font-semibold text-rose-700">選考結果詳細</h3>
 
               <div>
-                <label className={labelClass}>é¸èçµæã¿ã¤ã</label>
+                <label className={labelClass}>選考結果タイプ</label>
                 <select
                   name="selection_result"
                   value={form.selection_result}
                   onChange={handleChange}
                   className={inputClass}
                 >
-                  <option value="">æªè¨­å®</option>
+                  <option value="">未設定</option>
                   {(Object.entries(SELECTION_RESULT_LABELS) as [SelectionResult, string][]).map(
                     ([key, label]) => (
                       <option key={key} value={key}>{label}</option>
@@ -266,29 +266,29 @@ export default function KnowledgeNewPage() {
               </div>
 
               <div>
-                <label className={labelClass}>çç±ã»è¦å </label>
+                <label className={labelClass}>理由・要因</label>
                 <textarea
                   name="result_reason"
                   value={form.result_reason}
                   onChange={handleChange}
                   rows={4}
-                  placeholder="é¸èçµæã®çç±ãè¦å ãè¨è¼..."
+                  placeholder="選考結果の理由や要因を記載..."
                   className={`${inputClass} font-mono text-sm`}
                 />
               </div>
             </div>
           )}
 
-          {/* ã¿ã° */}
+          {/* タグ */}
           <div>
-            <label className={labelClass}>ã¿ã°</label>
+            <label className={labelClass}>タグ</label>
             <div className="flex gap-2">
               <input
                 type="text"
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
                 onKeyDown={handleTagKeyDown}
-                placeholder="ã¿ã°ãå¥åãã¦Enterã¾ãã¯è¿½å "
+                placeholder="タグを入力してEnterまたは追加"
                 className={`${inputClass} flex-1`}
               />
               <button
@@ -296,7 +296,7 @@ export default function KnowledgeNewPage() {
                 onClick={addTag}
                 className="px-4 py-2 text-sm bg-secondary hover:bg-gray-300 text-primary rounded transition-colors"
               >
-                è¿½å 
+                追加
               </button>
             </div>
             {form.tags.length > 0 && (
@@ -320,18 +320,18 @@ export default function KnowledgeNewPage() {
             )}
           </div>
 
-          {/* æ¬æ */}
+          {/* 本文 */}
           <div>
-            <label className={labelClass}>æ¬æï¼ãã¼ã¯ãã¦ã³å½¢å¼ï¼</label>
+            <label className={labelClass}>本文（マークダウン形式）</label>
             <textarea
               name="content"
               value={form.content}
               onChange={handleChange}
               rows={16}
-              placeholder={`## è¦åºã\n\næ¬æããã¼ã¯ãã¦ã³å½¢å¼ã§è¨å¥ã§ãã¾ãã\n\n- ãªã¹ã1\n- ãªã¹ã2\n\n**å¤ªå­** ã *æä½* ãä½¿ãã¾ãã`}
+              placeholder={`## 見出し\n\n本文をマークダウン形式で記入できます。\n\n- リスト1\n- リスト2\n\n**太字** や *斜体* も使えます。`}
               className={`${inputClass} font-mono text-sm`}
             />
-            <p className="text-xs text-gray-400 mt-1">ãã¼ã¯ãã¦ã³è¨æ³ã«å¯¾å¿ãã¦ãã¾ã</p>
+            <p className="text-xs text-gray-400 mt-1">マークダウン記法に対応しています</p>
           </div>
         </div>
 
@@ -341,13 +341,13 @@ export default function KnowledgeNewPage() {
             disabled={submitting}
             className="bg-cta hover:bg-cta-hover text-primary font-semibold px-8 py-2 rounded text-sm transition-colors disabled:opacity-50"
           >
-            {submitting ? <><Spinner size={16} className="inline mr-1.5" />ç»é²ä¸­...</> : "ç»é²ãã"}
+            {submitting ? <><Spinner size={16} className="inline mr-1.5" />登録中...</> : "登録する"}
           </button>
           <Link
             href="/admin/knowledge"
             className="bg-secondary hover:bg-gray-300 text-primary px-8 py-2 rounded text-sm font-medium transition-colors"
           >
-            ã­ã£ã³ã»ã«
+            キャンセル
           </Link>
         </div>
       </form>
