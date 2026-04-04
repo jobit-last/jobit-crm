@@ -16,22 +16,22 @@ import {
 } from "recharts";
 
 const DIMENSIONS = [
-  { key: "gender", label: "æ§å¥" },
-  { key: "age", label: "å¹´é½¢" },
-  { key: "salary", label: "å¹´å" },
-  { key: "status", label: "ã¹ãã¼ã¿ã¹" },
-  { key: "experience", label: "çµé¨" },
-  { key: "education", label: "å­¦æ­´" },
-  { key: "residence", label: "å±ä½å°" },
-  { key: "active", label: "ã¢ã¯ãã£ã" },
-  { key: "other_agent", label: "ä»ç¤¾ã¨ã¼ã¸ã§ã³ã" },
-  { key: "medical_history", label: "æ¢å¾æ­´" },
-  { key: "arts_science", label: "æç" },
-  { key: "occupation", label: "è·ç¨®" },
-  { key: "color", label: "è²" },
-  { key: "employment_type", label: "éç¨å½¢æ" },
-  { key: "relocation", label: "è»¢å±æç¡" },
-  { key: "conversation", label: "ä¼è©±éæ¯ç" },
+  { key: "gender", label: "性別" },
+  { key: "age", label: "年齢" },
+  { key: "salary", label: "年収" },
+  { key: "status", label: "ステータス" },
+  { key: "experience", label: "経験" },
+  { key: "education", label: "学歴" },
+  { key: "residence", label: "居住地" },
+  { key: "active", label: "アクティブ" },
+  { key: "other_agent", label: "他社エージェント" },
+  { key: "medical_history", label: "既往歴" },
+  { key: "arts_science", label: "文理" },
+  { key: "occupation", label: "職種" },
+  { key: "color", label: "色" },
+  { key: "employment_type", label: "雇用形態" },
+  { key: "relocation", label: "転居有無" },
+  { key: "conversation", label: "会話量比率" },
 ];
 
 const COLORS = [
@@ -109,13 +109,13 @@ export default function DemographicsClient() {
 
   return (
     <div className="space-y-6">
-      {/* ãããã¼ */}
+      {/* ヘッダー */}
       <div>
-        <h1 className="text-2xl font-bold text-primary">æ°å¤åæ</h1>
-        <p className="text-sm text-gray-500 mt-1">æ±è·èãã¼ã¿ã®äººå£çµ±è¨åæ</p>
+        <h1 className="text-2xl font-bold text-primary">数値分析</h1>
+        <p className="text-sm text-gray-500 mt-1">求職者データの人口統計分析</p>
       </div>
 
-      {/+ ãã£ã«ã¿ã¼ */}
+      {/* フィルター */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
         <div className="flex-1">
           <label className="text-sm font-medium text-gray-700 block mb-2">CA</label>
@@ -124,7 +124,7 @@ export default function DemographicsClient() {
             onChange={(e) => setCaId(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           >
-            <option value="">å¨ã¡ã³ãã¼</option>
+            <option value="">全メンバー</option>
             {cas.map((ca) => (
               <option key={ca.id} value={ca.id}>
                 {ca.name}
@@ -134,9 +134,9 @@ export default function DemographicsClient() {
         </div>
       </div>
 
-      {/* ãã£ã¡ã³ã·ã§ã³é¸æã¿ã */}
+      {/* ディメンション選択タブ */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-        <p className="text-sm font-medium text-gray-700 mb-3">åæé ç®</p>
+        <p className="text-sm font-medium text-gray-700 mb-3">分析項目</p>
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2">
           {DIMENSIONS.map(({ key, label }) => (
             <button
@@ -156,28 +156,28 @@ export default function DemographicsClient() {
 
       {loading ? (
         <div className="flex items-center justify-center h-64 text-gray-400 text-sm bg-white rounded-xl shadow-sm border border-gray-100">
-          èª­ã¿è¾¼ã¿ä¸­...
+          読み込み中...
         </div>
       ) : data.length === 0 ? (
         <div className="flex items-center justify-center h-64 text-gray-400 text-sm bg-white rounded-xl shadow-sm border border-gray-100">
-          ãã¼ã¿ãããã¾ãã
+          データがありません
         </div>
       ) : (
         <>
-          {/* ãµããªã¼ã«ã¼ã */}
+          {/* サマリーカード */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-            <p className="text-sm text-gray-500">å¯¾è±¡æ±è·èæ°</p>
+            <p className="text-sm text-gray-500">対象求職者数</p>
             <p className="text-3xl font-bold text-primary mt-1">
               {total}
-              <span className="text-base font-normal text-gray-400 ml-1">å</span>
+              <span className="text-base font-normal text-gray-400 ml-1">名</span>
             </p>
           </div>
 
-          {/* ãã£ã¼ãã¨ãªã¢ */}
+          {/* チャートエリア */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* æ¨ªæ£ã°ã©ã */}
+            {/* 横棒グラフ */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-base font-semibold text-gray-700 mb-4">åè¨³ï¼ä»¶æ°ï¼</h2>
+              <h2 className="text-base font-semibold text-gray-700 mb-4">内訳（件数）</h2>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart
                   data={data}
@@ -192,15 +192,15 @@ export default function DemographicsClient() {
                     tick={{ fontSize: 12 }}
                     width={95}
                   />
-                  <Tooltip formatter={(value: unknown) => [`${value}`, "ä»¶æ°"]} />
+                  <Tooltip formatter={(value: unknown) => [`${value}`, "件数"]} />
                   <Bar dataKey="count" fill={COLORS[0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
 
-            {/* åã°ã©ã */}
+            {/* 円グラフ */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-base font-semibold text-gray-700 mb-4">åè¨³ï¼æ§ææ¯ï¼</h2>
+              <h2 className="text-base font-semibold text-gray-700 mb-4">内訳（構成比）</h2>
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
@@ -223,8 +223,8 @@ export default function DemographicsClient() {
                   </Pie>
                   <Tooltip
                     formatter={(value: unknown) => {
-                      if (typeof value === "number") return [value, "ä»¶æ°"];
-                      return [`${value}`, "ä»¶æ°"];
+                      if (typeof value === "number") return [value, "件数"];
+                      return [`${value}`, "件数"];
                     }}
                   />
                 </PieChart>
@@ -232,21 +232,21 @@ export default function DemographicsClient() {
             </div>
           </div>
 
-          {/* ãã¼ãã« */}
+          {/* テーブル */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-base font-semibold text-gray-700 mb-4">è©³ç´°ãã¼ã¿</h2>
+            <h2 className="text-base font-semibold text-gray-700 mb-4">詳細データ</h2>
             <div className="overflow-x-auto">
               <table className="w-full text-sm text-left border-collapse">
                 <thead>
                   <tr className="bg-gray-50 text-gray-600">
                     <th className="px-4 py-3 border border-gray-200 font-medium">
-                      ã«ãã´ãª
+                      カテゴリ
                     </th>
                     <th className="px-4 py-3 border border-gray-200 font-medium text-right">
-                      ä»¶æ°
+                      件数
                     </th>
                     <th className="px-4 py-3 border border-gray-200 font-medium text-right">
-                      æ§ææ¯
+                      構成比
                     </th>
                   </tr>
                 </thead>
@@ -273,7 +273,7 @@ export default function DemographicsClient() {
                     </tr>
                   ))}
                   <tr className="bg-gray-50 font-semibold">
-                    <td className="px-4 py-3 border border-gray-200">è¨</td>
+                    <td className="px-4 py-3 border border-gray-200">計</td>
                     <td className="px-4 py-3 border border-gray-200 text-right">
                       {data.reduce((sum, row) => sum + row.count, 0)}
                     </td>
