@@ -50,13 +50,13 @@ export default function KnowledgeChatPage() {
       } else {
         setMessages((prev) => [
           ...prev,
-          { role: "assistant", content: json.message || "ã¨ã©ã¼ãçºçãã¾ããã" },
+          { role: "assistant", content: json.message || "エラーが発生しました。" },
         ]);
       }
     } catch {
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: "éä¿¡ã¨ã©ã¼ãçºçãã¾ããã" },
+        { role: "assistant", content: "通信エラーが発生しました。" },
       ]);
     } finally {
       setLoading(false);
@@ -65,33 +65,33 @@ export default function KnowledgeChatPage() {
 
   return (
     <div className="max-w-4xl mx-auto flex flex-col h-[calc(100vh-10rem)]">
-      {/* ãããã¼ */}
+      {/* ヘッダー */}
       <div className="flex items-center gap-3 mb-4">
         <Link
           href="/admin/knowledge"
           className="text-sm text-gray-500 hover:text-primary transition-colors"
         >
-          &larr; ãã¬ãã¸ä¸è¦§
+          &larr; ナレッジ一覧
         </Link>
-        <h1 className="text-2xl font-bold text-primary">AI ãã¬ãã¸æ¤ç´¢</h1>
+        <h1 className="text-2xl font-bold text-primary">AI ナレッジ検索</h1>
         <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Beta</span>
       </div>
 
-      {/* ãã£ããã¨ãªã¢ */}
+      {/* チャットエリア */}
       <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-100 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 && (
           <div className="text-center text-gray-400 py-16">
             <div className="text-5xl mb-4">&#x1F50D;</div>
-            <p className="text-lg font-medium mb-2">ãã¬ãã¸DBãAIã§æ¤ç´¢</p>
+            <p className="text-lg font-medium mb-2">ナレッジDBをAIで検索</p>
             <p className="text-sm">
-              è³ªåãå¥åããã¨ãèç©ããããã¬ãã¸ããé¢é£æå ±ãæ¤ç´¢ã»åç­ãã¾ãã
+              質問を入力すると、蓄積されたナレッジから関連情報を検索・回答します。
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-2">
               {[
-                "é¢æ¥å¯¾ç­ã®ãã¤ã³ãã¯ï¼",
-                "ITæ¥­çã®ææ°ååã¯ï¼",
-                "åå®çãé«ãä¼æ¥­ã¯ï¼",
-                "ä¸åæ ¼ã®ä¸»ãªçç±ã¯ï¼",
+                "面接対策のポイントは？",
+                "IT業界の最新動向は？",
+                "内定率が高い企業は？",
+                "不合格の主な理由は？",
               ].map((q) => (
                 <button
                   key={q}
@@ -116,10 +116,10 @@ export default function KnowledgeChatPage() {
             >
               <div className="whitespace-pre-wrap">{msg.content}</div>
 
-              {/* åç§ã½ã¼ã¹ */}
+              {/* 参照ソース */}
               {msg.sources && msg.sources.length > 0 && (
                 <div className="mt-3 pt-2 border-t border-gray-200">
-                  <p className="text-xs text-gray-500 mb-1">åç§ãã¬ãã¸:</p>
+                  <p className="text-xs text-gray-500 mb-1">参照ナレッジ:</p>
                   <div className="flex flex-wrap gap-1">
                     {msg.sources.map((s) => (
                       <Link
@@ -141,7 +141,7 @@ export default function KnowledgeChatPage() {
           <div className="flex justify-start">
             <div className="bg-gray-100 rounded-lg px-4 py-3 text-sm text-gray-500">
               <Spinner size={16} className="inline mr-2" />
-              æ¤ç´¢ä¸­...
+              検索中...
             </div>
           </div>
         )}
@@ -149,13 +149,13 @@ export default function KnowledgeChatPage() {
         <div ref={bottomRef} />
       </div>
 
-      {/* å¥åã¨ãªã¢ */}
+      {/* 入力エリア */}
       <form onSubmit={handleSubmit} className="mt-3 flex gap-2">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="ãã¬ãã¸ã«é¢ããè³ªåãå¥å..."
+          placeholder="ナレッジに関する質問を入力..."
           className="flex-1 border border-secondary rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
           disabled={loading}
         />
@@ -164,7 +164,7 @@ export default function KnowledgeChatPage() {
           disabled={loading || !input.trim()}
           className="bg-cta hover:bg-cta-hover text-primary font-semibold px-6 py-3 rounded-lg text-sm transition-colors disabled:opacity-50"
         >
-          éä¿¡
+          送信
         </button>
       </form>
     </div>
