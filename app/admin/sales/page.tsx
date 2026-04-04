@@ -335,9 +335,9 @@ export default function SalesPage() {
                       cx="50%"
                       cy="50%"
                       outerRadius={100}
-                      label={({ name, percent }: Record<string, unknown>) =>
-                        `${name} ${(Number(percent) * 100).toFixed(0)}%`
-                      }
+                      label={((entry: { name: string; percent: number }) =>
+                        `${entry.name} ${(entry.percent * 100).toFixed(0)}%`
+                      ) as unknown as boolean}
                     >
                       {caTotals.map((_, idx) => (
                         <Cell key={idx} fill={PIE_COLORS[idx % PIE_COLORS.length]} />
@@ -391,7 +391,7 @@ export default function SalesPage() {
                             {STATUS_LABELS[s.status] || s.status}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-gray-500 truncate max-w-[200px]">
+                        <td className="px-4 py-3 text-gray-500 truncate maw-w-[200px]">
                           {s.notes || ""}
                         </td>
                       </tr>
