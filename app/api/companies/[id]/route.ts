@@ -42,7 +42,7 @@ export async function PUT(
     const body = await request.json();
 
     const { name, industry, company_size, location, website,
-            contact_name, contact_email, contact_phone, temperature, notes } = body;
+            contact_name, contact_email, contact_phone, temperature, ra_id, notes } = body;
 
     if (name !== undefined && (typeof name !== "string" || name.trim() === "")) {
       return NextResponse.json(
@@ -61,6 +61,7 @@ export async function PUT(
     if (contact_email !== undefined) updateData.contact_email = contact_email || null;
     if (contact_phone !== undefined) updateData.contact_phone = contact_phone || null;
     if (temperature !== undefined) updateData.temperature = temperature || null;
+    if (ra_id !== undefined) updateData.ra_id = ra_id || null;
     if (notes !== undefined) updateData.notes = notes || null;
 
     const { data, error } = await supabase
