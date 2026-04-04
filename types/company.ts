@@ -23,9 +23,12 @@ export interface Company {
   contact_email: string | null;
   contact_phone: string | null;
   temperature: Temperature | null;
+  ra_id: string | null;
   notes: string | null;
   created_at: string;
   updated_at: string;
+  // JOIN
+  ra?: { id: string; name: string } | null;
 }
 
 export interface CompanySearchParams {
