@@ -27,12 +27,12 @@ function getPeriodRange(period: string): { from: string; to: string } {
   }
 }
 
-// æå®ã¹ãã¼ã¿ã¹ä»¥ä¸ã«å°éããä»¶æ°ãè¨ç®
+// 指定ステータス以上に到達した件数を計算
 function countReached(statuses: string[], targetStatuses: string[]): number {
   return statuses.filter((s) => targetStatuses.includes(s)).length;
 }
 
-// æ¥æ°ã®å·®åãè¨ç®
+// 日数の差分を計算
 function daysDifference(from: string, to: string): number {
   const fromDate = new Date(from);
   const toDate = new Date(to);
@@ -139,42 +139,42 @@ export async function GET(request: NextRequest) {
 
     const funnel = [
       {
-        stage: "ç»é²",
+        stage: "登録",
         count: total,
         rate: 100,
         pessimistic_count: total,
         optimistic_count: total,
       },
       {
-        stage: "é¢è«",
+        stage: "面談",
         count: interviewed,
         rate: total > 0 ? Math.round((interviewed / total) * 1000) / 10 : 0,
         pessimistic_count: pessimistic_interviewed,
         optimistic_count: optimistic_interviewed,
       },
       {
-        stage: "å¿å",
+        stage: "応募",
         count: applied,
         rate: interviewed > 0 ? Math.round((applied / interviewed) * 1000) / 10 : 0,
         pessimistic_count: pessimistic_applied,
         optimistic_count: optimistic_applied,
       },
       {
-        stage: "é¢æ¥",
+        stage: "面接",
         count: inSelection,
         rate: applied > 0 ? Math.round((inSelection / applied) * 1000) / 10 : 0,
         pessimistic_count: pessimistic_inSelection,
         optimistic_count: optimistic_inSelection,
       },
       {
-        stage: "åå®",
+        stage: "内定",
         count: offered,
         rate: inSelection > 0 ? Math.round((offered / inSelection) * 1000) / 10 : 0,
         pessimistic_count: pessimistic_offered,
         optimistic_count: optimistic_offered,
       },
       {
-        stage: "å¥ç¤¾",
+        stage: "入社",
         count: placed,
         rate: offered > 0 ? Math.round((placed / offered) * 1000) / 10 : 0,
         pessimistic_count: pessimistic_placed,
@@ -182,64 +182,64 @@ export async function GET(request: NextRequest) {
       },
     ];
 
-    // Overall conversion rate (ç»é²âå¥ç¤¾)
+    // Overall conversion rate (登録→入社)
     const overall_rate = total > 0 ? Math.round((placed / total) * 10000) / 100 : 0;
 
     // 3. Lead time calculation: average days from "interviewed" to "offered"
-    // Wrapped in try-catch to handle missing candidate_status_histories table
-    let lead_time = { avg_days: 0, min_days: 0, max_days: 0 };
+    let leadTimeQuery = supabase
+      .from("candidate_status_histories")
+      .select("candidate_id, to_status, changed_at")
+      .eq("to_status", "offered");
 
-    try {
-      let leadTimeQuery = supabase
-        .from("candidate_status_histories")
-        .select("candidate_id, to_status, changed_at")
-        .eq("to_status", "offered");
+    if (ca_id) {
+      // We need to join with candidates to filter by ca_id
+      leadTimeQuery = leadTimeQuery.in(
+        "candidate_id",
+        candidates.map((c) => c.id)
+      );
+    }
 
-      if (ca_id) {
-        leadTimeQuery = leadTimeQuery.in(
-          "candidate_id",
-          candidates.map((c) => c.id)
-        );
-      }
+    const { data: offeredHistories, error: offeredError } = await leadTimeQuery;
 
-      const { data: offeredHistories, error: offeredError } = await leadTimeQuery;
+    if (offeredError) {
+      return NextResponse.json(
+        { success: false, data: null, message: offeredError.message, meta: {} },
+        { status: 500 }
+      );
+    }
 
-      if (!offeredError && offeredHistories && offeredHistories.length > 0) {
-        const leadTimes: number[] = [];
+    const leadTimes: number[] = [];
 
-        for (const oh of offeredHistories) {
-          const candidateId = oh.candidate_id as string;
-          const offeredDate = oh.changed_at as string;
+    if (offeredHistories && offeredHistories.length > 0) {
+      // For each candidate that reached "offered" status
+      for (const offered of offeredHistories) {
+        const candidateId = offered.candidate_id as string;
+        const offeredDate = offered.changed_at as string;
 
-          const { data: interviewHistories, error: interviewError } = await supabase
-            .from("candidate_status_histories")
-            .select("changed_at")
-            .eq("candidate_id", candidateId)
-            .eq("to_status", "interviewed")
-            .order("changed_at", { ascending: true })
-            .limit(1);
+        // Find the earliest "interviewed" status change for this candidate
+        const { data: interviewHistories, error: interviewError } = await supabase
+          .from("candidate_status_histories")
+          .select("changed_at")
+          .eq("candidate_id", candidateId)
+          .eq("to_status", "interviewed")
+          .order("changed_at", { ascending: true })
+          .limit(1);
 
-          if (!interviewError && interviewHistories && interviewHistories.length > 0) {
-            const interviewDate = interviewHistories[0].changed_at as string;
-            const days = daysDifference(interviewDate, offeredDate);
-            if (days >= 0) {
-              leadTimes.push(days);
-            }
+        if (!interviewError && interviewHistories && interviewHistories.length > 0) {
+          const interviewDate = interviewHistories[0].changed_at as string;
+          const days = daysDifference(interviewDate, offeredDate);
+          if (days >= 0) {
+            leadTimes.push(days);
           }
         }
-
-        if (leadTimes.length > 0) {
-          lead_time = {
-            avg_days: Math.round(leadTimes.reduce((a, b) => a + b, 0) / leadTimes.length),
-            min_days: Math.min(...leadTimes),
-            max_days: Math.max(...leadTimes),
-          };
-        }
       }
-    } catch (e) {
-      // Table might not exist yet - return default lead_time values
-      console.warn("Lead time calculation skipped:", e);
     }
+
+    const lead_time = {
+      avg_days: leadTimes.length > 0 ? Math.round(leadTimes.reduce((a, b) => a + b, 0) / leadTimes.length) : 0,
+      min_days: leadTimes.length > 0 ? Math.min(...leadTimes) : 0,
+      max_days: leadTimes.length > 0 ? Math.max(...leadTimes) : 0,
+    };
 
     // 4. Monthly registration trend (12 months)
     const now = new Date();
