@@ -48,16 +48,16 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 const STATUS_LABELS: Record<string, string> = {
-  new: "新規登録",
-  interview_scheduling: "面談調整中",
-  interviewed: "面談済み",
-  job_proposed: "求人提案中",
-  applying: "応募中",
-  in_selection: "選考中",
-  offered: "内定",
-  placed: "入社",
-  failed: "不合格",
-  closed: "対応終了",
+  new: "æ°è¦ç»é²",
+  interview_scheduling: "é¢è«èª¿æ´ä¸­",
+  interviewed: "é¢è«æ¸ã¿",
+  job_proposed: "æ±äººææ¡ä¸­",
+  applying: "å¿åä¸­",
+  in_selection: "é¸èä¸­",
+  offered: "åå®",
+  placed: "å¥ç¤¾",
+  failed: "ä¸åæ ¼",
+  closed: "å¯¾å¿çµäº",
 };
 
 export default function GanttClient() {
@@ -86,10 +86,10 @@ export default function GanttClient() {
         setCas(data.data.cas);
         setDateRange(data.data.date_range);
       } else {
-        setError("データ取得に失敗しました");
+        setError("ãã¼ã¿åå¾ã«å¤±æãã¾ãã");
       }
     } catch (err) {
-      setError("エラーが発生しました");
+      setError("ã¨ã©ã¼ãçºçãã¾ãã");
       console.error(err);
     } finally {
       setLoading(false);
@@ -179,7 +179,7 @@ export default function GanttClient() {
           <div className="inline-block">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#002D37]"></div>
           </div>
-          <p className="mt-4 text-gray-600">読み込み中...</p>
+          <p className="mt-4 text-gray-600">èª­ã¿è¾¼ã¿ä¸­...</p>
         </div>
       </div>
     );
@@ -194,7 +194,7 @@ export default function GanttClient() {
             onClick={() => fetchData(selectedCaId)}
             className="mt-4 px-4 py-2 bg-[#002D37] text-white rounded-lg hover:bg-opacity-90 transition"
           >
-            再読み込み
+            åèª­ã¿è¾¼ã¿
           </button>
         </div>
       </div>
@@ -206,14 +206,14 @@ export default function GanttClient() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#002D37]">ガントチャート</h1>
-          <p className="text-sm text-gray-500 mt-1">求職者のステータス推移を時系列で表示</p>
+          <h1 className="text-2xl font-bold text-[#002D37]">ã¬ã³ããã£ã¼ã</h1>
+          <p className="text-sm text-gray-500 mt-1">æ±è·èã®ã¹ãã¼ã¿ã¹æ¨ç§»ãæç³»åã§è¡¨ç¤º</p>
         </div>
 
         {/* CA Filter Dropdown */}
         <div className="flex items-center gap-2">
           <label htmlFor="ca-filter" className="text-sm font-medium text-gray-700">
-            営業担当者:
+            å¶æ¥­æå½è:
           </label>
           <select
             id="ca-filter"
@@ -221,7 +221,7 @@ export default function GanttClient() {
             onChange={(e) => setSelectedCaId(e.target.value || null)}
             className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
           >
-            <option value="">全体</option>
+            <option value="">å¨ä½</option>
             {cas.map((ca) => (
               <option key={ca.id} value={ca.id}>
                 {ca.name}
@@ -233,13 +233,13 @@ export default function GanttClient() {
 
       {filteredCandidates.length === 0 ? (
         <div className="bg-white rounded-xl shadow-sm p-12 text-center">
-          <p className="text-gray-500">データがありません</p>
+          <p className="text-gray-500">ãã¼ã¿ãããã¾ãã</p>
         </div>
       ) : (
         <>
           {/* Legend */}
           <div className="bg-white rounded-xl shadow-sm p-4">
-            <p className="text-xs font-semibold text-gray-700 mb-3">ステータス凡例</p>
+            <p className="text-xs font-semibold text-gray-700 mb-3">ã¹ãã¼ã¿ã¹å¡ä¾</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-10 gap-3">
               {Object.entries(STATUS_LABELS).map(([status, label]) => (
                 <div key={status} className="flex items-center gap-2">
@@ -262,7 +262,7 @@ export default function GanttClient() {
                   <tr className="border-b border-gray-200">
                     {/* Candidate names column */}
                     <th className="sticky left-0 z-20 bg-gray-50 border-r border-gray-200 w-40 p-3 text-left">
-                      <span className="text-xs font-semibold text-gray-700">求職者名</span>
+                      <span className="text-xs font-semibold text-gray-700">æ±è·èå</span>
                     </th>
 
                     {/* Timeline header */}
@@ -318,12 +318,12 @@ export default function GanttClient() {
                                 }}
                                 onMouseEnter={() => setHoveredSegment(segmentId)}
                                 onMouseLeave={() => setHoveredSegment(null)}
-                                title={`${segment.label}\n${new Date(segment.start).toLocaleDateString("ja-JP")} - ${new Date(segment.end).toLocaleDateString("ja-JP")}`}
+                                title={`${STATUS_LABELS[segment.status] || segment.label}\n${new Date(segment.start).toLocaleDateString("ja-JP")} - ${new Date(segment.end).toLocaleDateString("ja-JP")}`}
                               >
                                 {/* Tooltip */}
                                 {isHovered && (
                                   <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-gray-900 text-white text-xs rounded px-2 py-1 whitespace-nowrap pointer-events-none">
-                                    <div className="font-semibold">{segment.label}</div>
+                                    <div className="font-semibold">{STATUS_LABELS[segment.status] || segment.label}</div>
                                     <div className="text-gray-300">
                                       {new Date(segment.start).toLocaleDateString("ja-JP")} ~{" "}
                                       {new Date(segment.end).toLocaleDateString("ja-JP")}
@@ -335,7 +335,7 @@ export default function GanttClient() {
                                   </div>
                                 )}
 
-                                <span className="truncate">{segment.label}</span>
+                                <span className="truncate">{STATUS_LABELS[segment.status] || segment.label}</span>
                               </div>
                             );
                           })}
@@ -350,7 +350,7 @@ export default function GanttClient() {
 
           {/* Info text */}
           <div className="text-xs text-gray-500 text-center">
-            {filteredCandidates.length}件の求職者を表示 | 過去3ヶ月間のステータス推移
+            {filteredCandidates.length}ä»¶ã®æ±è·èãè¡¨ç¤º | éå»3ã¶æéã®ã¹ãã¼ã¿ã¹æ¨ç§»
           </div>
         </>
       )}
