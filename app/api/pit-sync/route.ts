@@ -115,7 +115,7 @@ function mapPitUserToCandidate(pitUser: any, pitUserId: number) {
     birth_date: birthday || null,
     status: "new",
     source: "pit",
-    prefecture: extractPrefecture(address),
+    residence: extractPrefecture(address),
     pit_user_id: pitUserId,
     pit_synced_at: new Date().toISOString(),
     is_deleted: false,
