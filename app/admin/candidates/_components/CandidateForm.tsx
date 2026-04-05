@@ -2,8 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import type { Candidate, Advisor, CandidateStatus, Gender } from "@/types/candidate";
-import { STATUS_LABELS } from "@/types/candidate";
+import type { Candidate, Advisor, CandidateStatus, Gender, CandidateSource, FormType, ContactStatus, InterviewType, LivingArrangement } from "@/types/candidate";
+import { STATUS_LABELS, SOURCE_LABELS, FORM_TYPE_LABELS, CONTACT_STATUS_LABELS, INTERVIEW_TYPE_LABELS, LIVING_ARRANGEMENT_LABELS, PREFECTURE_OPTIONS } from "@/types/candidate";
 import Spinner from "@/components/Spinner";
 
 interface Props {
@@ -36,11 +36,44 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
     desired_salary: initialData.desired_salary?.toString() ?? "",
     status: (initialData.status ?? "new") as CandidateStatus,
     ca_id: initialData.ca_id ?? "",
+    // 流入情報
+    source: (initialData.source ?? "") as CandidateSource | "",
+    form_type: (initialData.form_type ?? "") as FormType | "",
+    ad_identifier: initialData.ad_identifier ?? "",
+    utm_source: initialData.utm_source ?? "",
+    utm_medium: initialData.utm_medium ?? "",
+    utm_campaign: initialData.utm_campaign ?? "",
+    // LINE連携
+    line_registered: initialData.line_registered ?? false,
+    line_id: initialData.line_id ?? "",
+    line_display_name: initialData.line_display_name ?? "",
+    // 通電・面談管理
+    application_date: initialData.application_date ?? "",
+    application_time: initialData.application_time ?? "",
+    contact_status: (initialData.contact_status ?? "") as ContactStatus | "",
+    contact_notes: initialData.contact_notes ?? "",
+    interview_date: initialData.interview_date ?? "",
+    interview_url: initialData.interview_url ?? "",
+    interview_type: (initialData.interview_type ?? "") as InterviewType | "",
+    // 個人詳細情報
+    living_arrangement: (initialData.living_arrangement ?? "") as LivingArrangement | "",
+    prefecture: initialData.prefecture ?? "",
+    nearest_station: initialData.nearest_station ?? "",
+    education: initialData.education ?? "",
+    graduation_year: initialData.graduation_year?.toString() ?? "",
+    desired_industry: initialData.desired_industry ?? "",
+    desired_job_type: initialData.desired_job_type ?? "",
+    available_start_date: initialData.available_start_date ?? "",
+    admin_notes: initialData.admin_notes ?? "",
   });
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
+    const target = e.target;
+    if (target instanceof HTMLInputElement && target.type === "checkbox") {
+      setForm((prev) => ({ ...prev, [target.name]: target.checked }));
+    } else {
+      setForm((prev) => ({ ...prev, [target.name]: target.value }));
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -66,6 +99,35 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
       status: form.status,
       ca_id: form.ca_id || null,
       create_portal: createPortal,
+      // 流入情報
+      source: form.source || null,
+      form_type: form.form_type || null,
+      ad_identifier: form.ad_identifier || null,
+      utm_source: form.utm_source || null,
+      utm_medium: form.utm_medium || null,
+      utm_campaign: form.utm_campaign || null,
+      // LINE連携
+      line_registered: form.line_registered,
+      line_id: form.line_id || null,
+      line_display_name: form.line_display_name || null,
+      // 通電・面談管理
+      application_date: form.application_date || null,
+      application_time: form.application_time || null,
+      contact_status: form.contact_status || null,
+      contact_notes: form.contact_notes || null,
+      interview_date: form.interview_date || null,
+      interview_url: form.interview_url || null,
+      interview_type: form.interview_type || null,
+      // 個人詳細情報
+      living_arrangement: form.living_arrangement || null,
+      prefecture: form.prefecture || null,
+      nearest_station: form.nearest_station || null,
+      education: form.education || null,
+      graduation_year: form.graduation_year ? parseInt(form.graduation_year) : null,
+      desired_industry: form.desired_industry || null,
+      desired_job_type: form.desired_job_type || null,
+      available_start_date: form.available_start_date || null,
+      admin_notes: form.admin_notes || null,
     };
 
     const url =
@@ -248,6 +310,417 @@ export default function CandidateForm({ mode, advisors, initialData = {} }: Prop
                 min={0}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
                 placeholder="600"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* 流入情報 */}
+        <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h2 className="text-base font-semibold mb-4" style={{ color: "#002D37" }}>
+            流入情報
+          </h2>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                流入元
+              </label>
+              <select
+                name="source"
+                value={form.source}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+              >
+                <option value="">未選択</option>
+                {(Object.entries(SOURCE_LABELS) as [CandidateSource, string][]).map(
+                  ([key, label]) => (
+                    <option key={key} value={key}>{label}</option>
+                  )
+                )}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                フォーム種類
+              </label>
+              <select
+                name="form_type"
+                value={form.form_type}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+              >
+                <option value="">未選択</option>
+                {(Object.entries(FORM_TYPE_LABELS) as [FormType, string][]).map(
+                  ([key, label]) => (
+                    <option key={key} value={key}>{label}</option>
+                  )
+                )}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                広告識別子
+              </label>
+              <input
+                type="text"
+                name="ad_identifier"
+                value={form.ad_identifier}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+                placeholder="ad-123456"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                utm_source
+              </label>
+              <input
+                type="text"
+                name="utm_source"
+                value={form.utm_source}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+                placeholder="google"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                utm_medium
+              </label>
+              <input
+                type="text"
+                name="utm_medium"
+                value={form.utm_medium}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+                placeholder="cpc"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                utm_campaign
+              </label>
+              <input
+                type="text"
+                name="utm_campaign"
+                value={form.utm_campaign}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+                placeholder="spring_2026"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* LINE連携 */}
+        <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h2 className="text-base font-semibold mb-4" style={{ color: "#002D37" }}>
+            LINE連携
+          </h2>
+          <div className="space-y-4">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                name="line_registered"
+                checked={form.line_registered}
+                onChange={handleChange}
+                className="w-4 h-4 rounded border-gray-300 text-[#002D37] focus:ring-[#002D37]"
+              />
+              <span className="text-sm text-gray-700">
+                LINE登録済み
+              </span>
+            </label>
+
+            {form.line_registered && (
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    LINE ID
+                  </label>
+                  <input
+                    type="text"
+                    name="line_id"
+                    value={form.line_id}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+                    placeholder="U1234567890abcdef1234567890abcd"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    LINE表示名
+                  </label>
+                  <input
+                    type="text"
+                    name="line_display_name"
+                    value={form.line_display_name}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+                    placeholder="太郎"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* 通電・面談管理 */}
+        <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h2 className="text-base font-semibold mb-4" style={{ color: "#002D37" }}>
+            通電・面談管理
+          </h2>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                申込日
+              </label>
+              <input
+                type="date"
+                name="application_date"
+                value={form.application_date}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                申込牂間
+              </label>
+              <input
+                type="time"
+                name="application_time"
+                value={form.application_time}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                通電状況
+              </label>
+              <select
+                name="contact_status"
+                value={form.contact_status}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+              >
+                <option value="">未選択</option>
+                {(Object.entries(CONTACT_STATUS_LABELS) as [ContactStatus, string][]).map(
+                  ([key, label]) => (
+                    <option key={key} value={key}>{label}</option>
+                  )
+                )}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                通電メモ
+              </label>
+              <input
+                type="text"
+                name="contact_notes"
+                value={form.contact_notes}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+                placeholder="通電結果のメモ"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                面談日時
+              </label>
+              <input
+                type="datetime-local"
+                name="interview_date"
+                value={form.interview_date}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                面談URL
+              </label>
+              <input
+                type="text"
+                name="interview_url"
+                value={form.interview_url}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+                placeholder="https://zoom.us/..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                面談形式
+              </label>
+              <select
+                name="interview_type"
+                value={form.interview_type}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+              >
+                <option value="">未選択</option>
+                {(Object.entries(INTERVIEW_TYPE_LABELS) as [InterviewType, string][]).map(
+                  ([key, label]) => (
+                    <option key={key} value={key}>{label}</option>
+                  )
+                )}
+              </select>
+            </div>
+          </div>
+        </section>
+
+        {/* 個人詳細情報 */}
+        <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h2 className="text-base font-semibold mb-4" style={{ color: "#002D37" }}>
+            個人詳細情報
+          </h2>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                生活形態
+              </label>
+              <select
+                name="living_arrangement"
+                value={form.living_arrangement}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+              >
+                <option value="">未選択</option>
+                {(Object.entries(LIVING_ARRANGEMENT_LABELS) as [LivingArrangement, string][]).map(
+                  ([key, label]) => (
+                    <option key={key} value={key}>{label}</option>
+                  )
+                )}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                都道府県
+              </label>
+              <select
+                name="prefecture"
+                value={form.prefecture}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+              >
+                <option value="">未選択</option>
+                {PREFECTURE_OPTIONS.map((pref) => (
+                  <option key={pref} value={pref}>{pref}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                最寄り駅
+              </label>
+              <input
+                type="text"
+                name="nearest_station"
+                value={form.nearest_station}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+                placeholder="新宿駅"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                最終学歴
+              </label>
+              <input
+                type="text"
+                name="education"
+                value={form.education}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+                placeholder="大学卒業"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                卒業年
+              </label>
+              <input
+                type="number"
+                name="graduation_year"
+                value={form.graduation_year}
+                onChange={handleChange}
+                min={1950}
+                max={2100}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+                placeholder="2020"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                希望業界
+              </label>
+              <input
+                type="text"
+                name="desired_industry"
+                value={form.desired_industry}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+                placeholder="IT業界"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                希望職種
+              </label>
+              <input
+                type="text"
+                name="desired_job_type"
+                value={form.desired_job_type}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+                placeholder="エンジニア"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                就業可能日
+              </label>
+              <input
+                type="date"
+                name="available_start_date"
+                value={form.available_start_date}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+              />
+            </div>
+
+            <div className="sm:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                管理者メモ
+              </label>
+              <textarea
+                name="admin_notes"
+                value={form.admin_notes}
+                onChange={handleChange}
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+                placeholder="管理者向けのメモを入力"
               />
             </div>
           </div>
