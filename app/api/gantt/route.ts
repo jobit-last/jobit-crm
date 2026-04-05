@@ -17,16 +17,16 @@ const STATUS_COLORS: Record<string, string> = {
 
 // Status labels (Japanese)
 const STATUS_LABELS: Record<string, string> = {
-  new: "æ°è¦ç»é²",
-  interview_scheduling: "é¢è«èª¿æ´ä¸­",
-  interviewed: "é¢è«æ¸ã¿",
-  job_proposed: "æ±äººææ¡ä¸­",
-  applying: "å¿åä¸­",
-  in_selection: "é¸èä¸­",
-  offered: "åå®",
-  placed: "å¥ç¤¾",
-  failed: "ä¸åæ ¼",
-  closed: "å¯¾å¿çµäº",
+  new: "新規登録",
+  interview_scheduling: "面談調整中",
+  interviewed: "面談済み",
+  job_proposed: "求人提案中",
+  applying: "応募中",
+  in_selection: "選考中",
+  offered: "内定",
+  placed: "入社",
+  failed: "不合格",
+  closed: "対応終了",
 };
 
 interface CandidateData {
@@ -144,7 +144,7 @@ export async function GET(request: NextRequest) {
           id: candidate.id,
           name: candidate.name,
           ca_id: candidate.ca_id,
-          ca_name: ca?.name || "æªå²ãå½ã¦",
+          ca_name: ca?.name || "未割り当て",
           entries: [],
         };
       }
