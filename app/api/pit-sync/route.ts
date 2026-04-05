@@ -107,6 +107,7 @@ function mapPitUserToCandidate(pitUser: any, pitUserId: number) {
   const email = pitUser.email || null;
   const birthday = pitUser.birthday || pitUser.birth_date || null;
   const address = pitUser.address || pitUser.prefecture || null;
+  // address stored in notes if available
 
   return {
     name: name.trim(),
@@ -115,7 +116,7 @@ function mapPitUserToCandidate(pitUser: any, pitUserId: number) {
     birth_date: birthday || null,
     status: "new",
     source: "pit",
-    residence: extractPrefecture(address),
+    notes: address ? `住所: ${address}` : null,
     pit_user_id: pitUserId,
     pit_synced_at: new Date().toISOString(),
     is_deleted: false,
