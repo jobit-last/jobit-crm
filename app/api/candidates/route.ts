@@ -9,6 +9,9 @@ export async function GET(request: NextRequest) {
   const name = searchParams.get("name");
   const status = searchParams.get("status");
   const ca_id = searchParams.get("ca_id");
+  const source = searchParams.get("source");
+  const contact_status = searchParams.get("contact_status");
+  const line_registered = searchParams.get("line_registered");
   const page = Math.max(1, parseInt(searchParams.get("page") ?? "1"));
   const limit = 20;
   const from = (page - 1) * limit;
@@ -24,6 +27,9 @@ export async function GET(request: NextRequest) {
   if (name) query = query.ilike("name", `%${name}%`);
   if (status) query = query.eq("status", status);
   if (ca_id) query = query.eq("ca_id", ca_id);
+  if (source) query = query.eq("source", source);
+  if (contact_status) query = query.eq("contact_status", contact_status);
+  if (line_registered !== null) query = query.eq("line_registered", line_registered === "true");
 
   const { data, error, count } = await query;
 
