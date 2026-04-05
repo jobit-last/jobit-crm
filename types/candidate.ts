@@ -416,3 +416,18 @@ export const MEMO_TYPE_COLORS: Record<MemoType, string> = {
 
 };
 
+// =============================================================
+// Portal sub-statuses (dropout/failure)
+// =============================================================
+
+export const SUB_STATUSES = [
+  "conducted_noshow",
+  "conducted_declined",
+  "support_noshow",
+  "support_declined",
+  "support_released",
+  "offer_noshow",
+  "offer_declined",
+  "accepted_noshow",
+  "accepted_declined",
+] as const;
