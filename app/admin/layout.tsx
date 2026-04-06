@@ -43,7 +43,7 @@ const navItems: NavItem[] = [
     children: [
       { label: "求人管理", href: "/admin/jobs" },
       {
-        label: "契紀・請求関係",
+        label: "契約・請求関係",
         href: "/admin/contracts",
         children: [
           { label: "契約書管理", href: "/admin/contracts" },
@@ -57,14 +57,8 @@ const navItems: NavItem[] = [
   { label: "スケジュール管理", href: "/admin/schedule" },
   { label: "通知管理", href: "/admin/notifications" },
   { label: "市場価値診断", href: "/admin/diagnosis/new" },
-  {
-    label: "ナレッジ管理",
-    href: "/admin/knowledge",
-    children: [
-      { label: "ナレッジ一覧", href: "/admin/knowledge" },
-      { label: "AI検索チャット", href: "/admin/knowledge/chat" },
-    ],
-  },
+  { label: "AIチャットボット", href: "/admin/ai-chat" },
+  { label: "ナレッジ管理", href: "/admin/knowledge" },
   { label: "操作ログ", href: "/admin/logs" },
   {
     label: "ユーザー管理",
