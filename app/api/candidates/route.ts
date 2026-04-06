@@ -120,10 +120,16 @@ export async function POST(request: NextRequest) {
     }
   }
 
+  // 全候補者にPT-XXXX IDを自動生成（ポータル未作成でも付与）
+  if (!portalLoginId) {
+    portalLoginId = await generatePortalLoginId(supabase);
+  }
+
   const insertData = {
     ...candidateData,
     is_deleted: false,
-    ...(portalLoginId ? { portal_login_id: portalLoginId, portal_active: true } : {}),
+    portal_login_id: portalLoginId,
+    ...(create_portal ? { portal_active: true } : {}),
   };
 
   const { data, error } = await supabase
