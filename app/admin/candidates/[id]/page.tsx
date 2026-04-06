@@ -6,6 +6,7 @@ import { STATUS_LABELS, STATUS_COLORS, GENDER_LABELS } from "@/types/candidate";
 import DeleteButton from "./_components/DeleteButton";
 import StatusManager from "./_components/StatusManager";
 import MemoSection from "./_components/MemoSection";
+import JobMatchPanel from "./_components/JobMatchPanel";
 
 export default async function CandidateDetailPage({
   params,
@@ -162,6 +163,11 @@ export default async function CandidateDetailPage({
           candidateId={id}
           initialMemos={(memos as CandidateMemo[]) ?? []}
         />
+      </div>
+
+      {/* AIジョブマッチング */}
+      <div className="mt-6">
+        <JobMatchPanel candidateId={id} />
       </div>
     </div>
   );
