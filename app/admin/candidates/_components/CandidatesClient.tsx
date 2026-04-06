@@ -137,6 +137,7 @@ export default function CandidatesClient({
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">
+                  <th className="text-left px-4 py-3 font-medium text-gray-600">ID</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-600">氏名</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-600">メール</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-600">電話番号</th>
@@ -152,6 +153,9 @@ export default function CandidatesClient({
                     className="hover:bg-gray-50 cursor-pointer transition-colors"
                     onClick={() => router.push(`/admin/candidates/${c.id}`)}
                   >
+                    <td className="px-4 py-3 text-xs font-mono text-blue-700 bg-blue-50/50">
+                      {c.portal_login_id ?? "—"}
+                    </td>
                     <td className="px-4 py-3 font-medium" style={{ color: "#002D37" }}>
                       {c.name}
                     </td>
