@@ -41,7 +41,7 @@ export default async function CandidateDetailPage({
 
   return (
     <div>
-      {/* パンくず */}
+      {/+ パンくず */}
       <div className="flex items-center gap-2 mb-6 text-sm" style={{ color: "#6B7280" }}>
         <Link href="/admin/candidates" className="hover:underline" style={{ color: "#002D37" }}>
           求職者管理
@@ -53,9 +53,16 @@ export default async function CandidateDetailPage({
       {/* ヘッダー */}
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-semibold" style={{ color: "#002D37" }}>
-            {candidate.name}
-          </h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-semibold" style={{ color: "#002D37" }}>
+              {candidate.name}
+            </h1>
+            {candidate.portal_login_id && (
+              <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-mono font-semibold text-blue-700 bg-blue-50 border border-blue-200">
+                {candidate.portal_login_id}
+              </span>
+            )}
+          </div>
           <div className="mt-2">
             <span
               className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[candidate.status]}`}
@@ -84,7 +91,7 @@ export default async function CandidateDetailPage({
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        {/* 基本情報 */}
+        {/+ 基本情報 */}
         <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <h2 className="text-base font-semibold mb-4" style={{ color: "#002D37" }}>
             基本情報
