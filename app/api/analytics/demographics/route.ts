@@ -22,48 +22,48 @@ function calculateAge(birthDate: string | null): number | null {
 }
 
 function getAgeRangeLabel(age: number | null): string {
-  if (age === null) return "æªè¨­å®";
-  if (age <= 20) return "~20æ­³";
-  if (age <= 25) return "21~25æ­³";
-  if (age <= 30) return "26~30æ­³";
-  if (age <= 35) return "31~35æ­³";
-  if (age <= 40) return "36~40æ­³";
-  if (age <= 45) return "41~45æ­³";
-  if (age <= 50) return "46~50æ­³";
-  return "51æ­³~";
+  if (age === null) return "未設定";
+  if (age <= 20) return "~20歳";
+  if (age <= 25) return "21~25歳";
+  if (age <= 30) return "26~30歳";
+  if (age <= 35) return "31~35歳";
+  if (age <= 40) return "36~40歳";
+  if (age <= 45) return "41~45歳";
+  if (age <= 50) return "46~50歳";
+  return "51歳~";
 }
 
 function getSalaryRangeLabel(salary: number | null): string {
-  if (salary === null) return "æªè¨­å®";
-  if (salary < 300) return "~300ä¸";
-  if (salary < 400) return "300~400ä¸";
-  if (salary < 500) return "400~500ä¸";
-  if (salary < 600) return "500~600ä¸";
-  if (salary < 700) return "600~700ä¸";
-  if (salary < 800) return "700~800ä¸";
-  if (salary < 1000) return "800~1000ä¸";
-  return "1000ä¸~";
+  if (salary === null) return "未設定";
+  if (salary < 300) return "~300万";
+  if (salary < 400) return "300~400万";
+  if (salary < 500) return "400~500万";
+  if (salary < 600) return "500~600万";
+  if (salary < 700) return "600~700万";
+  if (salary < 800) return "700~800万";
+  if (salary < 1000) return "800~1000万";
+  return "1000万~";
 }
 
 function getExperienceLabel(years: number | null): string {
-  if (years === null) return "æªè¨­å®";
-  if (years <= 1) return "~1å¹´";
-  if (years <= 3) return "2~3å¹´";
-  if (years <= 5) return "4~5å¹´";
-  if (years <= 10) return "6~10å¹´";
-  if (years <= 15) return "11~15å¹´";
-  return "16å¹´~";
+  if (years === null) return "未設定";
+  if (years <= 1) return "~1年";
+  if (years <= 3) return "2~3年";
+  if (years <= 5) return "4~5年";
+  if (years <= 10) return "6~10年";
+  if (years <= 15) return "11~15年";
+  return "16年~";
 }
 
 function getConversationLabel(score: number | null): string {
-  if (score === null) return "æªè¨­å®";
-  if (score <= 3) return "å°ãªã (1-3)";
-  if (score <= 5) return "æ®é (4-5)";
-  if (score <= 7) return "ããå¤ã (6-7)";
-  return "å¤ã (8-10)";
+  if (score === null) return "未設定";
+  if (score <= 3) return "少ない (1-3)";
+  if (score <= 5) return "普通 (4-5)";
+  if (score <= 7) return "やや多い (6-7)";
+  return "多い (8-10)";
 }
 
-// å¨16æ¬¡åã«å¯¾å¿ããselectæã®ã«ã©ã 
+// 全16次元に対応するselect文のカラム
 const ALL_COLUMNS =
   "id, gender, birth_date, current_salary, status, experience_years, education, residence, is_active, other_agent, medical_history, arts_science, desired_occupation, personality_color, desired_employment_type, relocation_willingness, conversation_score";
 
@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
       case "gender":
         candidates.forEach((c) => {
           const g = c.gender as string | null;
-          const label = g ? (g === "male" ? "ç·æ§" : g === "female" ? "å¥³æ§" : "ãã®ä»") : "æªè¨­å®";
+          const label = g ? (g === "male" ? "男性" : g === "female" ? "女性" : "その他") : "未設定";
           countMap[label] = (countMap[label] || 0) + 1;
         });
         break;
@@ -138,14 +138,14 @@ export async function GET(request: NextRequest) {
 
       case "education":
         candidates.forEach((c) => {
-          const label = (c.education as string) || "æªè¨­å®";
+          const label = (c.education as string) || "未設定";
           countMap[label] = (countMap[label] || 0) + 1;
         });
         break;
 
       case "residence":
         candidates.forEach((c) => {
-          const label = (c.residence as string) || "æªè¨­å®";
+          const label = (c.residence as string) || "未設定";
           countMap[label] = (countMap[label] || 0) + 1;
         });
         break;
@@ -153,56 +153,56 @@ export async function GET(request: NextRequest) {
       case "active":
         candidates.forEach((c) => {
           const active = c.is_active as boolean | null;
-          const label = active === true ? "ã¢ã¯ãã£ã" : active === false ? "éã¢ã¯ãã£ã" : "æªè¨­å®";
+          const label = active === true ? "アクティブ" : active === false ? "非アクティブ" : "未設定";
           countMap[label] = (countMap[label] || 0) + 1;
         });
         break;
 
       case "other_agent":
         candidates.forEach((c) => {
-          const label = (c.other_agent as string) || "æªè¨­å®";
+          const label = (c.other_agent as string) || "未設定";
           countMap[label] = (countMap[label] || 0) + 1;
         });
         break;
 
       case "medical_history":
         candidates.forEach((c) => {
-          const label = (c.medical_history as string) || "æªç¢ºèª";
+          const label = (c.medical_history as string) || "未確認";
           countMap[label] = (countMap[label] || 0) + 1;
         });
         break;
 
       case "arts_science":
         candidates.forEach((c) => {
-          const label = (c.arts_science as string) || "æªè¨­å®";
+          const label = (c.arts_science as string) || "未設定";
           countMap[label] = (countMap[label] || 0) + 1;
         });
         break;
 
       case "occupation":
         candidates.forEach((c) => {
-          const label = (c.desired_occupation as string) || "æªè¨­å®";
+          const label = (c.desired_occupation as string) || "未設定";
           countMap[label] = (countMap[label] || 0) + 1;
         });
         break;
 
       case "color":
         candidates.forEach((c) => {
-          const label = (c.personality_color as string) || "æªè¨­å®";
+          const label = (c.personality_color as string) || "未設定";
           countMap[label] = (countMap[label] || 0) + 1;
         });
         break;
 
       case "employment_type":
         candidates.forEach((c) => {
-          const label = (c.desired_employment_type as string) || "æªè¨­å®";
+          const label = (c.desired_employment_type as string) || "未設定";
           countMap[label] = (countMap[label] || 0) + 1;
         });
         break;
 
       case "relocation":
         candidates.forEach((c) => {
-          const label = (c.relocation_willingness as string) || "æªç¢ºèª";
+          const label = (c.relocation_willingness as string) || "未確認";
           countMap[label] = (countMap[label] || 0) + 1;
         });
         break;
@@ -215,7 +215,7 @@ export async function GET(request: NextRequest) {
         break;
 
       default:
-        // unknown dimension â return empty
+        // unknown dimension — return empty
         break;
     }
 
