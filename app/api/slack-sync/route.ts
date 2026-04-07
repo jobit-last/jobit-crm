@@ -1,5 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
+
+// RLSをバイパスするためservice role keyを使用
+function createClient() {
+  return createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { persistSession: false, autoRefreshToken: false } }
+  );
+}
 
 // Slack API設定
 const SLACK_API_BASE = "https://slack.com/api";
@@ -188,7 +197,7 @@ async function fetchSlackMessages(oldestTs?: string): Promise<any[]> {
 // ===== 同期ロジック =====
 
 async function syncSlackToCandidates(dryRun: boolean = false) {
-  const supabase = await createClient();
+  const supabase = createClient();
 
   // 最後に同期したslack_tsを取得（notesにJSONで保存）
   const { data: lastSync } = await supabase
