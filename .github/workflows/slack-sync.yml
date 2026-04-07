@@ -1,0 +1,11 @@
+name: Slack Sync
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call slack-sync API
+        run: curl -fsS -X POST https://jobit.pit-job.net/api/slack-sync -H "Content-Type: application/json" -d '{}'
