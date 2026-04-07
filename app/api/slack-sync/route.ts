@@ -190,18 +190,18 @@ async function fetchSlackMessages(oldestTs?: string): Promise<any[]> {
 async function syncSlackToCandidates(dryRun: boolean = false) {
   const supabase = await createClient();
 
-  // 最後に同期したslack_tsを取得（admin_notesにJSONで保存）
+  // 最後に同期したslack_tsを取得（notesにJSONで保存）
   const { data: lastSync } = await supabase
     .from("candidates")
-    .select("admin_notes")
-    .like("admin_notes", "%slack_ts%")
+    .select("notes")
+    .like("notes", "%slack_ts%")
     .order("created_at", { ascending: false })
     .limit(1);
 
   let oldestTs: string | undefined;
-  if (lastSync && lastSync[0]?.admin_notes) {
+  if (lastSync && lastSync[0]?.notes) {
     try {
-      const parsed = JSON.parse(lastSync[0].admin_notes);
+      const parsed = JSON.parse(lastSync[0].notes);
       if (parsed.slack_ts) {
         // 次回はその次から取得（小数を加算）
         oldestTs = (parseFloat(parsed.slack_ts) + 0.000001).toString();
@@ -274,51 +274,27 @@ async function syncSlackToCandidates(dryRun: boolean = false) {
 
   for (const candidate of newCandidates) {
     try {
+      // Only include columns that actually exist in the candidates table.
+      // Other Slack-derived fields (interview info, transfer timing, etc.) go into `notes` as JSON.
       const insertData = {
         name: candidate.name,
         email: candidate.email,
         phone: candidate.phone,
         birth_date: estimateBirthDate(candidate.age),
-        status: "interview_scheduling" as const,
-        source: "pit_career" as const,
-        form_type: "pit_career_flow" as const,
-        prefecture: candidate.prefecture,
-        interview_date: candidate.interview_date,
-        interview_url: candidate.interview_url,
-        interview_type: "online" as const,
-        contact_status: "pending" as const,
-        application_date: candidate.interview_date,
-        application_time: candidate.interview_time,
-        admin_notes: JSON.stringify({
+        status: "active",
+        source: "pit_career",
+        nationality: candidate.nationality,
+        desired_location: candidate.prefecture,
+        notes: JSON.stringify({
           slack_ts: candidate.slack_ts,
+          interview_date: candidate.interview_date,
+          interview_time: candidate.interview_time,
+          interview_url: candidate.interview_url,
           transfer_timing: candidate.transfer_timing,
-          nationality: candidate.nationality,
           work_restrictions: candidate.work_restrictions,
           age: candidate.age,
           source_text: candidate.raw_text.substring(0, 500),
         }),
-        portal_active: false,
-        line_id: null,
-        line_display_name: null,
-        last_contact_at: null,
-        contact_notes: null,
-        living_arrangement: null,
-        nearest_station: null,
-        education: null,
-        graduation_year: null,
-        desired_industry: null,
-        desired_job_type: null,
-        available_start_date: null,
-        gender: null,
-        current_company: null,
-        current_salary: null,
-        desired_salary: null,
-        ca_id: null,
-        portal_login_id: null,
-        ad_identifier: null,
-        utm_source: null,
-        utm_medium: null,
-        utm_campaign: null,
       };
 
       const { error } = await supabase.from("candidates").insert(insertData);
