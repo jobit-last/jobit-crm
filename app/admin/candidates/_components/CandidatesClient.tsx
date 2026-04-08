@@ -4,7 +4,14 @@ import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import type { Candidate, Advisor, CandidateStatus } from "@/types/candidate";
-import { STATUS_LABELS, STATUS_COLORS } from "@/types/candidate";
+import { STATUS_LABELS, STATUS_COLORS, SOURCE_LABELS } from "@/types/candidate";
+
+function formatDate(value: string | null | undefined): string {
+  if (!value) return "—";
+  const d = new Date(value);
+  if (isNaN(d.getTime())) return "—";
+  return d.toLocaleDateString("ja-JP");
+}
 
 interface Props {
   candidates: Candidate[];
@@ -143,7 +150,9 @@ export default function CandidatesClient({
                   <th className="text-left px-4 py-3 font-medium text-gray-600">電話番号</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-600">ステータス</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-600">担当CA</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-600">流入経路</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-600">登録日</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-600">初回面談日</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -171,8 +180,14 @@ export default function CandidatesClient({
                     <td className="px-4 py-3 text-gray-600">
                       {c.ca?.name ?? "—"}
                     </td>
+                    <td className="px-4 py-3 text-gray-600">
+                      {c.source ? SOURCE_LABELS[c.source] ?? c.source : "—"}
+                    </td>
                     <td className="px-4 py-3 text-gray-500">
-                      {new Date(c.created_at).toLocaleDateString("ja-JP")}
+                      {formatDate(c.application_date ?? c.created_at)}
+                    </td>
+                    <td className="px-4 py-3 text-gray-500">
+                      {formatDate(c.interview_date)}
                     </td>
                   </tr>
                 ))}
