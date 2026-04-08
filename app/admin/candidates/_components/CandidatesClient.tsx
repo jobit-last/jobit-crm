@@ -3,7 +3,7 @@
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { useState, useTransition } from "react";
-import type { Candidate, Advisor, CandidateStatus } from "@/types/candidate";
+import type { Candidate, Advisor, CandidateStatus, CandidateSource } from "@/types/candidate";
 import { STATUS_LABELS, STATUS_COLORS, SOURCE_LABELS } from "@/types/candidate";
 
 function formatDate(value: string | null | undefined): string {
@@ -13,13 +13,31 @@ function formatDate(value: string | null | undefined): string {
   return d.toLocaleDateString("ja-JP");
 }
 
+const SORT_LABELS: Record<string, string> = {
+  created_desc: "登録順(新しい)",
+  created_asc: "登録順(古い)",
+  application_desc: "申込日(新しい)",
+  application_asc: "申込日(古い)",
+  interview_desc: "面談日(新しい)",
+  interview_asc: "面談日(古い)",
+  name_asc: "氏名(あいうえお順)",
+};
+
+type Filters = {
+  name: string;
+  status: string;
+  ca_id: string;
+  source: string;
+  sort: string;
+};
+
 interface Props {
   candidates: Candidate[];
   totalCount: number;
   currentPage: number;
   limit: number;
   advisors: Advisor[];
-  initialFilters: { name: string; status: string; ca_id: string };
+  initialFilters: Filters;
 }
 
 export default function CandidatesClient({
@@ -37,18 +55,24 @@ export default function CandidatesClient({
   const [name, setName] = useState(initialFilters.name);
   const [status, setStatus] = useState(initialFilters.status);
   const [caId, setCaId] = useState(initialFilters.ca_id);
+  const [source, setSource] = useState(initialFilters.source);
+  const [sort, setSort] = useState(initialFilters.sort);
 
   const totalPages = Math.ceil(totalCount / limit);
 
-  function applyFilters(overrides?: Partial<{ name: string; status: string; ca_id: string; page: number }>) {
+  function applyFilters(overrides?: Partial<Filters & { page: number }>) {
     const params = new URLSearchParams();
     const n = overrides?.name ?? name;
     const s = overrides?.status ?? status;
     const c = overrides?.ca_id ?? caId;
+    const src = overrides?.source ?? source;
+    const so = overrides?.sort ?? sort;
     const p = overrides?.page ?? 1;
     if (n) params.set("name", n);
     if (s) params.set("status", s);
     if (c) params.set("ca_id", c);
+    if (src) params.set("source", src);
+    if (so && so !== "created_desc") params.set("sort", so);
     if (p > 1) params.set("page", String(p));
     startTransition(() => {
       router.push(`${pathname}?${params.toString()}`);
@@ -64,6 +88,8 @@ export default function CandidatesClient({
     setName("");
     setStatus("");
     setCaId("");
+    setSource("");
+    setSort("created_desc");
     startTransition(() => router.push(pathname));
   }
 
@@ -105,6 +131,35 @@ export default function CandidatesClient({
               <option value="">すべて</option>
               {advisors.map((a) => (
                 <option key={a.id} value={a.id}>{a.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="w-44">
+            <label className="block text-xs font-medium text-gray-600 mb-1">流入経路</label>
+            <select
+              value={source}
+              onChange={(e) => setSource(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+            >
+              <option value="">すべて</option>
+              {(Object.entries(SOURCE_LABELS) as [CandidateSource, string][]).map(([key, label]) => (
+                <option key={key} value={key}>{label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="w-48">
+            <label className="block text-xs font-medium text-gray-600 mb-1">並べ替え</label>
+            <select
+              value={sort}
+              onChange={(e) => {
+                const v = e.target.value;
+                setSort(v);
+                applyFilters({ sort: v, page: 1 });
+              }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+            >
+              {Object.entries(SORT_LABELS).map(([key, label]) => (
+                <option key={key} value={key}>{label}</option>
               ))}
             </select>
           </div>
