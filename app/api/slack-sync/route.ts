@@ -94,11 +94,14 @@ interface ParsedCandidate {
 }
 
 function parseSlackMessage(text: string, ts: string): ParsedCandidate | null {
-  // Slackのフォーマット記号を除去
-  const cleanText = text.replace(/<([^|>]+)\|([^>]+)>/g, "$2").replace(/<([^>]+)>/g, "$1");
+  // Slackのフォーマット記号を除去 + マークダウンの太字記号(*)を除去
+  const cleanText = text
+    .replace(/<([^|>]+)\|([^>]+)>/g, "$2")
+    .replace(/<([^>]+)>/g, "$1")
+    .replace(/\*/g, "");
 
   // 名前: "下村幹太 さんとの" の形式
-  const nameMatch = cleanText.match(/^(.+?)\s*さんとの/);
+  const nameMatch = cleanText.match(/^\s*(.+?)\s*さんとの/);
   if (!nameMatch) return null; // パースできない場合はスキップ
 
   const name = nameMatch[1].trim();
@@ -199,18 +202,19 @@ async function fetchSlackMessages(oldestTs?: string): Promise<any[]> {
 async function syncSlackToCandidates(dryRun: boolean = false) {
   const supabase = createClient();
 
-  // 最後に同期したslack_tsを取得（notesにJSONで保存）
+  // 最後に同期したslack_tsを取得（admin_notesにJSONで保存）
   const { data: lastSync } = await supabase
     .from("candidates")
-    .select("notes")
-    .like("notes", "%slack_ts%")
+    .select("admin_notes")
+    .eq("source", "pit_career")
+    .like("admin_notes", "%slack_ts%")
     .order("created_at", { ascending: false })
     .limit(1);
 
   let oldestTs: string | undefined;
-  if (lastSync && lastSync[0]?.notes) {
+  if (lastSync && lastSync[0]?.admin_notes) {
     try {
-      const parsed = JSON.parse(lastSync[0].notes);
+      const parsed = JSON.parse(lastSync[0].admin_notes);
       if (parsed.slack_ts) {
         // 次回はその次から取得（小数を加算）
         oldestTs = (parseFloat(parsed.slack_ts) + 0.000001).toString();
@@ -283,26 +287,40 @@ async function syncSlackToCandidates(dryRun: boolean = false) {
 
   for (const candidate of newCandidates) {
     try {
-      // Only include columns that actually exist in the candidates table.
-      // Other Slack-derived fields (interview info, transfer timing, etc.) go into `notes` as JSON.
-      const insertData = {
+      // Slack投稿時刻を登録日時に変換
+      const slackEpoch = parseFloat(candidate.slack_ts) * 1000;
+      const slackDate = new Date(slackEpoch);
+      const application_date = isNaN(slackEpoch)
+        ? null
+        : `${slackDate.getFullYear()}-${String(slackDate.getMonth() + 1).padStart(2, "0")}-${String(slackDate.getDate()).padStart(2, "0")}`;
+      const application_time = isNaN(slackEpoch)
+        ? null
+        : `${String(slackDate.getHours()).padStart(2, "0")}:${String(slackDate.getMinutes()).padStart(2, "0")}:${String(slackDate.getSeconds()).padStart(2, "0")}`;
+
+      const insertData: Record<string, unknown> = {
         name: candidate.name,
         email: candidate.email,
         phone: candidate.phone,
         birth_date: estimateBirthDate(candidate.age),
-        status: "active",
+        status: "new",
         source: "pit_career",
+        form_type: "pit_career_flow",
+        contact_status: "pending",
+        portal_active: false,
+        line_registered: false,
+        interview_type: "online",
         nationality: candidate.nationality,
-        desired_location: candidate.prefecture,
-        notes: JSON.stringify({
+        prefecture: candidate.prefecture,
+        application_date,
+        application_time,
+        interview_date: candidate.interview_date,
+        interview_url: candidate.interview_url,
+        admin_notes: JSON.stringify({
           slack_ts: candidate.slack_ts,
-          interview_date: candidate.interview_date,
           interview_time: candidate.interview_time,
-          interview_url: candidate.interview_url,
           transfer_timing: candidate.transfer_timing,
           work_restrictions: candidate.work_restrictions,
           age: candidate.age,
-          source_text: candidate.raw_text.substring(0, 500),
         }),
       };
 
