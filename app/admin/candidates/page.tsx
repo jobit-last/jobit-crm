@@ -7,7 +7,28 @@ type SearchParams = {
   name?: string;
   status?: string;
   ca_id?: string;
+  source?: string;
+  sort?: string;
   page?: string;
+};
+
+type SortKey =
+  | "created_desc"
+  | "created_asc"
+  | "application_desc"
+  | "application_asc"
+  | "interview_desc"
+  | "interview_asc"
+  | "name_asc";
+
+const SORT_MAP: Record<SortKey, { column: string; ascending: boolean; nullsFirst?: boolean }> = {
+  created_desc: { column: "created_at", ascending: false },
+  created_asc: { column: "created_at", ascending: true },
+  application_desc: { column: "application_date", ascending: false, nullsFirst: false },
+  application_asc: { column: "application_date", ascending: true, nullsFirst: false },
+  interview_desc: { column: "interview_date", ascending: false, nullsFirst: false },
+  interview_asc: { column: "interview_date", ascending: true, nullsFirst: false },
+  name_asc: { column: "name", ascending: true },
 };
 
 export default async function CandidatesPage({
@@ -23,16 +44,20 @@ export default async function CandidatesPage({
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
+  const sortKey = (sp.sort && sp.sort in SORT_MAP ? sp.sort : "created_desc") as SortKey;
+  const sortCfg = SORT_MAP[sortKey];
+
   let query = supabase
     .from("candidates")
     .select("*, ca:users!candidates_ca_id_fkey(id, name)", { count: "exact" })
     .eq("is_deleted", false)
-    .order("created_at", { ascending: false })
+    .order(sortCfg.column, { ascending: sortCfg.ascending, nullsFirst: sortCfg.nullsFirst })
     .range(from, to);
 
   if (sp.name) query = query.ilike("name", `%${sp.name}%`);
   if (sp.status) query = query.eq("status", sp.status);
   if (sp.ca_id) query = query.eq("ca_id", sp.ca_id);
+  if (sp.source) query = query.eq("source", sp.source);
 
   const [{ data: candidates, count }, { data: advisors }] = await Promise.all([
     query,
@@ -69,6 +94,8 @@ export default async function CandidatesPage({
           name: sp.name ?? "",
           status: sp.status ?? "",
           ca_id: sp.ca_id ?? "",
+          source: sp.source ?? "",
+          sort: sortKey,
         }}
       />
     </div>
