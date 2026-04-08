@@ -7,7 +7,7 @@ export async function POST(
 ) {
   const supabase = await createClient();
   const { id } = await params;
-  const { to_status } = await request.json();
+  const { to_status, job_id } = await request.json();
 
   if (!to_status) {
     return Response.json({ error: "to_status は必須です" }, { status: 400 });
@@ -58,5 +58,31 @@ export async function POST(
     return Response.json({ error: historyError.message }, { status: 500 });
   }
 
-  return Response.json({ ok: true, from_status: current.status, to_status });
+
+  // 応募中に変更された場合、自動で選考(application)レコード作成
+  let createdApplication: { id: string } | null = null;
+  if (to_status === "applying" && job_id) {
+    const { data: app, error: appError } = await supabase
+      .from("applications")
+      .insert({
+        candidate_id: id,
+        job_id,
+        status: "document_screening",
+        applied_at: now.slice(0, 10),
+      })
+      .select("id")
+      .single();
+    if (!appError && app) {
+      createdApplication = app;
+      await supabase.from("application_status_histories").insert({
+        application_id: app.id,
+        from_status: null,
+        to_status: "document_screening",
+        changed_by: user?.id ?? null,
+        changed_at: now,
+      });
+    }
+  }
+
+  return Response.json({ ok: true, from_status: current.status, to_status, application: createdApplication });
 }
