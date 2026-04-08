@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import type { CandidateStatus, StatusHistory } from "@/types/candidate";
 import { STATUS_LABELS, STATUS_COLORS } from "@/types/candidate";
 import Spinner from "@/components/Spinner";
@@ -19,7 +19,26 @@ export default function StatusManager({ candidateId, currentStatus, histories }:
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [selectedJobId, setSelectedJobId] = useState<string>("");
+  const [jobs, setJobs] = useState<Array<{ id: string; title: string; company_name: string | null }>>([]);
+  const [jobsLoading, setJobsLoading] = useState(false);
+
+  useEffect(() => {
+    if (selected !== "applying" || jobs.length > 0 || jobsLoading) return;
+    setJobsLoading(true);
+    fetch("/api/jobs?per_page=200&is_published=true")
+      .then((r) => r.json())
+      .then((j) => {
+        if (j?.success && Array.isArray(j.data)) {
+          setJobs(j.data.map((row: { id: string; title: string; company_name: string | null }) => ({ id: row.id, title: row.title, company_name: row.company_name })));
+        }
+      })
+      .finally(() => setJobsLoading(false));
+  }, [selected, jobs.length, jobsLoading]);
+
   const hasChanged = selected !== currentStatus;
+  const needsJob = selected === "applying";
+  const canSubmit = hasChanged && (!needsJob || selectedJobId !== "");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -30,7 +49,7 @@ export default function StatusManager({ candidateId, currentStatus, histories }:
     const res = await fetch(`/api/candidates/${candidateId}/status`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ to_status: selected }),
+      body: JSON.stringify({ to_status: selected, job_id: needsJob ? selectedJobId : undefined }),
     });
 
     const json = await res.json();
@@ -80,10 +99,30 @@ export default function StatusManager({ candidateId, currentStatus, histories }:
                 )
               )}
             </select>
+            {needsJob && (
+              <div className="mt-3">
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  応募先求人 <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={selectedJobId}
+                  onChange={(e) => setSelectedJobId(e.target.value)}
+                  disabled={jobsLoading}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#002D37] focus:border-transparent"
+                >
+                  <option value="">{jobsLoading ? "読み込み中..." : "求人を選択してください"}</option>
+                  {jobs.map((j) => (
+                    <option key={j.id} value={j.id}>
+                      {j.company_name ? `[${j.company_name}] ` : ""}{j.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
           <button
             type="submit"
-            disabled={!hasChanged || loading}
+            disabled={!canSubmit || loading}
             className="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-[#00A645] disabled:opacity-40 disabled:cursor-not-allowed"
             style={{ backgroundColor: "#00E05D", color: "#002D37" }}
           >
