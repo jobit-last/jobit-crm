@@ -18,7 +18,15 @@ export type CandidateStatus =
 
   | "applying"              // 応募中
 
-  | "in_selection"          // 選考中
+  | "in_selection"
+
+  | "document_screening"
+
+  | "first_interview"
+
+  | "second_interview"
+
+  | "final_interview"          // 選考中
 
   | "offered"               // 内定
 
@@ -188,13 +196,21 @@ export const STATUS_LABELS: Record<CandidateStatus, string> = {
 
   interview_scheduling: "面談調整中",
 
-  interviewed: "面觯済み",
+  interviewed: "面談済み",
 
   job_proposed: "求人提案中",
 
   applying: "応募中",
 
   in_selection: "選考中",
+
+  document_screening: "書類選考中",
+
+  first_interview: "一次面接",
+
+  second_interview: "二次面接",
+
+  final_interview: "最終面接",
 
   offered: "内定",
 
@@ -221,6 +237,14 @@ export const STATUS_COLORS: Record<CandidateStatus, string> = {
   applying: "bg-orange-100 text-orange-700",
 
   in_selection: "bg-amber-100 text-amber-700",
+
+  document_screening: "bg-blue-100 text-blue-700",
+
+  first_interview: "bg-sky-100 text-sky-700",
+
+  second_interview: "bg-indigo-100 text-indigo-700",
+
+  final_interview: "bg-purple-100 text-purple-700",
 
   offered: "bg-green-100 text-green-700",
 
