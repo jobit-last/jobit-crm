@@ -14,11 +14,14 @@ const navItems: NavItem[] = [
   {
     label: "ダッシュボード",
     href: "/admin/dashboard",
-    children: [
-      { label: "マイダッシュボード", href: "/admin/dashboard" },
-      { label: "歩留まり分析", href: "/admin/analytics" },
-      { label: "数値分析", href: "/admin/analytics/demographics" },
-    ],
+  },
+  {
+    label: "歩留まり分析",
+    href: "/admin/analytics",
+  },
+  {
+    label: "数値分析",
+    href: "/admin/analytics/demographics",
   },
   {
     label: "ガントチャート",
